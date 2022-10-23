@@ -14,6 +14,7 @@
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -59,6 +60,14 @@
 <li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
 <li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
                                        </ul>
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -192,35 +201,35 @@
 <path fill="none" stroke="#000000" d="M53.45,-64.15C62.21,-68.33 72.17,-73.08 81.52,-77.54"/>
 <polygon fill="#000000" stroke="#000000" points="80.07,-80.73 90.6,-81.88 83.09,-74.41 80.07,-80.73"/>
 </g>
-<!-- proc~fcoef -->
-<g id="proc~~mtu0~~CallsGraph_node3" class="node">
-<title>proc~fcoef</title>
-<g id="a_proc~~mtu0~~CallsGraph_node3"><a xlink:href=".././proc/fcoef.html" xlink:title="fcoef">
-<polygon fill="#d9534f" stroke="#d9534f" points="144,-64 90,-64 90,-40 144,-40 144,-64"/>
-<text text-anchor="middle" x="117" y="-49.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fcoef</text>
-</a>
-</g>
-</g>
-<!-- proc~mtu0&#45;&gt;proc~fcoef -->
-<g id="proc~~mtu0~~CallsGraph_edge2" class="edge">
-<title>proc~mtu0&#45;&gt;proc~fcoef</title>
-<path fill="none" stroke="#000000" d="M54.4,-52C62.39,-52 71.31,-52 79.82,-52"/>
-<polygon fill="#000000" stroke="#000000" points="79.92,-55.5 89.92,-52 79.92,-48.5 79.92,-55.5"/>
-</g>
 <!-- proc~dnan -->
-<g id="proc~~mtu0~~CallsGraph_node4" class="node">
+<g id="proc~~mtu0~~CallsGraph_node3" class="node">
 <title>proc~dnan</title>
-<g id="a_proc~~mtu0~~CallsGraph_node4"><a xlink:href=".././proc/dnan.html" xlink:title="dnan">
+<g id="a_proc~~mtu0~~CallsGraph_node3"><a xlink:href=".././proc/dnan.html" xlink:title="dnan">
 <polygon fill="#d94e8f" stroke="#d94e8f" points="234,-24 180,-24 180,0 234,0 234,-24"/>
 <text text-anchor="middle" x="207" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">dnan</text>
 </a>
 </g>
 </g>
 <!-- proc~mtu0&#45;&gt;proc~dnan -->
-<g id="proc~~mtu0~~CallsGraph_edge3" class="edge">
+<g id="proc~~mtu0~~CallsGraph_edge2" class="edge">
 <title>proc~mtu0&#45;&gt;proc~dnan</title>
-<path fill="none" stroke="#000000" d="M54.27,-42.04C65.2,-38.17 78.09,-33.97 90,-31 116.44,-24.4 146.86,-19.52 169.92,-16.36"/>
-<polygon fill="#000000" stroke="#000000" points="170.5,-19.81 179.95,-15.02 169.58,-12.87 170.5,-19.81"/>
+<path fill="none" stroke="#000000" d="M54.05,-48.98C77.72,-45.94 113.51,-40.61 144,-33 152.56,-30.86 161.63,-28.09 170.11,-25.27"/>
+<polygon fill="#000000" stroke="#000000" points="171.41,-28.52 179.73,-21.96 169.14,-21.9 171.41,-28.52"/>
+</g>
+<!-- proc~fcoef -->
+<g id="proc~~mtu0~~CallsGraph_node4" class="node">
+<title>proc~fcoef</title>
+<g id="a_proc~~mtu0~~CallsGraph_node4"><a xlink:href=".././proc/fcoef.html" xlink:title="fcoef">
+<polygon fill="#d9534f" stroke="#d9534f" points="144,-24 90,-24 90,0 144,0 144,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fcoef</text>
+</a>
+</g>
+</g>
+<!-- proc~mtu0&#45;&gt;proc~fcoef -->
+<g id="proc~~mtu0~~CallsGraph_edge3" class="edge">
+<title>proc~mtu0&#45;&gt;proc~fcoef</title>
+<path fill="none" stroke="#000000" d="M54.4,-40C62.66,-36.25 71.9,-32.05 80.66,-28.06"/>
+<polygon fill="#000000" stroke="#000000" points="82.26,-31.18 89.92,-23.86 79.37,-24.81 82.26,-31.18"/>
 </g>
 <!-- proc~cv0 -->
 <g id="proc~~mtu0~~CallsGraph_node5" class="node">
@@ -237,66 +246,66 @@
 <path fill="none" stroke="#000000" d="M144.4,-106C152.66,-109.75 161.9,-113.95 170.66,-117.94"/>
 <polygon fill="#000000" stroke="#000000" points="169.37,-121.19 179.92,-122.14 172.26,-114.82 169.37,-121.19"/>
 </g>
-<!-- proc~refine -->
+<!-- proc~cvql -->
 <g id="proc~~mtu0~~CallsGraph_node6" class="node">
+<title>proc~cvql</title>
+<g id="a_proc~~mtu0~~CallsGraph_node6"><a xlink:href=".././proc/cvql.html" xlink:title="cvql">
+<polygon fill="#d9534f" stroke="#d9534f" points="324,-177 270,-177 270,-153 324,-153 324,-177"/>
+<text text-anchor="middle" x="297" y="-162.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cvql</text>
+</a>
+</g>
+</g>
+<!-- proc~cva2&#45;&gt;proc~cvql -->
+<g id="proc~~mtu0~~CallsGraph_edge5" class="edge">
+<title>proc~cva2&#45;&gt;proc~cvql</title>
+<path fill="none" stroke="#000000" d="M126.21,-106.14C136.76,-120.61 156.55,-144.2 180,-155 204.95,-166.49 236.1,-168.6 259.83,-168.05"/>
+<polygon fill="#000000" stroke="#000000" points="259.99,-171.55 269.84,-167.65 259.71,-164.55 259.99,-171.55"/>
+</g>
+<!-- proc~refine -->
+<g id="proc~~mtu0~~CallsGraph_node7" class="node">
 <title>proc~refine</title>
-<g id="a_proc~~mtu0~~CallsGraph_node6"><a xlink:href=".././proc/refine.html" xlink:title="refine">
+<g id="a_proc~~mtu0~~CallsGraph_node7"><a xlink:href=".././proc/refine.html" xlink:title="refine">
 <polygon fill="#d9534f" stroke="#d9534f" points="234,-66 180,-66 180,-42 234,-42 234,-66"/>
 <text text-anchor="middle" x="207" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">refine</text>
 </a>
 </g>
 </g>
 <!-- proc~cva2&#45;&gt;proc~refine -->
-<g id="proc~~mtu0~~CallsGraph_edge5" class="edge">
+<g id="proc~~mtu0~~CallsGraph_edge6" class="edge">
 <title>proc~cva2&#45;&gt;proc~refine</title>
 <path fill="none" stroke="#000000" d="M144.4,-82C152.66,-78.25 161.9,-74.05 170.66,-70.06"/>
 <polygon fill="#000000" stroke="#000000" points="172.26,-73.18 179.92,-65.86 169.37,-66.81 172.26,-73.18"/>
 </g>
 <!-- proc~cvqm -->
-<g id="proc~~mtu0~~CallsGraph_node7" class="node">
+<g id="proc~~mtu0~~CallsGraph_node8" class="node">
 <title>proc~cvqm</title>
-<g id="a_proc~~mtu0~~CallsGraph_node7"><a xlink:href=".././proc/cvqm.html" xlink:title="cvqm">
-<polygon fill="#d9534f" stroke="#d9534f" points="324,-177 270,-177 270,-153 324,-153 324,-177"/>
-<text text-anchor="middle" x="297" y="-162.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cvqm</text>
+<g id="a_proc~~mtu0~~CallsGraph_node8"><a xlink:href=".././proc/cvqm.html" xlink:title="cvqm">
+<polygon fill="#d9534f" stroke="#d9534f" points="324,-126 270,-126 270,-102 324,-102 324,-126"/>
+<text text-anchor="middle" x="297" y="-111.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cvqm</text>
 </a>
 </g>
 </g>
 <!-- proc~cva2&#45;&gt;proc~cvqm -->
-<g id="proc~~mtu0~~CallsGraph_edge6" class="edge">
-<title>proc~cva2&#45;&gt;proc~cvqm</title>
-<path fill="none" stroke="#000000" d="M126.21,-106.14C136.76,-120.61 156.55,-144.2 180,-155 204.95,-166.49 236.1,-168.6 259.83,-168.05"/>
-<polygon fill="#000000" stroke="#000000" points="259.99,-171.55 269.84,-167.65 259.71,-164.55 259.99,-171.55"/>
-</g>
-<!-- proc~cvql -->
-<g id="proc~~mtu0~~CallsGraph_node8" class="node">
-<title>proc~cvql</title>
-<g id="a_proc~~mtu0~~CallsGraph_node8"><a xlink:href=".././proc/cvql.html" xlink:title="cvql">
-<polygon fill="#d9534f" stroke="#d9534f" points="324,-126 270,-126 270,-102 324,-102 324,-126"/>
-<text text-anchor="middle" x="297" y="-111.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cvql</text>
-</a>
-</g>
-</g>
-<!-- proc~cva2&#45;&gt;proc~cvql -->
 <g id="proc~~mtu0~~CallsGraph_edge7" class="edge">
-<title>proc~cva2&#45;&gt;proc~cvql</title>
+<title>proc~cva2&#45;&gt;proc~cvqm</title>
 <path fill="none" stroke="#000000" d="M144.26,-96.95C174.85,-100.39 225.55,-106.08 259.84,-109.94"/>
 <polygon fill="#000000" stroke="#000000" points="259.59,-113.43 269.92,-111.07 260.37,-106.47 259.59,-113.43"/>
 </g>
 <!-- proc~fcoef&#45;&gt;proc~dnan -->
 <g id="proc~~mtu0~~CallsGraph_edge8" class="edge">
 <title>proc~fcoef&#45;&gt;proc~dnan</title>
-<path fill="none" stroke="#000000" d="M144.4,-40C152.66,-36.25 161.9,-32.05 170.66,-28.06"/>
-<polygon fill="#000000" stroke="#000000" points="172.26,-31.18 179.92,-23.86 169.37,-24.81 172.26,-31.18"/>
-</g>
-<!-- proc~cv0&#45;&gt;proc~cvqm -->
-<g id="proc~~mtu0~~CallsGraph_edge10" class="edge">
-<title>proc~cv0&#45;&gt;proc~cvqm</title>
-<path fill="none" stroke="#000000" d="M234.4,-143.3C242.57,-146.18 251.7,-149.4 260.38,-152.45"/>
-<polygon fill="#000000" stroke="#000000" points="259.32,-155.79 269.92,-155.81 261.65,-149.19 259.32,-155.79"/>
+<path fill="none" stroke="#000000" d="M144.4,-12C152.39,-12 161.31,-12 169.82,-12"/>
+<polygon fill="#000000" stroke="#000000" points="169.92,-15.5 179.92,-12 169.92,-8.5 169.92,-15.5"/>
 </g>
 <!-- proc~cv0&#45;&gt;proc~cvql -->
 <g id="proc~~mtu0~~CallsGraph_edge9" class="edge">
 <title>proc~cv0&#45;&gt;proc~cvql</title>
+<path fill="none" stroke="#000000" d="M234.4,-143.3C242.57,-146.18 251.7,-149.4 260.38,-152.45"/>
+<polygon fill="#000000" stroke="#000000" points="259.32,-155.79 269.92,-155.81 261.65,-149.19 259.32,-155.79"/>
+</g>
+<!-- proc~cv0&#45;&gt;proc~cvqm -->
+<g id="proc~~mtu0~~CallsGraph_edge10" class="edge">
+<title>proc~cv0&#45;&gt;proc~cvqm</title>
 <path fill="none" stroke="#000000" d="M234.4,-128C242.48,-126.16 251.51,-124.11 260.1,-122.16"/>
 <polygon fill="#000000" stroke="#000000" points="260.94,-125.56 269.92,-119.93 259.39,-118.73 260.94,-125.56"/>
 </g>
@@ -442,6 +451,9 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
     
   </body>
 </html>
