@@ -1,3 +1,5 @@
+!*****************************************************************************************
+!>
 !  COMPUTATION OF SPECIAL FUNCTIONS
 !
 !     Shanjie Zhang and Jianming Jin
@@ -33,6 +35,7 @@
       real(wp),parameter,private :: halfpi = 0.5_wp*pi
 
    contains
+!*****************************************************************************************
 
       ! JW: should probably remove these two...
       real(wp) function dnan()
@@ -45,9 +48,11 @@
       dinf = dinf*dinf
       end function dinf
 
-      subroutine cpdsa(n,z,Cdn)
+!*****************************************************************************************
+!>
+!  Compute complex parabolic cylinder function `Dn(z)` for small argument
 
-      !! Compute complex parabolic cylinder function `Dn(z)` for small argument
+      subroutine cpdsa(n,z,Cdn)
 
       integer,intent(in) :: n !! Order of D(z) (n = 0,-1,-2,...)
       complex(wp),intent(in) :: z !! complex argument of D(z)
@@ -60,7 +65,7 @@
       real(wp),parameter :: eps = 1.0e-15_wp
       real(wp),parameter :: sq2 = sqrt(2.0_wp)
 
-      ca0 = exp(-.25_wp*z*z)
+      ca0 = exp(-0.25_wp*z*z)
       va0 = 0.5_wp*(1.0_wp-n)
       if ( n==0 ) then
          Cdn = ca0
@@ -92,9 +97,11 @@
       endif
    end subroutine cpdsa
 
-   subroutine cfs(z,Zf,Zd)
+!*****************************************************************************************
+!>
+!  Compute complex Fresnel Integral S(z) and S'(z)
 
-      !! Compute complex Fresnel Integral S(z) and S'(z)
+   subroutine cfs(z,Zf,Zd)
 
       complex(wp),intent(in) :: z !! Argument of S(z)
       complex(wp),intent(out) :: Zf !! S(z)
@@ -175,9 +182,11 @@
       Zd = sin(halfpi*z*z)
    end subroutine cfs
 
-   subroutine lqmn(Mm,m,n,x,Qm,Qd)
+!*****************************************************************************************
+!>
+!  Compute the associated Legendre functions of the second kind, Qmn(x) and Qmn'(x)
 
-      !! Compute the associated Legendre functions of the second kind, Qmn(x) and Qmn'(x)
+   subroutine lqmn(Mm,m,n,x,Qm,Qd)
 
       real(wp),intent(in) :: x !! Argument of Qmn(x)
       integer,intent(in) :: m !! Order of Qmn(x)  ( m = 0,1,2,… )
@@ -272,11 +281,13 @@
       enddo
    end subroutine lqmn
 
-   subroutine clpmn(Mm,m,n,x,y,Ntype,Cpm,Cpd)
+!*****************************************************************************************
+!>
+!  Compute the associated Legendre functions Pmn(z)
+!  and their derivatives Pmn'(z) for a complex
+!  argument
 
-      !! Compute the associated Legendre functions Pmn(z)
-      !! and their derivatives Pmn'(z) for a complex
-      !! argument
+   subroutine clpmn(Mm,m,n,x,y,Ntype,Cpm,Cpd)
 
 !       Input :  x     --- Real part of z
 !                y     --- Imaginary part of z
@@ -286,13 +297,12 @@
 !                ntype --- type of cut, either 2 or 3
 !       Output:  CPM(m,n) --- Pmn(z)
 !                CPD(m,n) --- Pmn'(z)
-!       =========================================================
 
-      implicit none
       complex(wp) Cpd , Cpm , z , zq , zs
       real(wp)  x , y
       integer i , j , ls , m , Mm , n , Ntype
       dimension Cpm(0:Mm,0:n) , Cpd(0:Mm,0:n)
+
       z = dcmplx(x,y)
       do i = 0 , n
          do j = 0 , m
@@ -360,25 +370,24 @@
       enddo
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute parabolic cylinder function Vv(x)
+!  for small argument
 
       subroutine vvsa(Va,x,Pv)
-
-         !! Compute parabolic cylinder function Vv(x)
-         !! for small argument
 
 !       Input:   x  --- Argument
 !                va --- Order
 !       Output:  PV --- Vv(x)
 !       Routine called : GAMMA2 for computing Г(x)
-!       ===================================================
-!
-      implicit none
+
       real(wp) a0 , ep , eps , fac , g1 , ga0 , gm , gw ,  &
                      & Pv , r , r1 , sq2 , sv , sv0 , v1 , Va , va0 ,   &
                      & vb0 , vm
       real(wp) x
       integer m
+
       eps = 1.0d-15
       ep = exp(-0.25_wp*x*x)
       va0 = 1.0_wp + 0.5_wp*Va
@@ -412,16 +421,15 @@
       endif
       end
 
+!*****************************************************************************************
+!>
+!  Compute the zeros of Bessel functions Jn(x) and
+!  Jn'(x), and arrange them in the order of their
+!  magnitudes
 
-
-!       **********************************
-!       SciPy: Changed P from a character array to an integer array.
       subroutine jdzo(Nt,n,m,p,Zo)
 
-         !! Compute the zeros of Bessel functions Jn(x) and
-         !! Jn'(x), and arrange them in the order of their
-         !! magnitudes
-
+!       SciPy: Changed P from a character array to an integer array.
 !       Input :  NT    --- Number of total zeros ( NT ≤ 1200 )
 !       Output:  ZO(L) --- Value of the L-th zero of Jn(x)
 !                          and Jn'(x)
@@ -438,15 +446,14 @@
 !                          those of Jn'(x) correspond to TE modes
 !       Routine called:    BJNDD for computing Jn(x), Jn'(x) and
 !                          Jn''(x)
-!       =============================================================
-!
-      implicit none
+
       real(wp) bj , dj , fj , x , x0 , x1 , x2 , xm , Zo , zoc
       integer i , j , k , l , l0 , l1 , l2 , m , m1 , mm , n , n1 , nm ,&
             & Nt
       integer p(1400) , p1(70)
       dimension n(1400) , m(1400) , Zo(0:1400) , n1(70) , m1(70) ,      &
               & zoc(0:70) , bj(101) , dj(101) , fj(101)
+
       x = 0
       zoc(0) = 0
       if ( Nt<600 ) then
@@ -536,16 +543,18 @@
       enddo
       end
 
+!*****************************************************************************************
+!>
+!  Compute coefficient Bk's for oblate radial
+!  functions with a small argument
+
       subroutine cbk(m,n,c,Cv,Qt,Ck,Bk)
 
-         !!Compute coefficient Bk's for oblate radial
-         !!functions with a small argument
-
-      implicit none
       real(wp) Bk , c , Ck , Cv , eps , Qt , r1 , s1 , sw , t , &
                      & u , v , w
       integer i , i1 , ip , j , k , m , n , n2 , nm
       dimension Bk(200) , Ck(200) , u(200) , v(200) , w(200)
+
       eps = 1.0d-14
       ip = 1
       if ( n-m==2*int((n-m)/2) ) ip = 0
@@ -611,21 +620,13 @@
       enddo
       end
 
+!*****************************************************************************************
+!>
+!  Compute prolate spheroidal radial function
+!  of the second kind with a small argument
+
       subroutine rmn2sp(m,n,c,x,Cv,Df,Kd,R2f,R2d)
 
-         !! Compute prolate spheroidal radial function
-         !! of the second kind with a small argument
-
-!       Routines called:
-!            (1) LPMNS for computing the associated Legendre
-!                functions of the first kind
-!            (2) LQMNS for computing the associated Legendre
-!                functions of the second kind
-!            (3) KMN for computing expansion coefficients
-!                and joining factors
-!       ======================================================
-!
-      implicit none
       real(wp) c , ck1 , ck2 , Cv , Df , dn , eps , ga , gb ,   &
                      & gc , pd , pm , qd , qm , r1 , r2 , R2d , R2f ,   &
                      & r3 , r4
@@ -729,17 +730,19 @@
       R2d = sdm/ck2
       end
 
-      subroutine bernob(n,Bn)
+!*****************************************************************************************
+!>
+!  Compute Bernoulli number Bn
 
-         !! Compute Bernoulli number Bn
+      subroutine bernob(n,Bn)
 
 !       Input :  n --- Serial number
 !       Output:  BN(n) --- Bn
 
-      implicit none
       real(wp) Bn , r1 , r2 , s , tpi
       integer k , m , n
       dimension Bn(0:n)
+
       tpi = 6.283185307179586d0
       Bn(0) = 1.0_wp
       Bn(1) = -0.5_wp
@@ -757,9 +760,11 @@
       enddo
       end
 
-      subroutine bernoa(n,Bn)
+!*****************************************************************************************
+!>
+!  Compute Bernoulli number Bn
 
-         !! Compute Bernoulli number Bn
+      subroutine bernoa(n,Bn)
 
 !       Input :  n --- Serial number
 !       Output:  BN(n) --- Bn
@@ -786,15 +791,17 @@
       enddo
       end
 
+!*****************************************************************************************
+!>
+!  Compute Q*mn(-ic) for oblate radial functions
+!  with a small argument
+
       subroutine qstar(m,n,c,Ck,Ck1,Qs,Qt)
 
-         !! Compute Q*mn(-ic) for oblate radial functions
-         !! with a small argument
-
-      implicit none
       real(wp) ap , c , Ck , Ck1 , Qs , qs0 , Qt , r , s , sk
       integer i , ip , k , l , m , n
       dimension ap(200) , Ck(200)
+
       ip = 1
       if ( n-m==2*int((n-m)/2) ) ip = 0
       r = 1.0_wp/Ck(1)**2
@@ -822,21 +829,17 @@
       Qt = -2.0_wp/Ck1*Qs
       end
 
+!*****************************************************************************************
+!>
+!  Compute the initial characteristic value of
+!  Mathieu functions for m ≤ 12  or q ≤ 300 or
+!  q ≥ m*m
+
       subroutine cv0(Kd,m,q,a0)
 
-!       =====================================================
-!       Purpose: Compute the initial characteristic value of
-!                Mathieu functions for m ≤ 12  or q ≤ 300 or
-!                q ≥ m*m
 !       Input :  m  --- Order of Mathieu functions
 !                q  --- Parameter of Mathieu functions
 !       Output:  A0 --- Characteristic value
-!       Routines called:
-!             (1) CVQM for computing initial characteristic
-!                 value for q ≤ 3*m
-!             (2) CVQL for computing initial characteristic
-!                 value for q ≥ m*m
-!       ====================================================
 
       implicit none
       real(wp) a0 , q , q2
@@ -973,45 +976,41 @@
       endif
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute the characteristic value of Mathieu
+!  functions for q ≤ m*m
 
       subroutine cvqm(m,q,a0)
-!
-!       =====================================================
-!       Purpose: Compute the characteristic value of Mathieu
-!                functions for q ≤ m*m
+
 !       Input :  m  --- Order of Mathieu functions
 !                q  --- Parameter of Mathieu functions
 !       Output:  A0 --- Initial characteristic value
-!       =====================================================
-!
-      implicit none
+
       real(wp) a0 , hm1 , hm3 , hm5 , q
       integer m
+
       hm1 = .5*q/(m*m-1.0)
       hm3 = .25*hm1**3/(m*m-4.0)
       hm5 = hm1*hm3*q/((m*m-1.0)*(m*m-9.0))
       a0 = m*m + q*(hm1+(5.0*m*m+7.0)*hm3+(9.0*m**4+58.0*m*m+29.0)*hm5)
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute the characteristic value of Mathieu
+!  functions  for q ≥ 3m
 
       subroutine cvql(Kd,m,q,a0)
-!
-!       ========================================================
-!       Purpose: Compute the characteristic value of Mathieu
-!                functions  for q ≥ 3m
+
 !       Input :  m  --- Order of Mathieu functions
 !                q  --- Parameter of Mathieu functions
 !       Output:  A0 --- Initial characteristic value
-!       ========================================================
-!
-      implicit none
+
       real(wp) a0 , c1 , cv1 , cv2 , d1 , d2 , d3 , d4 , p1 ,   &
                      & p2 , q , w , w2 , w3 , w4 , w6
       integer Kd , m
+
       w = 0.0_wp
       if ( Kd==1 .or. Kd==2 ) w = 2.0_wp*m + 1.0_wp
       if ( Kd==3 .or. Kd==4 ) w = 2.0_wp*m - 1.0_wp
@@ -1032,22 +1031,21 @@
       a0 = cv1 - cv2/(c1*p1)
       end
 
-
+!*****************************************************************************************
+!>
+!  Determine the starting point for backward
+!  recurrence such that the magnitude of
+!  Jn(x) at that point is about 10^(-MP)
 
       integer function msta1(x,Mp)
-!
-!       ===================================================
-!       Purpose: Determine the starting point for backward
-!                recurrence such that the magnitude of
-!                Jn(x) at that point is about 10^(-MP)
+
 !       Input :  x     --- Argument of Jn(x)
 !                MP    --- Value of magnitude
 !       Output:  MSTA1 --- Starting point
-!       ===================================================
-!
-      implicit none
+
       real(wp) a0 , f , f0 , f1 , x
       integer it , Mp , n0 , n1 , nn
+
       a0 = abs(x)
       n0 = int(1.1_wp*a0) + 1
       f0 = envj(n0,a0) - Mp
@@ -1065,22 +1063,22 @@
       msta1 = nn
       end
 
+!*****************************************************************************************
+!>
+!  Determine the starting point for backward
+!  recurrence such that all Jn(x) has MP
+!  significant digits
 
       integer function msta2(x,n,Mp)
-!
-!       ===================================================
-!       Purpose: Determine the starting point for backward
-!                recurrence such that all Jn(x) has MP
-!                significant digits
+
 !       Input :  x  --- Argument of Jn(x)
 !                n  --- Order of Jn(x)
 !                MP --- Significant digit
 !       Output:  MSTA2 --- Starting point
-!       ===================================================
-!
-      implicit none
+
       real(wp) a0 , ejn , f , f0 , f1 , hmp , obj , x
       integer it , Mp , n , n0 , n1 , nn
+
       a0 = abs(x)
       hmp = 0.5_wp*Mp
       ejn = envj(n,a0)
@@ -1106,6 +1104,9 @@
       msta2 = nn + 10
       end
 
+!*****************************************************************************************
+!>
+!
       real(wp) function envj(n,x)
       implicit none
       integer n
@@ -1113,21 +1114,20 @@
       envj = 0.5_wp*log10(6.28d0*n) - n*log10(1.36d0*x/n)
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Integrate [1-J0(t)]/t with respect to t from 0
+!  to x, and Y0(t)/t with respect to t from x to ∞
 
       subroutine ittjyb(x,Ttj,Tty)
-!
-!       ==========================================================
-!       Purpose: Integrate [1-J0(t)]/t with respect to t from 0
-!                to x, and Y0(t)/t with respect to t from x to ∞
+
 !       Input :  x   --- Variable in the limits  ( x ≥ 0 )
 !       Output:  TTJ --- Integration of [1-J0(t)]/t from 0 to x
 !                TTY --- Integration of Y0(t)/t from x to ∞
-!       ==========================================================
-!
-      implicit none
+
       real(wp) e0 , el , f0 , g0 , t , t1 , Ttj , Tty , x ,&
                      & x1 , xt
+
       el = .5772156649015329d0
       if ( x==0.0_wp ) then
          Ttj = 0.0_wp
@@ -1167,24 +1167,23 @@
       endif
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Integrate [1-J0(t)]/t with respect to t from 0
+!  to x, and Y0(t)/t with respect to t from x to ∞
 
       subroutine ittjya(x,Ttj,Tty)
-!
-!       =========================================================
-!       Purpose: Integrate [1-J0(t)]/t with respect to t from 0
-!                to x, and Y0(t)/t with respect to t from x to ∞
+
 !       Input :  x   --- Variable in the limits  ( x ≥ 0 )
 !       Output:  TTJ --- Integration of [1-J0(t)]/t from 0 to x
 !                TTY --- Integration of Y0(t)/t from x to ∞
-!       =========================================================
-!
-      implicit none
+
       real(wp) a0 , b1 , bj0 , bj1 , by0 , by1 , e0 , el , g0 , &
                      & g1 , px , qx , r , r0 , r1 , r2 , rs , t ,  &
                      & Ttj
       real(wp) Tty , vt , x , xk
       integer k , l
+
       el = .5772156649015329d0
       if ( x==0.0_wp ) then
          Ttj = 0.0_wp
@@ -1261,24 +1260,21 @@
       endif
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute Bessel functions Jv(z) and Yv(z)
+!  and their derivatives with a complex
+!  argument and a large order
 
       subroutine cjylv(v,z,Cbjv,Cdjv,Cbyv,Cdyv)
-!
-!       ===================================================
-!       Purpose: Compute Bessel functions Jv(z) and Yv(z)
-!                and their derivatives with a complex
-!                argument and a large order
+
 !       Input:   v --- Order of Jv(z) and Yv(z)
 !                z --- Complex argument
 !       Output:  CBJV --- Jv(z)
 !                CDJV --- Jv'(z)
 !                CBYV --- Yv(z)
 !                CDYV --- Yv'(z)
-!       Routine called:
-!                CJK to compute the expansion coefficients
-!       ===================================================
-!
+
       implicit none
       real(wp) a , v , v0 , vr
       complex(wp) Cbjv , Cbyv , Cdjv , Cdyv , ceta , cf , cfj , cfy ,    &
@@ -1320,28 +1316,21 @@
       Cdyv = -v/z*Cbyv + cfy
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute prolate and oblate spheroidal radial
+!  functions of the second kind for given m, n,
+!  c and a large cx
 
       subroutine rmn2l(m,n,c,x,Df,Kd,R2f,R2d,Id)
-!
-!       ========================================================
-!       Purpose: Compute prolate and oblate spheroidal radial
-!                functions of the second kind for given m, n,
-!                c and a large cx
-!       Routine called:
-!                SPHY for computing the spherical Bessel
-!                functions of the second kind
-!       ========================================================
-!
-      implicit none
+
       real(wp) a0 , b0 , c , cx , Df , dy , eps , eps1 , eps2 , &
                      & r , r0 , R2d , R2f , reg , suc , sud , sw , sy , &
                      & x
       integer Id , id1 , id2 , ip , j , k , Kd , l , lg , m , n , nm ,  &
             & nm1 , nm2 , np
       dimension Df(200) , sy(0:251) , dy(0:251)
+
       eps = 1.0d-14
       ip = 1
       nm1 = int((n-m)/2)
@@ -1413,18 +1402,15 @@
       Id = max(id1,id2)
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute Psi function
 
       subroutine psi_spec(x,Ps)
-!
-!       ======================================
-!       Purpose: Compute Psi function
+
 !       Input :  x  --- Argument of psi(x)
 !       Output:  PS --- psi(x)
-!       ======================================
-!
+
       implicit none
       real(wp) a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , el ,&
                      & Ps , s , x , x2 , xa
@@ -1472,13 +1458,13 @@
       if ( x<0.0 ) Ps = Ps - pi*cos(pi*x)/sin(pi*x) - 1.0_wp/x
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Calculate a specific characteristic value of
+!  Mathieu functions
 
-      subroutine cva2(Kd,m,q,a)
-!
-!       ======================================================
-!       Purpose: Calculate a specific characteristic value of
-!                Mathieu functions
+   subroutine cva2(Kd,m,q,a)
+
 !       Input :  m  --- Order of Mathieu functions
 !                q  --- Parameter of Mathieu functions
 !                KD --- Case code
@@ -1487,17 +1473,7 @@
 !                       KD=3 for sem(x,q)  ( m = 1,3,5,...)
 !                       KD=4 for sem(x,q)  ( m = 2,4,6,...)
 !       Output:  A  --- Characteristic value
-!       Routines called:
-!             (1) REFINE for finding accurate characteristic
-!                 value using an iteration method
-!             (2) CV0 for finding initial characteristic
-!                 values using polynomial approximation
-!             (3) CVQM for computing initial characteristic
-!                 values for q ≤ 3*m
-!             (3) CVQL for computing initial characteristic
-!                 values for q ≥ m*m
-!       ======================================================
-!
+
       implicit none
       real(wp) a , a1 , a2 , delta , q , q1 , q2 , qq
       integer i , iflag , Kd , m , ndiv , nn
@@ -1560,26 +1536,23 @@
       endif
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute associated Legendre functions Pmn(x)
+!  and Pmn'(x) for a given order
 
       subroutine lpmns(m,n,x,Pm,Pd)
-!
-!       ========================================================
-!       Purpose: Compute associated Legendre functions Pmn(x)
-!                and Pmn'(x) for a given order
+
 !       Input :  x --- Argument of Pmn(x)
 !                m --- Order of Pmn(x),  m = 0,1,2,...,n
 !                n --- Degree of Pmn(x), n = 0,1,2,...,N
 !       Output:  PM(n) --- Pmn(x)
 !                PD(n) --- Pmn'(x)
-!       ========================================================
-!
-      implicit none
+
       integer k , m , n
       real(wp) Pd , Pm , pm0 , pm1 , pm2 , pmk , x , x0
       dimension Pm(0:n) , Pd(0:n)
+
       do k = 0 , n
          Pm(k) = 0.0_wp
          Pd(k) = 0.0_wp
@@ -1628,24 +1601,24 @@
       enddo
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute complex Error function erf(z) & erf'(z)
 
       subroutine cerf(z,Cer,Cder)
-!
-!       ==========================================================
-!       Purpose: Compute complex Error function erf(z) & erf'(z)
+
 !       Input:   z   --- Complex argument of erf(z)
 !                x   --- Real part of z
 !                y   --- Imaginary part of z
 !       Output:  CER --- erf(z)
 !                CDER --- erf'(z)
-!       ==========================================================
-      implicit none
+
       real(wp) c0 , cs , ei1 , ei2 , eps , er , er0 , er1 ,     &
                      & er2 , eri , err , r , ss , w , w1 , w2 , x ,&
                      & x2 , y
       integer k , n
       complex(wp) z , Cer , Cder
+
       eps = 1.0d-12
       x = real(z,wp)
       y = aimag(z)
@@ -1684,7 +1657,7 @@
          w1 = 0.0_wp
          do n = 1 , 100
             er2 = er2 + exp(-0.25_wp*n*n)/(n*n+4.0_wp*x2)                  &
-                & *(2.0_wp*x-2.0_wp*x*dcosh(n*y)*cs+n*dsinh(n*y)*ss)
+                & *(2.0_wp*x-2.0_wp*x*cosh(n*y)*cs+n*sinh(n*y)*ss)
             if ( abs((er2-w1)/er2)<eps ) exit
             w1 = er2
          enddo
@@ -1694,7 +1667,7 @@
          w2 = 0.0_wp
          do n = 1 , 100
             ei2 = ei2 + exp(-0.25_wp*n*n)/(n*n+4.0_wp*x2)                  &
-                & *(2.0_wp*x*dcosh(n*y)*ss+n*dsinh(n*y)*cs)
+                & *(2.0_wp*x*cosh(n*y)*ss+n*sinh(n*y)*cs)
             if ( abs((ei2-w2)/ei2)<eps ) exit
             w2 = ei2
          enddo
@@ -1704,13 +1677,13 @@
       Cder = 2.0_wp/sqrtpi*exp(-z*z)
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute prolate spheriodal radial functions of the
+!  first and second kinds, and their derivatives
 
       subroutine rswfp(m,n,c,x,Cv,Kf,R1f,R1d,R2f,R2d)
-!
-!       ==============================================================
-!       Purpose: Compute prolate spheriodal radial functions of the
-!                first and second kinds, and their derivatives
+
 !       Input :  m  --- Mode parameter, m = 0,1,2,...
 !                n  --- Mode parameter, n = m,m+1,m+2,...
 !                c  --- Spheroidal parameter
@@ -1726,16 +1699,7 @@
 !                R2F --- Radial function of the second kind
 !                R2D --- Derivative of the radial function of
 !                        the second kind
-!       Routines called:
-!            (1) SDMN for computing expansion coefficients dk
-!            (2) RMN1 for computing prolate and oblate radial
-!                functions of the first kind
-!            (3) RMN2L for computing prolate and oblate radial
-!                functions of the second kind for a large argument
-!            (4) RMN2SP for computing the prolate radial function
-!                of the second kind for a small argument
-!       ==============================================================
-!
+
       implicit none
       real(wp) c , Cv , df , R1d , R1f , R2d , R2f , x
       integer id , kd , Kf , m , n
@@ -1749,15 +1713,13 @@
       endif
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute Bessel functions Jn(x) and Yn(x), and
+!  their first and second derivatives
 
       subroutine jyndd(n,x,Bjn,Djn,Fjn,Byn,Dyn,Fyn)
-!
-!       ===========================================================
-!       Purpose: Compute Bessel functions Jn(x) and Yn(x), and
-!                their first and second derivatives
+
 !       Input:   x   ---  Argument of Jn(x) and Yn(x) ( x > 0 )
 !                n   ---  Order of Jn(x) and Yn(x)
 !       Output:  BJN ---  Jn(x)
@@ -1766,14 +1728,11 @@
 !                BYN ---  Yn(x)
 !                DYN ---  Yn'(x)
 !                FYN ---  Yn"(x)
-!       Routines called:
-!                JYNBH to compute Jn and Yn
-!       ===========================================================
-!
-      implicit none
+
       real(wp) bj , Bjn , by , Byn , Djn , Dyn , Fjn , Fyn , x
       integer n , nm
       dimension bj(2) , by(2)
+
       call jynbh(n+1,n,x,nm,bj,by)
 !       Compute derivatives by differentiation formulas
       Bjn = bj(1)
@@ -1784,21 +1743,19 @@
       Fyn = (n*n/(x*x)-1.0_wp)*Byn - Dyn/x
       end
 
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute gamma function Г(x)
 
       subroutine gam0(x,Ga)
-!
-!       ================================================
-!       Purpose: Compute gamma function Г(x)
+
 !       Input :  x  --- Argument of Г(x)  ( |x| ≤ 1 )
 !       Output:  GA --- Г(x)
-!       ================================================
-!
-      implicit none
+
       real(wp) g , Ga , gr , x
       integer k
       dimension g(25)
+
       data g/1.0_wp , 0.5772156649015329d0 , -0.6558780715202538d0 ,     &
          & -0.420026350340952d-1 , 0.1665386113822915d0 ,               &
          & -.421977345555443d-1 , -.96219715278770d-2 ,                 &
@@ -1815,21 +1772,19 @@
       Ga = 1.0_wp/(gr*x)
       end
 
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute cosine and sine integrals
+!  Si(x) and Ci(x) ( x ≥ 0 )
 
       subroutine cisib(x,Ci,Si)
-!
-!       =============================================
-!       Purpose: Compute cosine and sine integrals
-!                Si(x) and Ci(x) ( x ≥ 0 )
+
 !       Input :  x  --- Argument of Ci(x) and Si(x)
 !       Output:  CI --- Ci(x)
 !                SI --- Si(x)
-!       =============================================
-!
-      implicit none
+
       real(wp) Ci , fx , gx , Si , x , x2
+
       x2 = x*x
       if ( x==0.0 ) then
          Ci = -1.0e+300_wp
@@ -1853,20 +1808,19 @@
       endif
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute Euler number En
 
       subroutine eulera(n,En)
-!
-!       ======================================
-!       Purpose: Compute Euler number En
+
 !       Input :  n --- Serial number
 !       Output:  EN(n) --- En
-!       ======================================
-!
-      implicit none
+
       real(wp) En , r , s
       integer j , k , m , n
       dimension En(0:n)
+
       En(0) = 1.0_wp
       do m = 1 , n/2
          s = 1.0_wp
@@ -1881,25 +1835,22 @@
       enddo
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  calculate the accurate characteristic value
+!  by the secant method
 
       subroutine refine(Kd,m,q,a)
-!
-!       =====================================================
-!       Purpose: calculate the accurate characteristic value
-!                by the secant method
+
 !       Input :  m --- Order of Mathieu functions
 !                q --- Parameter of Mathieu functions
 !                A --- Initial characteristic value
 !       Output:  A --- Refineed characteristic value
-!       Routine called:  CVF for computing the value of F for
-!                        characteristic equation
-!       ========================================================
-!
-      implicit none
+
       real(wp) a , ca , delta , eps , f , f0 , f1 , q , x , x0 ,&
                      & x1
       integer it , Kd , m , mj
+
       eps = 1.0d-14
       mj = 10 + m
       ca = a
@@ -1921,26 +1872,23 @@
       a = x
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute cosine and sine integrals
+!  Si(x) and Ci(x)  ( x ≥ 0 )
 
       subroutine cisia(x,Ci,Si)
-!
-!       =============================================
-!       Purpose: Compute cosine and sine integrals
-!                Si(x) and Ci(x)  ( x ≥ 0 )
+
 !       Input :  x  --- Argument of Ci(x) and Si(x)
 !       Output:  CI --- Ci(x)
 !                SI --- Si(x)
-!       =============================================
-!
-      implicit none
+
       real(wp) bj , Ci , el , eps , p2 , Si , x , x2 , xa ,     &
                      & xa0 , xa1 , xcs , xf , xg , xg1 , xg2 , xr , xs ,&
                      & xss
       integer k , m
       dimension bj(101)
+
       p2 = 1.570796326794897d0
       el = .5772156649015329d0
       eps = 1.0d-15
@@ -2015,23 +1963,21 @@
       endif
       end
 
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Evaluate the integral of modified Struve function
+!  L0(t) with respect to t from 0 to x
 
       subroutine itsl0(x,Tl0)
-!
-!       ===========================================================
-!       Purpose: Evaluate the integral of modified Struve function
-!                L0(t) with respect to t from 0 to x
+
 !       Input :  x   --- Upper limit  ( x ≥ 0 )
 !       Output:  TL0 --- Integration of L0(t) from 0 to x
-!       ===========================================================
-!
-      implicit none
+
       real(wp) a , a0 , a1 , af , el , r , rd , s , s0 ,   &
                      & ti , Tl0 , x
       integer k
       dimension a(18)
+
       r = 1.0_wp
       if ( x<=20.0 ) then
          s = 0.5_wp
@@ -2072,26 +2018,25 @@
       endif
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute the Legendre functions Qn(z) and
+!  their derivatives Qn'(z) for a complex
+!  argument
 
       subroutine clqn(n,x,y,Cqn,Cqd)
-!
-!       ==================================================
-!       Purpose: Compute the Legendre functions Qn(z) and
-!                their derivatives Qn'(z) for a complex
-!                argument
+
 !       Input :  x --- Real part of z
 !                y --- Imaginary part of z
 !                n --- Degree of Qn(z), n = 0,1,2,...
 !       Output:  CQN(n) --- Qn(z)
 !                CQD(n) --- Qn'(z)
-!       ==================================================
-!
-      implicit none
+
       complex(wp) cq0 , cq1 , Cqd , cqf0 , cqf1 , cqf2 , Cqn , z
       integer k , km , ls , n
       real(wp) x , y
       dimension Cqn(0:n) , Cqd(0:n)
+
       z = dcmplx(x,y)
       if ( z==1.0_wp ) then
          do k = 0 , n
@@ -2139,17 +2084,17 @@
       enddo
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute the first NT zeros of Airy functions
+!  Ai(x) and Ai'(x), a and a', and the associated
+!  values of Ai(a') and Ai'(a); and the first NT
+!  zeros of Airy functions Bi(x) and Bi'(x), b and
+!  b', and the associated values of Bi(b') and
+!  Bi'(b)
 
       subroutine airyzo(Nt,Kf,Xa,Xb,Xc,Xd)
-!
-!       ========================================================
-!       Purpose: Compute the first NT zeros of Airy functions
-!                Ai(x) and Ai'(x), a and a', and the associated
-!                values of Ai(a') and Ai'(a); and the first NT
-!                zeros of Airy functions Bi(x) and Bi'(x), b and
-!                b', and the associated values of Bi(b') and
-!                Bi'(b)
+
 !       Input :  NT    --- Total number of zeros
 !                KF    --- Function code
 !                          KF=1 for Ai(x) and Ai'(x)
@@ -2161,15 +2106,12 @@
 !                XC(m) --- Ai(a') or Bi(b')
 !                XD(m) --- Ai'(a) or Bi'(b)
 !                          ( m --- Serial number of zeros )
-!       Routine called: AIRYB for computing Airy functions and
-!                       their derivatives
-!       =======================================================
-!
-      implicit none
+
       real(wp) ad , ai , bd , bi , err , rt , rt0 , u ,    &
                      & u1 , x , Xa , Xb , Xc , Xd
       integer i , Kf , Nt
       dimension Xa(Nt) , Xb(Nt) , Xc(Nt) , Xd(Nt)
+
       rt = 0.0_wp
       do i = 1 , Nt
          rt0 = 0d0
@@ -2243,21 +2185,18 @@
       enddo
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute error function erf(x)
 
       subroutine error(x,Err)
-!
-!       =========================================
-!       Purpose: Compute error function erf(x)
+
 !       Input:   x   --- Argument of erf(x)
 !       Output:  ERR --- erf(x)
-!       =========================================
-!
-      implicit none
+
       real(wp) c0 , eps , er , Err , r , x , x2
       integer k
+
       eps = 1.0d-15
       x2 = x*x
       if ( abs(x)<3.5d0 ) then
@@ -2283,21 +2222,20 @@
       endif
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute error function erf(z) for a complex
+!  argument (z=x+iy)
 
       subroutine cerror(z,Cer)
-!
-!       ====================================================
-!       Purpose: Compute error function erf(z) for a complex
-!                argument (z=x+iy)
+
 !       Input :  z   --- Complex argument
 !       Output:  CER --- erf(z)
-!       ====================================================
-!
-      implicit none
+
       complex(wp) c0 , Cer , cl , cr , cs , z , z1
       integer k
       real(wp) a0
+
       a0 = abs(z)
       c0 = exp(-z*z)
       z1 = z
@@ -2343,22 +2281,19 @@
       if ( real(z,wp)<0.0 ) Cer = -Cer
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+! Compute Euler number En
 
       subroutine eulerb(n,En)
-!
-!       ======================================
-!       Purpose: Compute Euler number En
+
 !       Input :  n --- Serial number
 !       Output:  EN(n) --- En
-!       ======================================
-!
-      implicit none
+
       real(wp) En , hpi , r1 , r2 , s
       integer isgn , k , m , n
       dimension En(0:n)
+
       hpi = 2.0_wp/3.141592653589793d0
       En(0) = 1.0_wp
       En(2) = -1.0_wp
@@ -2377,13 +2312,13 @@
       enddo
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute a sequence of characteristic values of
+!  Mathieu functions
 
       subroutine cva1(Kd,m,q,Cv)
-!
-!       ============================================================
-!       Purpose: Compute a sequence of characteristic values of
-!                Mathieu functions
+
 !       Input :  M  --- Maximum order of Mathieu functions
 !                q  --- Parameter of Mathieu functions
 !                KD --- Case code
@@ -2400,8 +2335,7 @@
 !                the characteristic values of sem for m = 1,3,5,...
 !                For KD=4, CV(1), CV(2), CV(3),..., correspond to
 !                the characteristic values of sem for m = 0,2,4,...
-!       ============================================================
-!
+
       implicit none
       real(wp) Cv , d , e , eps , f , g , h , q , s , t , t1 ,  &
                      & x1 , xa , xb
@@ -2502,20 +2436,19 @@
       endif
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Integrate [I0(t)-1]/t with respect to t from 0
+!  to x, and K0(t)/t with respect to t from x to ∞
 
       subroutine ittikb(x,Tti,Ttk)
-!
-!       =========================================================
-!       Purpose: Integrate [I0(t)-1]/t with respect to t from 0
-!                to x, and K0(t)/t with respect to t from x to ∞
+
 !       Input :  x   --- Variable in the limits  ( x ≥ 0 )
 !       Output:  TTI --- Integration of [I0(t)-1]/t from 0 to x
 !                TTK --- Integration of K0(t)/t from x to ∞
-!       =========================================================
-!
-      implicit none
+
       real(wp) e0 , el , t , t1 , Tti , Ttk , x , x1
+
       el = .5772156649015329d0
       if ( x==0.0_wp ) then
          Tti = 0.0_wp
@@ -2555,23 +2488,22 @@
       endif
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute Legendre functions Qn(x) & Qn'(x)
 
       subroutine lqnb(n,x,Qn,Qd)
-!
-!       ====================================================
-!       Purpose: Compute Legendre functions Qn(x) & Qn'(x)
+
 !       Input :  x  --- Argument of Qn(x)
 !                n  --- Degree of Qn(x)  ( n = 0,1,2,…)
 !       Output:  QN(n) --- Qn(x)
 !                QD(n) --- Qn'(x)
-!       ====================================================
-!
-      implicit none
+
       real(wp) eps , q0 , q1 , qc1 , qc2 , Qd , qf , qf0 , qf1 ,&
                      & qf2 , Qn , qr , x , x2
       integer j , k , l , n , nl
       dimension Qn(0:n) , Qd(0:n)
+
       eps = 1.0d-14
       if ( abs(x)==1.0_wp ) then
          do k = 0 , n
@@ -2633,23 +2565,22 @@
       endif
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute the expansion coefficients for the
+!  asymptotic expansion of Bessel functions
+!  with large orders
 
       subroutine cjk(Km,a)
-!
-!       ========================================================
-!       Purpose: Compute the expansion coefficients for the
-!                asymptotic expansion of Bessel functions
-!                with large orders
+
 !       Input :  Km   --- Maximum k
 !       Output:  A(L) --- Cj(k) where j and k are related to L
 !                         by L=j+1+[k*(k+1)]/2; j,k=0,1,...,Km
-!       ========================================================
-!
-      implicit none
+
       real(wp) a , f , f0 , g , g0
       integer j , k , Km , l1 , l2 , l3 , l4
       dimension a(*)
+
       a(1) = 1.0_wp
       f0 = 1.0_wp
       g0 = 1.0_wp
@@ -2673,24 +2604,22 @@
       enddo
       end
 
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Integrate [I0(t)-1]/t with respect to t from 0
+!  to x, and K0(t)/t with respect to t from x to ∞
 
       subroutine ittika(x,Tti,Ttk)
-!
-!       =========================================================
-!       Purpose: Integrate [I0(t)-1]/t with respect to t from 0
-!                to x, and K0(t)/t with respect to t from x to ∞
+
 !       Input :  x   --- Variable in the limits  ( x ≥ 0 )
 !       Output:  TTI --- Integration of [I0(t)-1]/t from 0 to x
 !                TTK --- Integration of K0(t)/t from x to ∞
-!       =========================================================
-!
-      implicit none
+
       real(wp) b1 , c , e0 , el , r , r2 , rc , rs , Tti , &
                      & Ttk , x
       integer k
       dimension c(8)
+
       el = .5772156649015329d0
       data c/1.625d0 , 4.1328125d0 , 1.45380859375d+1 ,                 &
          & 6.553353881835d+1 , 3.6066157150269d+2 , 2.3448727161884d+3 ,&
@@ -2745,13 +2674,13 @@
       endif
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute lambda function with arbitrary order v,
+!  and their derivative
 
       subroutine lamv(v,x,Vm,Vl,Dl)
-!
-!       =========================================================
-!       Purpose: Compute lambda function with arbitrary order v,
-!                and their derivative
+
 !       Input :  x --- Argument of lambda function
 !                v --- Order of lambda function
 !       Output:  VL(n) --- Lambda function of order n+v0
@@ -2761,9 +2690,7 @@
 !            (1) MSTA1 and MSTA2 for computing the starting
 !                point for backward recurrence
 !            (2) GAM0 for computing gamma function (|x| ≤ 1)
-!       =========================================================
-!
-      implicit none
+
       real(wp) a0 , bjv0 , bjv1 , bk , ck , cs , Dl , f , f0 ,  &
                      & f1 , f2 , fac , ga , px , qx , r , r0 , rc ,&
                      & rp
@@ -2771,6 +2698,7 @@
                      & x , x2 , xk
       integer i , j , k , k0 , m , n
       dimension Vl(0:*) , Dl(0:*)
+
       rp2 = 0.63661977236758d0
       x = abs(x)
       x2 = x*x
@@ -2893,29 +2821,25 @@
       Vm = n + v0
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute hypergeometric function U(a,b,x) by
+!  using Gaussian-Legendre integration (n=60)
 
       subroutine chguit(a,b,x,Hu,Id)
-!
-!       ======================================================
-!       Purpose: Compute hypergeometric function U(a,b,x) by
-!                using Gaussian-Legendre integration (n=60)
+
 !       Input  : a  --- Parameter ( a > 0 )
 !                b  --- Parameter
 !                x  --- Argument ( x > 0 )
 !       Output:  HU --- U(a,b,z)
 !                ID --- Estimated number of significant digits
-!       Routine called: GAMMA2 for computing Г(x)
-!       ======================================================
-!
-      implicit none
+
       real(wp) a , a1 , b , b1 , c , d , f1 , f2 , g , ga , Hu ,&
                      & hu0 , hu1 , hu2 , s , t , t1 , t2 , t3 , t4
       real(wp) w , x
       integer Id , j , k , m
       dimension t(30) , w(30)
+
       data t/.259597723012478d-01 , .778093339495366d-01 ,              &
          & .129449135396945d+00 , .180739964873425d+00 ,                &
          & .231543551376029d+00 , .281722937423262d+00 ,                &
@@ -3001,19 +2925,14 @@
       Hu = hu1 + hu2
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute the expansion coefficients of the
+!  prolate and oblate spheroidal functions
+!  and joining factors
 
       subroutine kmn(m,n,c,Cv,Kd,Df,Dn,Ck1,Ck2)
-!
-!       ===================================================
-!       Purpose: Compute the expansion coefficients of the
-!                prolate and oblate spheroidal functions
-!                and joining factors
-!       ===================================================
-!
-      implicit none
+
       real(wp) c , Ck1 , Ck2 , cs , Cv , Df , Dn , dnp , g0 ,   &
                      & gk0 , gk1 , gk2 , gk3 , r , r1 , r2 , r3 , r4 ,  &
                      & r5 , rk
@@ -3021,6 +2940,7 @@
       integer i , ip , j , k , Kd , l , m , n , nm , nm1 , nn
       dimension u(200) , v(200) , w(200) , Df(200) , Dn(200) , tp(200) ,&
               & rk(200)
+
       nm = 25 + int(0.5*(n-m)+c)
       nn = nm + m
       cs = c*c*Kd
@@ -3105,27 +3025,24 @@
       Ck2 = (-1)**ip*sb0*r4*r5*g0/r1*su0
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute the zeros of Laguerre polynomial Ln(x)
+!  in the interval [0,∞], and the corresponding
+!  weighting coefficients for Gauss-Laguerre
+!  integration
 
       subroutine lagzo(n,x,w)
-!
-!       =========================================================
-!       Purpose : Compute the zeros of Laguerre polynomial Ln(x)
-!                 in the interval [0,∞], and the corresponding
-!                 weighting coefficients for Gauss-Laguerre
-!                 integration
+
 !       Input :   n    --- Order of the Laguerre polynomial
 !                 X(n) --- Zeros of the Laguerre polynomial
 !                 W(n) --- Corresponding weighting coefficients
-!       =========================================================
-!
-      implicit none
+
       real(wp) f0 , f1 , fd , gd , hn , p , pd , pf , q , w ,   &
                      & wp_ , x , z , z0
       integer i , it , j , k , n , nr
       dimension x(n) , w(n)
+
       hn = 1.0_wp/n
       pf = 0.0_wp
       pd = 0.0_wp
@@ -3164,25 +3081,21 @@
       enddo
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute parabolic cylinder function Vv(x)
+!  for large argument
 
       subroutine vvla(Va,x,Pv)
-!
-!       ===================================================
-!       Purpose: Compute parabolic cylinder function Vv(x)
-!                for large argument
+
 !       Input:   x  --- Argument
 !                va --- Order
 !       Output:  PV --- Vv(x)
-!       Routines called:
-!             (1) DVLA for computing Dv(x) for large |x|
-!             (2) GAMMA2 for computing Г(x)
-!       ===================================================
-!
-      implicit none
+
       real(wp) a0 , dsl , eps , gl , pdl , Pv , qe , r ,   &
                      & Va , x , x1
       integer k
+
       eps = 1.0d-12
       qe = exp(0.25*x*x)
       a0 = abs(x)**(-Va-1.0_wp)*sqrt(2.0_wp/pi)*qe
@@ -3203,15 +3116,13 @@
       endif
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute Bessel functions Jv(z), Yv(z) and their
+!  derivatives for a complex argument
 
       subroutine cjyva(v,z,Vm,Cbj,Cdj,Cby,Cdy)
-!
-!       ===========================================================
-!       Purpose: Compute Bessel functions Jv(z), Yv(z) and their
-!                derivatives for a complex argument
+
 !       Input :  z --- Complex argument
 !                v --- Order of Jv(z) and Yv(z)
 !                      ( v = n+v0, n = 0,1,2,..., 0 ≤ v0 < 1 )
@@ -3220,12 +3131,7 @@
 !                CBY(n) --- Yn+v0(z)
 !                CDY(n) --- Yn+v0'(z)
 !                VM --- Highest order computed
-!       Routines called:
-!            (1) GAMMA2 for computing the gamma function
-!            (2) MSTA1 and MSTA2 for computing the starting
-!                point for backward recurrence
-!       ===========================================================
-!
+
       implicit none
       real(wp) a0 , ga , gb , pv0 , pv1 , rp2 , v , v0 ,   &
                      & vg , vl , Vm , vv , w0 , w1 , wa , ya0 , ya1 ,   &
@@ -3485,15 +3391,13 @@
       Vm = n + v0
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute Bessel functions Jv(z), Yv(z) and their
+!  derivatives for a complex argument
 
       subroutine cjyvb(v,z,Vm,Cbj,Cdj,Cby,Cdy)
-!
-!       ===========================================================
-!       Purpose: Compute Bessel functions Jv(z), Yv(z) and their
-!                derivatives for a complex argument
+
 !       Input :  z --- Complex argument
 !                v --- Order of Jv(z) and Yv(z)
 !                      ( v = n+v0, n = 0,1,2,..., 0 ≤ v0 < 1 )
@@ -3502,13 +3406,7 @@
 !                CBY(n) --- Yn+v0(z)
 !                CDY(n) --- Yn+v0'(z)
 !                VM --- Highest order computed
-!       Routines called:
-!            (1) GAMMA2 for computing the gamma function
-!            (2) MSTA1 and MSTA2 for computing the starting
-!                point for backward recurrence
-!       ===========================================================
-!
-      implicit none
+
       real(wp) a0 , ga , gb , pv0 , rp2 , v , v0 , vg ,    &
                      & Vm , vv , w0
       complex(wp) ca , ca0 , cb , Cbj , Cby , cck , Cdj , Cdy , cec ,    &
@@ -3518,6 +3416,7 @@
                & z1 , z2 , zk
       integer k , k0 , m , n
       dimension Cbj(0:*) , Cdj(0:*) , Cby(0:*) , Cdy(0:*)
+
       rp2 = .63661977236758d0
       ci = (0.0_wp,1.0_wp)
       a0 = abs(z)
@@ -3660,15 +3559,13 @@
       Vm = n + v0
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute Bessel functions J0(x), J1(x), Y0(x),
+!  Y1(x), and their derivatives
 
       subroutine jy01a(x,Bj0,Dj0,Bj1,Dj1,By0,Dy0,By1,Dy1)
-!
-!       =======================================================
-!       Purpose: Compute Bessel functions J0(x), J1(x), Y0(x),
-!                Y1(x), and their derivatives
+
 !       Input :  x   --- Argument of Jn(x) & Yn(x) ( x ≥ 0 )
 !       Output:  BJ0 --- J0(x)
 !                DJ0 --- J0'(x)
@@ -3678,9 +3575,7 @@
 !                DY0 --- Y0'(x)
 !                BY1 --- Y1(x)
 !                DY1 --- Y1'(x)
-!       =======================================================
-!
-      implicit none
+
       real(wp) a , a1 , b , b1 , Bj0 , Bj1 , By0 , By1 , cs0 ,  &
                      & cs1 , cu , Dj0 , Dj1 , Dy0 , Dy1 , ec , p0 , p1 ,&
                      & q0
@@ -3688,6 +3583,7 @@
                      & x2
       integer k , k0
       dimension a(12) , b(12) , a1(12) , b1(12)
+
       rp2 = 0.63661977236758d0
       x2 = x*x
       if ( x==0.0_wp ) then
@@ -3795,25 +3691,23 @@
       Dy1 = By0 - By1/x
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute the incomplete gamma function
+!  r(a,x), Г(a,x) and P(a,x)
 
       subroutine incog(a,x,Gin,Gim,Gip,Isfer)
-!
-!       ===================================================
-!       Purpose: Compute the incomplete gamma function
-!                r(a,x), Г(a,x) and P(a,x)
+
 !       Input :  a   --- Parameter ( a ≤ 170 )
 !                x   --- Argument
 !       Output:  GIN --- r(a,x)
 !                GIM --- Г(a,x)
 !                GIP --- P(a,x)
 !                ISFER --- Error flag
-!       Routine called: GAMMA2 for computing Г(x)
-!       ===================================================
-!
-      implicit none
+
       real(wp) a , ga , Gim , Gin , Gip , r , s , t0 , x , xam
       integer Isfer , k
+
       Isfer = 0
       xam = -x + a*log(x)
       if ( xam>700.0 .or. a>170.0 ) then
@@ -3849,22 +3743,19 @@
       endif
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Integrate Bessel functions I0(t) and K0(t)
+!  with respect to t from 0 to x
 
       subroutine itikb(x,Ti,Tk)
-!
-!       =======================================================
-!       Purpose: Integrate Bessel functions I0(t) and K0(t)
-!                with respect to t from 0 to x
+
 !       Input :  x  --- Upper limit of the integral ( x ≥ 0 )
 !       Output:  TI --- Integration of I0(t) from 0 to x
 !                TK --- Integration of K0(t) from 0 to x
-!       =======================================================
-!
-      implicit none
+
       real(wp) t , t1 , Ti , Tk , x
+
       if ( x==0.0_wp ) then
          Ti = 0.0_wp
       elseif ( x<5.0_wp ) then
@@ -3910,23 +3801,22 @@
       endif
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Integrate modified Bessel functions I0(t) and
+!  K0(t) with respect to t from 0 to x
 
       subroutine itika(x,Ti,Tk)
-!
-!       =======================================================
-!       Purpose: Integrate modified Bessel functions I0(t) and
-!                K0(t) with respect to t from 0 to x
+
 !       Input :  x  --- Upper limit of the integral  ( x ≥ 0 )
 !       Output:  TI --- Integration of I0(t) from 0 to x
 !                TK --- Integration of K0(t) from 0 to x
-!       =======================================================
-!
-      implicit none
+
       real(wp) a , b1 , b2 , e0 , el , r , rc1 , rc2 , rs ,&
                      & Ti , Tk , tw , x , x2
       integer k
       dimension a(10)
+
       el = .5772156649015329d0
       data a/.625d0 , 1.0078125d0 , 2.5927734375d0 , 9.1868591308594d0 ,&
          & 4.1567974090576d+1 , 2.2919635891914d+2 , 1.491504060477d+3 ,&
@@ -3985,13 +3875,13 @@
       endif
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute Bessel functions Jv(x) and Yv(x)
+!  and their derivatives
 
       subroutine jyv(v,x,Vm,Bj,Dj,By,Dy)
-!
-!       =======================================================
-!       Purpose: Compute Bessel functions Jv(x) and Yv(x)
-!                and their derivatives
+
 !       Input :  x --- Argument of Jv(x) and Yv(x)
 !                v --- Order of Jv(x) and Yv(x)
 !                      ( v = n+v0, 0 ≤ v0 < 1, n = 0,1,2,... )
@@ -4000,13 +3890,7 @@
 !                BY(n) --- Yn+v0(x)
 !                DY(n) --- Yn+v0'(x)
 !                VM --- Highest order computed
-!       Routines called:
-!            (1) GAMMA2 for computing gamma function
-!            (2) MSTA1 and MSTA2 for computing the starting
-!                point for backward recurrence
-!       =======================================================
-!
-      implicit none
+
       real(wp) a , a0 , b , Bj , bju0 , bju1 , bjv0 , bjv1 ,    &
                      & bjvl , By , byv0 , byv1 , byvk , ck , cs , cs0 , &
                      & cs1 , Dj , Dy , ec
@@ -4016,6 +3900,7 @@
       real(wp) v0 , vg , vl , Vm , vv , w0 , w1 , x , x2 , xk
       integer j , k , k0 , l , m , n
       dimension Bj(0:*) , Dj(0:*) , By(0:*) , Dy(0:*)
+
       el = .5772156649015329d0
       rp2 = .63661977236758d0
       x2 = x*x
@@ -4192,15 +4077,13 @@
       Vm = n + v0
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute Bessel functions Jn(x), Yn(x) and
+!  their derivatives
 
       subroutine jynb(n,x,Nm,Bj,Dj,By,Dy)
-!
-!       =====================================================
-!       Purpose: Compute Bessel functions Jn(x), Yn(x) and
-!                their derivatives
+
 !       Input :  x --- Argument of Jn(x) and Yn(x) ( x ≥ 0 )
 !                n --- Order of Jn(x) and Yn(x)
 !       Output:  BJ(n) --- Jn(x)
@@ -4210,12 +4093,11 @@
 !                NM --- Highest order computed
 !       Routines called:
 !                JYNBH to calculate the Jn and Yn
-!       =====================================================
-!
-      implicit none
+
       real(wp) Bj , By , Dj , Dy , x
       integer k , n , Nm
       dimension Bj(0:n) , Dj(0:n) , By(0:n) , Dy(0:n)
+
       call jynbh(n,0,x,Nm,Bj,By)
 !       Compute derivatives by differentiation formulas
       if ( x<1.0d-100 ) then
@@ -4236,25 +4118,19 @@
       endif
       end
 
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute Bessel functions Jn(x), Yn(x)
 
       subroutine jynbh(n,Nmin,x,Nm,Bj,By)
-!
-!       =====================================================
-!       Purpose: Compute Bessel functions Jn(x), Yn(x)
+
 !       Input :  x --- Argument of Jn(x) and Yn(x) ( x ≥ 0 )
 !                n --- Highest order of Jn(x) and Yn(x) computed  ( n ≥ 0 )
 !                nmin -- Lowest order computed  ( nmin ≥ 0 )
 !       Output:  BJ(n-NMIN) --- Jn(x)   ; if indexing starts at 0
 !                BY(n-NMIN) --- Yn(x)   ; if indexing starts at 0
 !                NM --- Highest order computed
-!       Routines called:
-!                MSTA1 and MSTA2 to calculate the starting
-!                point for backward recurrence
-!       =====================================================
-!
-      implicit none
+
       real(wp) a , a1 , b , b1 , Bj , bj0 , bj1 , bjk , bs ,    &
                      & By , by0 , by1 , byk , cu , ec , f , f1 , f2 ,   &
                      & p0 , p1
@@ -4262,6 +4138,7 @@
       integer k , ky , m , n , Nm , Nmin
       dimension Bj(0:n-Nmin) , By(0:n-Nmin) , a(4) , b(4) , a1(4) ,     &
               & b1(4)
+
       r2p = .63661977236758d0
       Nm = n
       if ( x<1.0d-100 ) then
@@ -4362,25 +4239,24 @@
       enddo
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute the zeros of Legendre polynomial Pn(x)
+!  in the interval [-1,1], and the corresponding
+!  weighting coefficients for Gauss-Legendre
+!  integration
 
       subroutine legzo(n,x,w)
-!
-!       =========================================================
-!       Purpose : Compute the zeros of Legendre polynomial Pn(x)
-!                 in the interval [-1,1], and the corresponding
-!                 weighting coefficients for Gauss-Legendre
-!                 integration
+
 !       Input :   n    --- Order of the Legendre polynomial
 !       Output:   X(n) --- Zeros of the Legendre polynomial
 !                 W(n) --- Corresponding weighting coefficients
-!       =========================================================
-!
-      implicit none
+
       real(wp) f0 , f1 , fd , gd , p , pd , pf , q , w , wp_ ,   &
                      & x , z , z0
       integer i , j , k , n , n0 , nr
       dimension x(n) , w(n)
+
       n0 = (n+1)/2
       pf = 0.0_wp
       pd = 0.0_wp
@@ -4421,13 +4297,13 @@
       enddo
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute the prolate and oblate spheroidal angular
+!  functions of the first kind and their derivatives
 
       subroutine aswfa(m,n,c,x,Kd,Cv,S1f,S1d)
-!
-!       ===========================================================
-!       Purpose: Compute the prolate and oblate spheroidal angular
-!                functions of the first kind and their derivatives
+
 !       Input :  m  --- Mode parameter,  m = 0,1,2,...
 !                n  --- Mode parameter,  n = m,m+1,...
 !                c  --- Spheroidal parameter
@@ -4438,15 +4314,12 @@
 !       Output:  S1F --- Angular function of the first kind
 !                S1D --- Derivative of the angular function of
 !                        the first kind
-!       Routine called:
-!                SCKB for computing expansion coefficients ck
-!       ===========================================================
-!
-      implicit none
+
       real(wp) a0 , c , ck , Cv , d0 , d1 , df , eps , r , S1d ,&
                      & S1f , su1 , su2 , x , x0 , x1
       integer ip , k , Kd , m , n , nm , nm2
       dimension ck(200) , df(200)
+
       eps = 1.0d-14
       x0 = x
       x = abs(x)
@@ -4490,15 +4363,13 @@
       x = x0
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute Bessel functions Jn(x) & Yn(x) and
+!  their derivatives
 
       subroutine jyna(n,x,Nm,Bj,Dj,By,Dy)
-!
-!       ==========================================================
-!       Purpose: Compute Bessel functions Jn(x) & Yn(x) and
-!                their derivatives
+
 !       Input :  x --- Argument of Jn(x) & Yn(x)  ( x ≥ 0 )
 !                n --- Order of Jn(x) & Yn(x)
 !       Output:  BJ(n) --- Jn(x)
@@ -4506,17 +4377,12 @@
 !                BY(n) --- Yn(x)
 !                DY(n) --- Yn'(x)
 !                NM --- Highest order computed
-!       Routines called:
-!            (1) JY01B to calculate J0(x), J1(x), Y0(x) & Y1(x)
-!            (2) MSTA1 and MSTA2 to calculate the starting
-!                point for backward recurrence
-!       =========================================================
-!
-      implicit none
+
       real(wp) Bj , bj0 , bj1 , bjk , By , by0 , by1 , cs , Dj ,&
                      & dj0 , dj1 , Dy , dy0 , dy1 , f , f0 , f1 , f2 , x
       integer k , m , n , Nm
       dimension Bj(0:n) , By(0:n) , Dj(0:n) , Dy(0:n)
+
       Nm = n
       if ( x<1.0d-100 ) then
          do k = 0 , n
@@ -4587,15 +4453,13 @@
       enddo
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute parabolic cylinder functions Dv(x)
+!  and their derivatives
 
       subroutine pbdv(v,x,Dv,Dp,Pdf,Pdd)
-!
-!       ====================================================
-!       Purpose: Compute parabolic cylinder functions Dv(x)
-!                and their derivatives
+
 !       Input:   x --- Argument of Dv(x)
 !                v --- Order of Dv(x)
 !       Output:  DV(na) --- Dn+v0(x)
@@ -4604,16 +4468,12 @@
 !                  n = 0,±1,±2,… )
 !                PDF --- Dv(x)
 !                PDD --- Dv'(x)
-!       Routines called:
-!             (1) DVSA for computing Dv(x) for small |x|
-!             (2) DVLA for computing Dv(x) for large |x|
-!       ====================================================
-!
-      implicit none
+
       real(wp) Dp , Dv , ep , f , f0 , f1 , pd , pd0 , pd1 ,    &
                      & Pdd , Pdf , s0 , v , v0 , v1 , v2 , vh , x , xa
       integer ja , k , l , m , na , nk , nv
       dimension Dv(0:*) , Dp(0:*)
+
       xa = abs(x)
       vh = v
       v = v + sign(1.0_wp,v)
@@ -4708,24 +4568,21 @@
       v = vh
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Evaluate the integral of Struve function
+!  H0(t) with respect to t from 0 and x
 
       subroutine itsh0(x,Th0)
-!
-!       ===================================================
-!       Purpose: Evaluate the integral of Struve function
-!                H0(t) with respect to t from 0 and x
+
 !       Input :  x   --- Upper limit  ( x ≥ 0 )
 !       Output:  TH0 --- Integration of H0(t) from 0 and x
-!       ===================================================
-!
-      implicit none
+
       real(wp) a , a0 , a1 , af , bf , bg , el , r , rd ,  &
                      & s , s0 , Th0 , ty , x , xp
       integer k
       dimension a(25)
+
       r = 1.0_wp
       if ( x<=30.0 ) then
          s = 0.5_wp
@@ -4774,23 +4631,21 @@
       endif
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Evaluate the complex zeros of error function erf(z)
+!  using the modified Newton's iteration method
 
       subroutine cerzo(Nt,Zo)
-!
-!       ===============================================================
-!       Purpose : Evaluate the complex zeros of error function erf(z)
-!                 using the modified Newton's iteration method
+
 !       Input :   NT --- Total number of zeros
 !       Output:   ZO(L) --- L-th zero of erf(z), L=1,2,...,NT
-!       Routine called: CERF for computing erf(z) and erf'(z)
-!       ===============================================================
-!
-      implicit none
+
       integer i , it , j , nr , Nt
       real(wp) pu , pv , px , py , w , w0
       complex(wp) z , zd , zf , zfd , zgd , Zo , zp , zq , zw
       dimension Zo(Nt)
+
       w = 0.0_wp
       do nr = 1 , Nt
          pu = sqrt(pi*(4.0_wp*nr-0.5_wp))
@@ -4823,23 +4678,20 @@
       enddo
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute gamma function Г(x)
 
       subroutine gamma2(x,Ga)
-!
-!       ==================================================
-!       Purpose: Compute gamma function Г(x)
+
 !       Input :  x  --- Argument of Г(x)
 !                       ( x is not equal to 0,-1,-2,…)
 !       Output:  GA --- Г(x)
-!       ==================================================
-!
-      implicit none
+
       real(wp) g , Ga , gr , r , x , z
       integer k , m , m1
       dimension g(26)
+
       if ( x/=int(x) ) then
          r = 1.0_wp
          if ( abs(x)>1.0_wp ) then
@@ -4881,30 +4733,23 @@
       endif
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute the confluent hypergeometric function U(a,b,x)
 
       subroutine chgu(a,b,x,Hu,Md,Isfer)
-!
-!       =======================================================
-!       Purpose: Compute the confluent hypergeometric function
-!                U(a,b,x)
+
 !       Input  : a  --- Parameter
 !                b  --- Parameter
 !                x  --- Argument  ( x > 0 )
 !       Output:  HU --- U(a,b,x)
 !                MD --- Method code
 !                ISFER --- Error flag
-!       Routines called:
-!            (1) CHGUS for small x ( MD=1 )
-!            (2) CHGUL for large x ( MD=2 )
-!            (3) CHGUBI for integer b ( MD=3 )
-!            (4) CHGUIT for numerical integration ( MD=4 )
-!       =======================================================
-!
-      implicit none
+
       real(wp) a , a00 , aa , b , b00 , Hu , hu1 , x
       integer id , id1 , Isfer , Md
       logical il1 , il2 , il3 , bl1 , bl2 , bl3 , bn
+
       aa = a - b + 1.0_wp
       Isfer = 0
       il1 = a==int(a) .and. a<=0.0
@@ -4957,29 +4802,23 @@
       if ( id<6 ) Isfer = 6
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute lambda functions and their derivatives
 
       subroutine lamn(n,x,Nm,Bl,Dl)
-!
-!       =========================================================
-!       Purpose: Compute lambda functions and their derivatives
+
 !       Input:   x --- Argument of lambda function
 !                n --- Order of lambda function
 !       Output:  BL(n) --- Lambda function of order n
 !                DL(n) --- Derivative of lambda function
 !                NM --- Highest order computed
-!       Routines called:
-!                MSTA1 and MSTA2 for computing the start
-!                point for backward recurrence
-!       =========================================================
-!
-      implicit none
+
       real(wp) bg , bk , Bl , bs , Dl , f , f0 , f1 , r , r0 ,  &
                      & uk , x , x2
       integer i , k , m , n , Nm
       dimension Bl(0:n) , Dl(0:n)
+
       Nm = n
       if ( abs(x)<1.0d-100 ) then
          do k = 0 , n
@@ -5046,22 +4885,18 @@
       enddo
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute complete elliptic integrals K(k) and E(k)
 
       subroutine comelp(Hk,Ck,Ce)
-!
-!       ==================================================
-!       Purpose: Compute complete elliptic integrals K(k)
-!                and E(k)
+
 !       Input  : K  --- Modulus k ( 0 ≤ k ≤ 1 )
 !       Output : CK --- K(k)
 !                CE --- E(k)
-!       ==================================================
-!
-      implicit none
+
       real(wp) ae , ak , be , bk , Ce , Ck , Hk , pk
+
       pk = 1.0_wp - Hk*Hk
       if ( Hk==1.0 ) then
          Ck = 1.0e+300_wp
@@ -5080,24 +4915,22 @@
       endif
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute the incomplete beta function Ix(a,b)
 
       subroutine incob(a,b,x,Bix)
-!
-!       ========================================================
-!       Purpose: Compute the incomplete beta function Ix(a,b)
+
 !       Input :  a --- Parameter
 !                b --- Parameter
 !                x --- Argument ( 0 ≤ x ≤ 1 )
 !       Output:  BIX --- Ix(a,b)
-!       Routine called: BETA for computing beta function B(p,q)
-!       ========================================================
-!
-      implicit none
+
       real(wp) a , b , Bix , bt , dk , fk , s0 , t1 , t2 , ta , &
                      & tb , x
       integer k
       dimension dk(51) , fk(51)
+
       s0 = (a+1.0_wp)/(a+b+2.0_wp)
       call beta(a,b,bt)
       if ( x<=s0 ) then
@@ -5130,24 +4963,21 @@
       endif
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute the value of F for characteristic
+!  equation of Mathieu functions
 
       subroutine cvf(Kd,m,q,a,Mj,f)
-!
-!       ======================================================
-!       Purpose: Compute the value of F for characteristic
-!                equation of Mathieu functions
+
 !       Input :  m --- Order of Mathieu functions
 !                q --- Parameter of Mathieu functions
 !                A --- Characteristic value
 !       Output:  F --- Value of F for characteristic equation
-!       ======================================================
-!
-      implicit none
+
       real(wp) a , b , f , q , t0 , t1 , t2
       integer ic , j , j0 , jf , Kd , l , l0 , m , Mj
+
       b = a
       ic = int(m/2)
       l = 0
@@ -5182,28 +5012,25 @@
       f = (2.0_wp*ic+l)**2 + t1 + t2 - b
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute Legendre polynomials Pn(z) and
+!  their derivatives Pn'(z) for a complex
+!  argument
 
       subroutine clpn(n,x,y,Cpn,Cpd)
-!
-!       ==================================================
-!       Purpose: Compute Legendre polynomials Pn(z) and
-!                their derivatives Pn'(z) for a complex
-!                argument
+
 !       Input :  x --- Real part of z
 !                y --- Imaginary part of z
 !                n --- Degree of Pn(z), n = 0,1,2,...
 !       Output:  CPN(n) --- Pn(z)
 !                CPD(n) --- Pn'(z)
-!       ==================================================
-!
-      implicit none
+
       complex(wp) cp0 , cp1 , Cpd , cpf , Cpn , z
       integer k , n
       real(wp) x , y
       dimension Cpn(0:n) , Cpd(0:n)
+
       z = dcmplx(x,y)
       Cpn(0) = (1.0_wp,0.0_wp)
       Cpn(1) = z
@@ -5224,27 +5051,26 @@
       enddo
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute associated Legendre functions Qmn(x)
+!  and Qmn'(x) for a given order
 
       subroutine lqmns(m,n,x,Qm,Qd)
-!
-!       ========================================================
-!       Purpose: Compute associated Legendre functions Qmn(x)
-!                and Qmn'(x) for a given order
+
 !       Input :  x --- Argument of Qmn(x)
 !                m --- Order of Qmn(x),  m = 0,1,2,...
 !                n --- Degree of Qmn(x), n = 0,1,2,...
 !       Output:  QM(n) --- Qmn(x)
 !                QD(n) --- Qmn'(x)
-!       ========================================================
-!
-      implicit none
+
       integer k , km , l , ls , m , n
       real(wp) q0 , q00 , q01 , q0l , q10 , q11 , q1l , Qd ,    &
                      & qf0 , qf1 , qf2 , qg0 , qg1 , qh0 , qh1 , qh2 ,  &
                      & Qm , qm0 , qm1 , qmk
       real(wp) x , xq
       dimension Qm(0:n) , Qd(0:n)
+
       do k = 0 , n
          Qm(k) = 0.0_wp
          Qd(k) = 0.0_wp
@@ -5359,30 +5185,27 @@
       enddo
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute modified Bessel functions Iv(z) and
+!  Kv(z) and their derivatives with a complex
+!  argument and a large order
 
       subroutine ciklv(v,z,Cbiv,Cdiv,Cbkv,Cdkv)
-!
-!       =====================================================
-!       Purpose: Compute modified Bessel functions Iv(z) and
-!                Kv(z) and their derivatives with a complex
-!                argument and a large order
+
 !       Input:   v --- Order of Iv(z) and Kv(z)
 !                z --- Complex argument
 !       Output:  CBIV --- Iv(z)
 !                CDIV --- Iv'(z)
 !                CBKV --- Kv(z)
 !                CDKV --- Kv'(z)
-!       Routine called:
-!                CJK to compute the expansion coefficients
-!       ====================================================
-!
-      implicit none
+
       real(wp) a , v , v0 , vr
       complex(wp) Cbiv , Cbkv , Cdiv , Cdkv , ceta , cf , cfi , cfk ,    &
                & csi , csk , ct , ct2 , cws , z
       integer i , k , km , l , l0 , lf
       dimension cf(12) , a(91)
+
       km = 12
       call cjk(km,a)
       do l = 1 , 0 , -1
@@ -5418,25 +5241,22 @@
       Cdkv = -cfk - v/z*Cbkv
       end
 
-
-
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute complete and incomplete elliptic
+!  integrals F(k,phi) and E(k,phi)
 
       subroutine elit(Hk,Phi,Fe,Ee)
-!
-!       ==================================================
-!       Purpose: Compute complete and incomplete elliptic
-!                integrals F(k,phi) and E(k,phi)
+
 !       Input  : HK  --- Modulus k ( 0 ≤ k ≤ 1 )
 !                Phi --- Argument ( in degrees )
 !       Output : FE  --- F(k,phi)
 !                EE  --- E(k,phi)
-!       ==================================================
-!
-      implicit none
+
       real(wp) a , a0 , b , b0 , c , ce , ck , d , d0 , Ee ,    &
                      & fac , Fe , g , Hk , Phi , r
       integer n
+
       g = 0.0_wp
       a0 = 1.0_wp
       b0 = sqrt(1.0_wp-Hk*Hk)
@@ -5478,26 +5298,25 @@
       endif
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute the elliptic integral of the third kind
+!  using Gauss-Legendre quadrature
 
       subroutine elit3(Phi,Hk,c,El3)
-!
-!       =========================================================
-!       Purpose: Compute the elliptic integral of the third kind
-!                using Gauss-Legendre quadrature
+
 !       Input :  Phi --- Argument ( in degrees )
 !                 k  --- Modulus   ( 0 ≤ k ≤ 1.0 )
 !                 c  --- Parameter ( 0 ≤ c ≤ 1.0 )
 !       Output:  EL3 --- Value of the elliptic integral of the
 !                        third kind
-!       =========================================================
-!
-      implicit none
+
       real(wp) c , c0 , c1 , c2 , El3 , f1 , f2 , Hk , Phi , t ,&
                      & t1 , t2 , w
       integer i
       dimension t(10) , w(10)
       logical lb1 , lb2
+
       data t/.9931285991850949d0 , .9639719272779138d0 ,                &
          & .9122344282513259d0 , .8391169718222188d0 ,                  &
          & .7463319064601508d0 , .6360536807265150d0 ,                  &
@@ -5530,19 +5349,18 @@
       El3 = c1*El3
       end
 
-!       **********************************
+!*****************************************************************************************
+!>
+!  Compute exponential integral Ei(x)
 
       subroutine eix(x,Ei)
-!
-!       ============================================
-!       Purpose: Compute exponential integral Ei(x)
+
 !       Input :  x  --- Argument of Ei(x)
 !       Output:  EI --- Ei(x)
-!       ============================================
-!
-      implicit none
+
       real(wp) Ei , ga , r , x
       integer k
+
       if ( x==0.0 ) then
          Ei = -1.0e+300_wp
       elseif ( x<0 ) then
@@ -5571,7 +5389,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine eixz(z,Cei)
 !
@@ -5594,7 +5411,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine e1xb(x,e1)
 !
@@ -5630,7 +5446,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine chgm(a,b,x,Hg)
 !
@@ -5733,7 +5548,6 @@
       x = x0
       end
 
-!       **********************************
 
       subroutine hygfx(a,b,c,x,Hf,Isfer)
 !
@@ -5953,7 +5767,6 @@
 
 
 
-!       **********************************
 
       subroutine cchg(a,b,z,Chg)
 !
@@ -6081,7 +5894,6 @@
 
 
 
-!       **********************************
 
       subroutine hygfz(a,b,c,z,Zhf,Isfer)
 !
@@ -6401,7 +6213,6 @@
 
 
 
-!       **********************************
 
       subroutine itairy(x,Apt,Bpt,Ant,Bnt)
 !
@@ -6510,7 +6321,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine ikna(n,x,Nm,Bi,Di,Bk,Dk)
 !
@@ -6605,7 +6415,6 @@
 
 
 
-!       **********************************
 
       subroutine cjynb(n,z,Nm,Cbj,Cdj,Cby,Cdy)
 !
@@ -6754,7 +6563,6 @@
 
 
 
-!       **********************************
 
       subroutine iknb(n,x,Nm,Bi,Di,Bk,Dk)
 !
@@ -6853,7 +6661,6 @@
 
 
 
-!       **********************************
 
       subroutine lpmn(Mm,m,n,x,Pm,Pd)
 !
@@ -6927,7 +6734,6 @@
       enddo
       end
 
-!       **********************************
 
       subroutine mtu0(Kf,m,q,x,Csf,Csd)
 !
@@ -7003,7 +6809,6 @@
 
 
 
-!       **********************************
 
       subroutine cy01(Kf,z,Zf,Zd)
 !
@@ -7155,7 +6960,6 @@
       end
 
 
-!       **********************************
 
       subroutine ffk(Ks,x,Fr,Fi,Fm,Fa,Gr,Gi,Gm,Ga)
 !
@@ -7293,7 +7097,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine airya(x,Ai,Bi,Ad,Bd)
 !
@@ -7341,7 +7144,6 @@
 
 
 
-!       **********************************
 
       subroutine airyb(x,Ai,Bi,Ad,Bd)
 !
@@ -7490,7 +7292,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine scka(m,n,c,Cv,Kd,Ck)
 !
@@ -7595,7 +7396,6 @@
 
 
 
-!       **********************************
 
       subroutine sckb(m,n,c,Df,Ck)
 !
@@ -7655,7 +7455,6 @@
 
 
 
-!       **********************************
 
       subroutine cpdla(n,z,Cdn)
 !
@@ -7683,7 +7482,6 @@
 
 
 
-!       **********************************
 
       subroutine fcszo(Kf,Nt,Zo)
 !
@@ -7745,7 +7543,6 @@
 
 
 
-!       **********************************
 
       subroutine e1xa(x,e1)
 !
@@ -7771,7 +7568,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine lpmv0(v,m,x,Pmv)
 !
@@ -7878,7 +7674,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine lpmv(v,m,x,Pmv)
 !
@@ -7941,7 +7736,6 @@
       end
 
 
-!       **********************************
 
       subroutine cgama(x,y,Kf,Gr,Gi)
 !
@@ -8008,8 +7802,8 @@
       if ( x1<0.0_wp ) then
          z1 = sqrt(x*x+y*y)
          th1 = atan(y/x)
-         sr = -sin(pi*x)*dcosh(pi*y)
-         si = -cos(pi*x)*dsinh(pi*y)
+         sr = -sin(pi*x)*cosh(pi*y)
+         si = -cos(pi*x)*sinh(pi*y)
          z2 = sqrt(sr*sr+si*si)
          th2 = atan(si/sr)
          if ( sr<0.0_wp ) th2 = pi + th2
@@ -8025,7 +7819,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine aswfb(m,n,c,x,Kd,Cv,S1f,S1d)
 !
@@ -8081,7 +7874,6 @@
 
 
 
-!       **********************************
 
       subroutine chgus(a,b,x,Hu,Id)
 !
@@ -8136,7 +7928,6 @@
 
 
 
-!       **********************************
 
       subroutine itth0(x,Tth)
 !
@@ -8177,7 +7968,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine lgama(Kf,x,Gl)
 !
@@ -8223,7 +8013,6 @@
  100  if ( Kf==1 ) Gl = exp(Gl)
       end
 
-!       **********************************
 
       subroutine lqna(n,x,Qn,Qd)
 !
@@ -8262,7 +8051,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine dvla(Va,x,Pd)
 !
@@ -8302,7 +8090,6 @@
 
 
 
-!       **********************************
 
       subroutine ik01a(x,Bi0,Di0,Bi1,Di1,Bk0,Dk0,Bk1,Dk1)
 !
@@ -8418,7 +8205,6 @@
       Dk1 = -Bk0 - Bk1/x
       end
 
-!       **********************************
 
       subroutine cpbdn(n,z,Cpb,Cpd)
 !
@@ -8518,7 +8304,6 @@
 
 
 
-!       **********************************
 
       subroutine ik01b(x,Bi0,Di0,Bi1,Di1,Bk0,Dk0,Bk1,Dk1)
 !
@@ -8590,7 +8375,6 @@
       Dk1 = -Bk0 - Bk1/x
       end
 
-!       **********************************
 
       subroutine beta(p,q,Bt)
 !
@@ -8613,7 +8397,6 @@
 
 
 
-!       **********************************
 
       subroutine lpn(n,x,Pn,Pd)
 !
@@ -8649,7 +8432,6 @@
       enddo
       end
 
-!       **********************************
 
       subroutine fcoef(Kd,m,q,a,Fc)
 !
@@ -8893,7 +8675,6 @@
 
 
 
-!       **********************************
 
       subroutine sphi(n,x,Nm,Si,Di)
 !
@@ -8924,8 +8705,8 @@
          Di(1) = 0.333333333333333d0
          return
       endif
-      Si(0) = dsinh(x)/x
-      Si(1) = -(dsinh(x)/x-dcosh(x))/x
+      Si(0) = sinh(x)/x
+      Si(1) = -(sinh(x)/x-cosh(x))/x
       si0 = Si(0)
       if ( n>=2 ) then
          m = msta1(x,200)
@@ -8956,7 +8737,6 @@
 
 
 
-!       **********************************
 
       subroutine pbwa(a,x,W1f,W1d,W2f,W2d)
 !
@@ -9059,7 +8839,6 @@
 
 
 
-!       **********************************
 
       subroutine rmn1(m,n,c,x,Df,Kd,R1f,R1d)
 !
@@ -9175,7 +8954,6 @@
 
 
 
-!       **********************************
 
       subroutine dvsa(Va,x,Pd)
 !
@@ -9226,7 +9004,6 @@
 
 
 
-!       **********************************
 
       subroutine e1z(z,Ce1)
 !
@@ -9291,7 +9068,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine itjyb(x,Tj,Ty)
 !
@@ -9344,7 +9120,6 @@
       end
 
 
-!       **********************************
 
       subroutine chgul(a,b,x,Hu,Id)
 !
@@ -9398,7 +9173,6 @@
 
 
 
-!       **********************************
 
       subroutine gmn(m,n,c,x,Bk,Gf,Gd)
 !
@@ -9441,7 +9215,6 @@
 
 
 
-!       **********************************
 
       subroutine itjya(x,Tj,Ty)
 !
@@ -9514,7 +9287,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine rcty(n,x,Nm,Ry,Dy)
 !
@@ -9560,7 +9332,6 @@
       enddo
       end
 
-!       **********************************
 
       subroutine lpni(n,x,Pn,Pd,Pl)
 !
@@ -9608,7 +9379,6 @@
       enddo
       end
 
-!       **********************************
 
       subroutine klvna(x,Ber,Bei,Ger,Gei,Der,Dei,Her,Hei)
 !
@@ -9776,7 +9546,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine chgubi(a,b,x,Hu,Id)
 !
@@ -9904,7 +9673,6 @@
 
 
 
-!       **********************************
 
       subroutine cyzo(Nt,Kf,Kc,Zo,Zv)
 !
@@ -9986,7 +9754,6 @@
 
 
 
-!       **********************************
 
       subroutine klvnb(x,Ber,Bei,Ger,Gei,Der,Dei,Her,Hei)
 !
@@ -10101,7 +9868,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine rmn2so(m,n,c,x,Cv,Df,Kd,R2f,R2d)
 !
@@ -10168,7 +9934,6 @@
 
 
 
-!       **********************************
 
       subroutine bjndd(n,x,Bj,Dj,Fj)
 !
@@ -10213,7 +9978,6 @@
       enddo
       end
 
-!       **********************************
 
 
       subroutine sphj(n,x,Nm,Sj,Dj)
@@ -10282,7 +10046,6 @@
 
 
 
-!       **********************************
 
       subroutine othpl(Kf,n,x,Pl,Dpl)
 !
@@ -10346,7 +10109,6 @@
       enddo
       end
 
-!       **********************************
 
       subroutine klvnzo(Nt,Kd,Zo)
 !
@@ -10412,7 +10174,6 @@
 
 
 
-!       **********************************
 
       subroutine rswfo(m,n,c,x,Cv,Kf,R1f,R1d,R2f,R2d)
 !
@@ -10460,7 +10221,6 @@
 
 
 
-!       **********************************
 
       subroutine ch12n(n,z,Nm,Chf1,Chd1,Chf2,Chd2)
 !
@@ -10530,7 +10290,6 @@
 
 
 
-!       **********************************
 
       subroutine jyzo(n,Nt,Rj0,Rj1,Ry0,Ry1)
 !
@@ -10663,7 +10422,6 @@
 
 
 
-!       **********************************
 
       subroutine ikv(v,x,Vm,Bi,Di,Bk,Dk)
 !
@@ -10824,7 +10582,6 @@
 
 
 
-!       **********************************
 
       subroutine sdmn(m,n,c,Cv,Kd,Df)
 !
@@ -10962,7 +10719,6 @@
 
 
 
-!       **********************************
 
       subroutine ajyik(x,Vj1,Vj2,Vy1,Vy2,Vi1,Vi2,Vk1,Vk2)
 !
@@ -11141,7 +10897,6 @@
 
 
 
-!       **********************************
 
       subroutine cikvb(v,z,Vm,Cbi,Cdi,Cbk,Cdk)
 !
@@ -11310,7 +11065,6 @@
 
 
 
-!       **********************************
 
       subroutine cikva(v,z,Vm,Cbi,Cdi,Cbk,Cdk)
 !
@@ -11487,7 +11241,6 @@
 
 
 
-!       **********************************
 
       subroutine cfc(z,Zf,Zd)
 !
@@ -11569,7 +11322,6 @@
 
 
 
-!       **********************************
 
       subroutine fcs(x,c,s)
 !
@@ -11653,7 +11405,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine rctj(n,x,Nm,Rj,Dj)
 !
@@ -11718,7 +11469,6 @@
 
 
 
-!       **********************************
 
       subroutine herzo(n,x,w)
 !
@@ -11793,7 +11543,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine jy01b(x,Bj0,Dj0,Bj1,Dj1,By0,Dy0,By1,Dy1)
 !
@@ -11869,7 +11618,6 @@
       Dy1 = By0 - By1/x
       end
 
-!       **********************************
 
       subroutine enxb(n,x,En)
 !
@@ -11932,7 +11680,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine sphk(n,x,Nm,Sk,Dk)
 !
@@ -11976,7 +11723,6 @@
       enddo
       end
 
-!       **********************************
 
       subroutine enxa(n,x,En)
 !
@@ -12004,7 +11750,6 @@
 
 
 
-!       **********************************
 
       subroutine gaih(x,Ga)
 !
@@ -12032,7 +11777,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine pbvv(v,x,Vv,Vp,Pvf,Pvd)
 !
@@ -12160,7 +11904,6 @@
 
 
 
-!       **********************************
 
       subroutine clqmn(Mm,m,n,x,y,Cqm,Cqd)
 !
@@ -12270,7 +12013,6 @@
       end
 
 
-!       **********************************
 
       subroutine segv(m,n,c,Kd,Cv,Eg)
 !
@@ -12381,7 +12123,6 @@
       end
 
 
-!       **********************************
 
       subroutine ciknb(n,z,Nm,Cbi,Cdi,Cbk,Cdk)
 !
@@ -12495,7 +12236,6 @@
       end
 
 
-!       **********************************
 
       subroutine cikna(n,z,Nm,Cbi,Cdi,Cbk,Cdk)
 !
@@ -12579,7 +12319,6 @@
 
 
 
-!       **********************************
 
       subroutine mtu12(Kf,Kc,m,q,x,F1r,D1r,F2r,D2r)
 !
@@ -12722,7 +12461,6 @@
 
 
 
-!       **********************************
 
       subroutine cik01(z,Cbi0,Cdi0,Cbi1,Cdi1,Cbk0,Cdk0,Cbk1,Cdk1)
 !
@@ -12850,7 +12588,6 @@
       Cdk1 = -Cbk0 - 1.0_wp/z*Cbk1
       end
 
-!       **********************************
 
       subroutine cpsi(x,y,Psr,Psi)
 !
@@ -12921,7 +12658,6 @@
       endif
       end
 
-!       **********************************
 
       subroutine sphy(n,x,Nm,Sy,Dy)
 !
@@ -12966,7 +12702,6 @@
       enddo
       end
 
-!       **********************************
 
       subroutine jelp(u,Hk,Esn,Ecn,Edn,Eph)
 !
