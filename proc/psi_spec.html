@@ -84,7 +84,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.4% of total for procedures.">44 statements</a>
+    title=" 0.5% of total for procedures.">44 statements</a>
      </li> 
     <li><i class="fa fa-code"></i><a href="../src/specfun.f90"> Source File</a></li>
   </ul>
@@ -119,6 +119,7 @@
     <h2>public subroutine psi_spec(x, Ps)</h2>
     
 
+    <p>Compute Psi function</p>
 
     <h3>Arguments</h3>
       <table class="table table-striped varlist">
@@ -177,18 +178,18 @@
 <path fill="none" stroke="#000000" d="M135.35,-125.85C148.68,-116.53 167.28,-103.51 182.32,-92.98"/>
 <polygon fill="#000000" stroke="#000000" points="184.52,-95.71 190.7,-87.11 180.5,-89.98 184.52,-95.71"/>
 </g>
-<!-- proc~lpmv0 -->
+<!-- proc~hygfx -->
 <g id="proc~~psi_spec~~CalledByGraph_node3" class="node">
-<title>proc~lpmv0</title>
-<g id="a_proc~~psi_spec~~CalledByGraph_node3"><a xlink:href=".././proc/lpmv0.html" xlink:title="lpmv0">
+<title>proc~hygfx</title>
+<g id="a_proc~~psi_spec~~CalledByGraph_node3"><a xlink:href=".././proc/hygfx.html" xlink:title="hygfx">
 <polygon fill="#d9534f" stroke="#d9534f" points="144,-108 90,-108 90,-84 144,-84 144,-108"/>
-<text text-anchor="middle" x="117" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lpmv0</text>
+<text text-anchor="middle" x="117" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">hygfx</text>
 </a>
 </g>
 </g>
-<!-- proc~lpmv0&#45;&gt;proc~psi_spec -->
+<!-- proc~hygfx&#45;&gt;proc~psi_spec -->
 <g id="proc~~psi_spec~~CalledByGraph_edge2" class="edge">
-<title>proc~lpmv0&#45;&gt;proc~psi_spec</title>
+<title>proc~hygfx&#45;&gt;proc~psi_spec</title>
 <path fill="none" stroke="#000000" d="M144.03,-89.93C152.09,-88.05 161.14,-85.93 169.85,-83.9"/>
 <polygon fill="#000000" stroke="#000000" points="170.88,-87.26 179.82,-81.57 169.29,-80.44 170.88,-87.26"/>
 </g>
@@ -207,18 +208,18 @@
 <path fill="none" stroke="#000000" d="M144.03,-60.07C152.09,-61.95 161.14,-64.07 169.85,-66.1"/>
 <polygon fill="#000000" stroke="#000000" points="169.29,-69.56 179.82,-68.43 170.88,-62.74 169.29,-69.56"/>
 </g>
-<!-- proc~hygfx -->
+<!-- proc~lpmv0 -->
 <g id="proc~~psi_spec~~CalledByGraph_node5" class="node">
-<title>proc~hygfx</title>
-<g id="a_proc~~psi_spec~~CalledByGraph_node5"><a xlink:href=".././proc/hygfx.html" xlink:title="hygfx">
+<title>proc~lpmv0</title>
+<g id="a_proc~~psi_spec~~CalledByGraph_node5"><a xlink:href=".././proc/lpmv0.html" xlink:title="lpmv0">
 <polygon fill="#d9534f" stroke="#d9534f" points="144,-24 90,-24 90,0 144,0 144,-24"/>
-<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">hygfx</text>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lpmv0</text>
 </a>
 </g>
 </g>
-<!-- proc~hygfx&#45;&gt;proc~psi_spec -->
+<!-- proc~lpmv0&#45;&gt;proc~psi_spec -->
 <g id="proc~~psi_spec~~CalledByGraph_edge4" class="edge">
-<title>proc~hygfx&#45;&gt;proc~psi_spec</title>
+<title>proc~lpmv0&#45;&gt;proc~psi_spec</title>
 <path fill="none" stroke="#000000" d="M135.35,-24.15C148.68,-33.47 167.28,-46.49 182.32,-57.02"/>
 <polygon fill="#000000" stroke="#000000" points="180.5,-60.02 190.7,-62.89 184.52,-54.29 180.5,-60.02"/>
 </g>
@@ -241,16 +242,16 @@
 <g id="proc~~psi_spec~~CalledByGraph_node7" class="node">
 <title>proc~lpmv</title>
 <g id="a_proc~~psi_spec~~CalledByGraph_node7"><a xlink:href=".././proc/lpmv.html" xlink:title="lpmv">
-<polygon fill="#d9534f" stroke="#d9534f" points="54,-108 0,-108 0,-84 54,-84 54,-108"/>
-<text text-anchor="middle" x="27" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lpmv</text>
+<polygon fill="#d9534f" stroke="#d9534f" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lpmv</text>
 </a>
 </g>
 </g>
 <!-- proc~lpmv&#45;&gt;proc~lpmv0 -->
 <g id="proc~~psi_spec~~CalledByGraph_edge6" class="edge">
 <title>proc~lpmv&#45;&gt;proc~lpmv0</title>
-<path fill="none" stroke="#000000" d="M54.4,-96C62.39,-96 71.31,-96 79.82,-96"/>
-<polygon fill="#000000" stroke="#000000" points="79.92,-99.5 89.92,-96 79.92,-92.5 79.92,-99.5"/>
+<path fill="none" stroke="#000000" d="M54.4,-12C62.39,-12 71.31,-12 79.82,-12"/>
+<polygon fill="#000000" stroke="#000000" points="79.92,-15.5 89.92,-12 79.92,-8.5 79.92,-15.5"/>
 </g>
 </g>
 </svg>

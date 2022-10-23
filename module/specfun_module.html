@@ -84,7 +84,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title="100.0% of total for modules and submodules.">9786 statements</a>
+    title="100.0% of total for modules and submodules.">9723 statements</a>
      </li> 
     <li><i class="fa fa-code"></i><a href="../src/specfun.f90"> Source File</a></li>
   </ul>
@@ -298,7 +298,26 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    
+    <p>COMPUTATION OF SPECIAL FUNCTIONS</p>
+<p>Shanjie Zhang and Jianming Jin</p>
+<p>Copyrighted but permission granted to use code in programs.
+Buy their book "Computation of Special Functions", 1996, John Wiley &amp; Sons, Inc.</p>
+<p>Scipy changes:
+- Compiled into a single source file and changed REAL To DBLE throughout.
+- Changed according to ERRATA.
+- Changed GAMMA to GAMMA2 and PSI to PSI_SPEC to avoid potential conflicts.
+- Made functions return sf_error codes in ISFER variables instead
+  of printing warnings. The codes are
+  - SF_ERROR_OK        = 0: no error
+  - SF_ERROR_SINGULAR  = 1: singularity encountered
+  - SF_ERROR_UNDERFLOW = 2: floating point underflow
+  - SF_ERROR_OVERFLOW  = 3: floating point overflow
+  - SF_ERROR_SLOW      = 4: too many iterations required
+  - SF_ERROR_LOSS      = 5: loss of precision
+  - SF_ERROR_NO_RESULT = 6: no result obtained
+  - SF_ERROR_DOMAIN    = 7: out of domain
+  - SF_ERROR_ARG       = 8: invalid input parameter
+  - SF_ERROR_OTHER     = 9: unclassified error</p>
 <br>        <div class="panel panel-default">
       <div class="panel-heading">
   <h3 class="panel-title">Uses</h3>
@@ -657,7 +676,11 @@
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-msta1"></span><h3>public function <a href='../proc/msta1.html'>msta1</a>(x, Mp)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Determine the starting point for backward
+recurrence such that the magnitude of
+Jn(x) at that point is about 10^(-MP)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -684,7 +707,11 @@
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-msta2"></span><h3>public function <a href='../proc/msta2.html'>msta2</a>(x, n, Mp)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Determine the starting point for backward
+recurrence such that all Jn(x) has MP
+significant digits</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1263,7 +1290,11 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-cv0"></span><h3>public subroutine <a href='../proc/cv0.html'>cv0</a>(Kd, m, q, a0)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute the initial characteristic value of
+Mathieu functions for m ≤ 12  or q ≤ 300 or
+q ≥ m*m</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1301,7 +1332,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-cvqm"></span><h3>public subroutine <a href='../proc/cvqm.html'>cvqm</a>(m, q, a0)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute the characteristic value of Mathieu
+functions for q ≤ m*m</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1333,7 +1367,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-cvql"></span><h3>public subroutine <a href='../proc/cvql.html'>cvql</a>(Kd, m, q, a0)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute the characteristic value of Mathieu
+functions  for q ≥ 3m</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1371,7 +1408,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-ittjyb"></span><h3>public subroutine <a href='../proc/ittjyb.html'>ittjyb</a>(x, Ttj, Tty)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Integrate [1-J0(t)]/t with respect to t from 0
+to x, and Y0(t)/t with respect to t from x to ∞</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1403,7 +1443,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-ittjya"></span><h3>public subroutine <a href='../proc/ittjya.html'>ittjya</a>(x, Ttj, Tty)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Integrate [1-J0(t)]/t with respect to t from 0
+to x, and Y0(t)/t with respect to t from x to ∞</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1435,7 +1478,11 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-cjylv"></span><h3>public subroutine <a href='../proc/cjylv.html'>cjylv</a>(v, z, Cbjv, Cdjv, Cbyv, Cdyv)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute Bessel functions Jv(z) and Yv(z)
+and their derivatives with a complex
+argument and a large order</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1485,7 +1532,11 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-rmn2l"></span><h3>public subroutine <a href='../proc/rmn2l.html'>rmn2l</a>(m, n, c, x, Df, Kd, R2f, R2d, Id)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute prolate and oblate spheroidal radial
+functions of the second kind for given m, n,
+c and a large cx</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1553,7 +1604,9 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-psi_spec"></span><h3>public subroutine <a href='../proc/psi_spec.html'>psi_spec</a>(x, Ps)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute Psi function</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1579,7 +1632,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-cva2"></span><h3>public subroutine <a href='../proc/cva2.html'>cva2</a>(Kd, m, q, a)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Calculate a specific characteristic value of
+Mathieu functions</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1617,7 +1673,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-lpmns"></span><h3>public subroutine <a href='../proc/lpmns.html'>lpmns</a>(m, n, x, Pm, Pd)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute associated Legendre functions Pmn(x)
+and Pmn'(x) for a given order</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1661,7 +1720,9 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-cerf"></span><h3>public subroutine <a href='../proc/cerf.html'>cerf</a>(z, Cer, Cder)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute complex Error function erf(z) &amp; erf'(z)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1693,7 +1754,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-rswfp"></span><h3>public subroutine <a href='../proc/rswfp.html'>rswfp</a>(m, n, c, x, Cv, Kf, R1f, R1d, R2f, R2d)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute prolate spheriodal radial functions of the
+first and second kinds, and their derivatives</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1767,7 +1831,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-jyndd"></span><h3>public subroutine <a href='../proc/jyndd.html'>jyndd</a>(n, x, Bjn, Djn, Fjn, Byn, Dyn, Fyn)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute Bessel functions Jn(x) and Yn(x), and
+their first and second derivatives</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1829,7 +1896,9 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-gam0"></span><h3>public subroutine <a href='../proc/gam0.html'>gam0</a>(x, Ga)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute gamma function Г(x)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1855,7 +1924,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-cisib"></span><h3>public subroutine <a href='../proc/cisib.html'>cisib</a>(x, Ci, Si)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute cosine and sine integrals
+Si(x) and Ci(x) ( x ≥ 0 )</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1887,7 +1959,9 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-eulera"></span><h3>public subroutine <a href='../proc/eulera.html'>eulera</a>(n, En)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute Euler number En</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1913,7 +1987,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-refine"></span><h3>public subroutine <a href='../proc/refine.html'>refine</a>(Kd, m, q, a)</h3></div>
   <div class="panel-body">
-           
+       
+<p>calculate the accurate characteristic value
+by the secant method</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1951,7 +2028,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-cisia"></span><h3>public subroutine <a href='../proc/cisia.html'>cisia</a>(x, Ci, Si)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute cosine and sine integrals
+Si(x) and Ci(x)  ( x ≥ 0 )</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -1983,7 +2063,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-itsl0"></span><h3>public subroutine <a href='../proc/itsl0.html'>itsl0</a>(x, Tl0)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Evaluate the integral of modified Struve function
+L0(t) with respect to t from 0 to x</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2009,7 +2092,11 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-clqn"></span><h3>public subroutine <a href='../proc/clqn.html'>clqn</a>(n, x, y, Cqn, Cqd)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute the Legendre functions Qn(z) and
+their derivatives Qn'(z) for a complex
+argument</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2053,7 +2140,14 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-airyzo"></span><h3>public subroutine <a href='../proc/airyzo.html'>airyzo</a>(Nt, Kf, Xa, Xb, Xc, Xd)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute the first NT zeros of Airy functions
+Ai(x) and Ai'(x), a and a', and the associated
+values of Ai(a') and Ai'(a); and the first NT
+zeros of Airy functions Bi(x) and Bi'(x), b and
+b', and the associated values of Bi(b') and
+Bi'(b)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2103,7 +2197,9 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-error"></span><h3>public subroutine <a href='../proc/error.html'>error</a>(x, Err)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute error function erf(x)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2129,7 +2225,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-cerror"></span><h3>public subroutine <a href='../proc/cerror.html'>cerror</a>(z, Cer)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute error function erf(z) for a complex
+argument (z=x+iy)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2155,7 +2254,9 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-eulerb"></span><h3>public subroutine <a href='../proc/eulerb.html'>eulerb</a>(n, En)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute Euler number En</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2181,7 +2282,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-cva1"></span><h3>public subroutine <a href='../proc/cva1.html'>cva1</a>(Kd, m, q, Cv)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute a sequence of characteristic values of
+Mathieu functions</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2219,7 +2323,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-ittikb"></span><h3>public subroutine <a href='../proc/ittikb.html'>ittikb</a>(x, Tti, Ttk)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Integrate [I0(t)-1]/t with respect to t from 0
+to x, and K0(t)/t with respect to t from x to ∞</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2251,7 +2358,9 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-lqnb"></span><h3>public subroutine <a href='../proc/lqnb.html'>lqnb</a>(n, x, Qn, Qd)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute Legendre functions Qn(x) &amp; Qn'(x)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2289,7 +2398,11 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-cjk"></span><h3>public subroutine <a href='../proc/cjk.html'>cjk</a>(Km, a)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute the expansion coefficients for the
+asymptotic expansion of Bessel functions
+with large orders</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2315,7 +2428,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-ittika"></span><h3>public subroutine <a href='../proc/ittika.html'>ittika</a>(x, Tti, Ttk)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Integrate [I0(t)-1]/t with respect to t from 0
+to x, and K0(t)/t with respect to t from x to ∞</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2347,7 +2463,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-lamv"></span><h3>public subroutine <a href='../proc/lamv.html'>lamv</a>(v, x, Vm, Vl, Dl)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute lambda function with arbitrary order v,
+and their derivative</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2391,7 +2510,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-chguit"></span><h3>public subroutine <a href='../proc/chguit.html'>chguit</a>(a, b, x, Hu, Id)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute hypergeometric function U(a,b,x) by
+using Gaussian-Legendre integration (n=60)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2435,7 +2557,11 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-kmn"></span><h3>public subroutine <a href='../proc/kmn.html'>kmn</a>(m, n, c, Cv, Kd, Df, Dn, Ck1, Ck2)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute the expansion coefficients of the
+prolate and oblate spheroidal functions
+and joining factors</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2503,7 +2629,12 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-lagzo"></span><h3>public subroutine <a href='../proc/lagzo.html'>lagzo</a>(n, x, w)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute the zeros of Laguerre polynomial Ln(x)
+in the interval [0,∞], and the corresponding
+weighting coefficients for Gauss-Laguerre
+integration</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2535,7 +2666,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-vvla"></span><h3>public subroutine <a href='../proc/vvla.html'>vvla</a>(Va, x, Pv)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute parabolic cylinder function Vv(x)
+for large argument</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2567,7 +2701,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-cjyva"></span><h3>public subroutine <a href='../proc/cjyva.html'>cjyva</a>(v, z, Vm, Cbj, Cdj, Cby, Cdy)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute Bessel functions Jv(z), Yv(z) and their
+derivatives for a complex argument</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2623,7 +2760,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-cjyvb"></span><h3>public subroutine <a href='../proc/cjyvb.html'>cjyvb</a>(v, z, Vm, Cbj, Cdj, Cby, Cdy)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute Bessel functions Jv(z), Yv(z) and their
+derivatives for a complex argument</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2679,7 +2819,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-jy01a"></span><h3>public subroutine <a href='../proc/jy01a.html'>jy01a</a>(x, Bj0, Dj0, Bj1, Dj1, By0, Dy0, By1, Dy1)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute Bessel functions J0(x), J1(x), Y0(x),
+Y1(x), and their derivatives</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2747,7 +2890,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-incog"></span><h3>public subroutine <a href='../proc/incog.html'>incog</a>(a, x, Gin, Gim, Gip, Isfer)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute the incomplete gamma function
+r(a,x), Г(a,x) and P(a,x)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2797,7 +2943,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-itikb"></span><h3>public subroutine <a href='../proc/itikb.html'>itikb</a>(x, Ti, Tk)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Integrate Bessel functions I0(t) and K0(t)
+with respect to t from 0 to x</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2829,7 +2978,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-itika"></span><h3>public subroutine <a href='../proc/itika.html'>itika</a>(x, Ti, Tk)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Integrate modified Bessel functions I0(t) and
+K0(t) with respect to t from 0 to x</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2861,7 +3013,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-jyv"></span><h3>public subroutine <a href='../proc/jyv.html'>jyv</a>(v, x, Vm, Bj, Dj, By, Dy)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute Bessel functions Jv(x) and Yv(x)
+and their derivatives</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2917,7 +3072,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-jynb"></span><h3>public subroutine <a href='../proc/jynb.html'>jynb</a>(n, x, Nm, Bj, Dj, By, Dy)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute Bessel functions Jn(x), Yn(x) and
+their derivatives</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -2973,7 +3131,9 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-jynbh"></span><h3>public subroutine <a href='../proc/jynbh.html'>jynbh</a>(n, Nmin, x, Nm, Bj, By)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute Bessel functions Jn(x), Yn(x)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3023,7 +3183,12 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-legzo"></span><h3>public subroutine <a href='../proc/legzo.html'>legzo</a>(n, x, w)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute the zeros of Legendre polynomial Pn(x)
+in the interval [-1,1], and the corresponding
+weighting coefficients for Gauss-Legendre
+integration</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3055,7 +3220,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-aswfa"></span><h3>public subroutine <a href='../proc/aswfa.html'>aswfa</a>(m, n, c, x, Kd, Cv, S1f, S1d)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute the prolate and oblate spheroidal angular
+functions of the first kind and their derivatives</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3117,7 +3285,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-jyna"></span><h3>public subroutine <a href='../proc/jyna.html'>jyna</a>(n, x, Nm, Bj, Dj, By, Dy)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute Bessel functions Jn(x) &amp; Yn(x) and
+their derivatives</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3173,7 +3344,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-pbdv"></span><h3>public subroutine <a href='../proc/pbdv.html'>pbdv</a>(v, x, Dv, Dp, Pdf, Pdd)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute parabolic cylinder functions Dv(x)
+and their derivatives</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3223,7 +3397,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-itsh0"></span><h3>public subroutine <a href='../proc/itsh0.html'>itsh0</a>(x, Th0)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Evaluate the integral of Struve function
+H0(t) with respect to t from 0 and x</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3249,7 +3426,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-cerzo"></span><h3>public subroutine <a href='../proc/cerzo.html'>cerzo</a>(Nt, Zo)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Evaluate the complex zeros of error function erf(z)
+using the modified Newton's iteration method</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3275,7 +3455,9 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-gamma2"></span><h3>public subroutine <a href='../proc/gamma2.html'>gamma2</a>(x, Ga)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute gamma function Г(x)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3301,7 +3483,9 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-chgu"></span><h3>public subroutine <a href='../proc/chgu.html'>chgu</a>(a, b, x, Hu, Md, Isfer)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute the confluent hypergeometric function U(a,b,x)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3351,7 +3535,9 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-lamn"></span><h3>public subroutine <a href='../proc/lamn.html'>lamn</a>(n, x, Nm, Bl, Dl)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute lambda functions and their derivatives</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3395,7 +3581,9 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-comelp"></span><h3>public subroutine <a href='../proc/comelp.html'>comelp</a>(Hk, Ck, Ce)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute complete elliptic integrals K(k) and E(k)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3427,7 +3615,9 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-incob"></span><h3>public subroutine <a href='../proc/incob.html'>incob</a>(a, b, x, Bix)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute the incomplete beta function Ix(a,b)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3465,7 +3655,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-cvf"></span><h3>public subroutine <a href='../proc/cvf.html'>cvf</a>(Kd, m, q, a, Mj, f)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute the value of F for characteristic
+equation of Mathieu functions</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3515,7 +3708,11 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-clpn"></span><h3>public subroutine <a href='../proc/clpn.html'>clpn</a>(n, x, y, Cpn, Cpd)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute Legendre polynomials Pn(z) and
+their derivatives Pn'(z) for a complex
+argument</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3559,7 +3756,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-lqmns"></span><h3>public subroutine <a href='../proc/lqmns.html'>lqmns</a>(m, n, x, Qm, Qd)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute associated Legendre functions Qmn(x)
+and Qmn'(x) for a given order</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3603,7 +3803,11 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-ciklv"></span><h3>public subroutine <a href='../proc/ciklv.html'>ciklv</a>(v, z, Cbiv, Cdiv, Cbkv, Cdkv)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute modified Bessel functions Iv(z) and
+Kv(z) and their derivatives with a complex
+argument and a large order</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3653,7 +3857,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-elit"></span><h3>public subroutine <a href='../proc/elit.html'>elit</a>(Hk, Phi, Fe, Ee)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute complete and incomplete elliptic
+integrals F(k,phi) and E(k,phi)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3691,7 +3898,10 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-elit3"></span><h3>public subroutine <a href='../proc/elit3.html'>elit3</a>(Phi, Hk, c, El3)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute the elliptic integral of the third kind
+using Gauss-Legendre quadrature</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
@@ -3729,7 +3939,9 @@ with a small argument</p>
       <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-eix"></span><h3>public subroutine <a href='../proc/eix.html'>eix</a>(x, Ei)</h3></div>
   <div class="panel-body">
-           
+       
+<p>Compute exponential integral Ei(x)</p>
+    
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
