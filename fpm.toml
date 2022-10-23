@@ -1,0 +1,17 @@
+name = "specfun"
+author = "Jacob Williams"
+copyright  = "Copyright (c) 2022, Jacob Williams"
+license = "BSD-3"
+description = "Special functions"
+homepage = "https://github.com/jacobwilliams/specfun"
+
+[build]
+auto-executables = false
+auto-examples = false
+auto-tests = true
+
+[library]
+source-dir = "src"
+
+[install]
+library = true
