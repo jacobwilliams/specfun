@@ -60,7 +60,7 @@
       integer m , n
       eps = 1.0d-15
       pi = 3.141592653589793d0
-      sq2 = dsqrt(2.0d0)
+      sq2 = sqrt(2.0d0)
       ca0 = exp(-.25d0*z*z)
       va0 = 0.5d0*(1.0d0-n)
       if ( n==0.0 ) then
@@ -70,7 +70,7 @@
             Cdn = 0.0d0
          else
             call gaih(va0,ga0)
-            pd = dsqrt(pi)/(2.0d0**(-.5d0*n)*ga0)
+            pd = sqrt(pi)/(2.0d0**(-.5d0*n)*ga0)
             Cdn = dcmplx(pd,0.0d0)
          endif
       else
@@ -128,7 +128,7 @@
                & /(4.0d0*k+3.0d0)*zp2
             s = s + cr
             wb = abs(s)
-            if ( dabs(wb-wb0)<eps .and. k>10 ) exit
+            if ( abs(wb-wb0)<eps .and. k>10 ) exit
             wb0 = wb
          enddo
       elseif ( w0>2.5 .and. w0<4.5 ) then
@@ -202,7 +202,7 @@
       double precision q0 , q1 , q10 , Qd , qf , qf0 , qf1 , qf2 , Qm , &
                      & x , xq , xs
       dimension Qm(0:Mm,0:n) , Qd(0:Mm,0:n)
-      if ( dabs(x)==1.0d0 ) then
+      if ( abs(x)==1.0d0 ) then
          do i = 0 , m
             do j = 0 , n
                Qm(i,j) = 1.0d+300
@@ -212,11 +212,11 @@
          return
       endif
       ls = 1
-      if ( dabs(x)>1.0d0 ) ls = -1
+      if ( abs(x)>1.0d0 ) ls = -1
       xs = ls*(1.0d0-x*x)
-      xq = dsqrt(xs)
-      q0 = 0.5d0*dlog(dabs((x+1.0d0)/(x-1.0d0)))
-      if ( dabs(x)<1.0001d0 ) then
+      xq = sqrt(xs)
+      q0 = 0.5d0*log(abs((x+1.0d0)/(x-1.0d0)))
+      if ( abs(x)<1.0001d0 ) then
          Qm(0,0) = q0
          Qm(0,1) = x*q0 - 1.0d0
          Qm(1,0) = -1.0d0/xq
@@ -234,7 +234,7 @@
             enddo
          enddo
       else
-         if ( dabs(x)>1.1d0 ) then
+         if ( abs(x)>1.1d0 ) then
             km = 40 + m + n
          else
             km = (40+m+n)*int(-1.0-1.8*log(x-1.0))
@@ -317,7 +317,7 @@
       enddo
       Cpm(0,0) = (1.0d0,0.0d0)
       if ( n==0 ) return
-      if ( dabs(x)==1.0d0 .and. y==0.0d0 ) then
+      if ( abs(x)==1.0d0 .and. y==0.0d0 ) then
          do i = 1 , n
             Cpm(0,i) = x**i
             Cpd(0,i) = 0.5d0*i*(i+1)*x**(i+1)
@@ -399,9 +399,9 @@
       ep = exp(-.25d0*x*x)
       va0 = 1.0d0 + 0.5d0*Va
       if ( x/=0.0 ) then
-         sq2 = dsqrt(2.0d0)
+         sq2 = sqrt(2.0d0)
          a0 = 2.0d0**(-.5d0*Va)*ep/(2.0d0*pi)
-         sv = dsin(-(Va+.5d0)*pi)
+         sv = sin(-(Va+.5d0)*pi)
          v1 = -.5d0*Va
          call gamma2(v1,g1)
          Pv = (sv+1.0d0)*g1
@@ -415,14 +415,14 @@
             gw = fac*sv + 1.0d0
             r1 = gw*r*gm
             Pv = Pv + r1
-            if ( dabs(r1/Pv)<eps .and. gw/=0.0 ) exit
+            if ( abs(r1/Pv)<eps .and. gw/=0.0 ) exit
          enddo
          Pv = a0*Pv
       elseif ( va0<=0.0 .and. va0==int(va0) .or. Va==0.0 ) then
          Pv = 0.0d0
       else
          vb0 = -0.5d0*Va
-         sv0 = dsin(va0*pi)
+         sv0 = sin(va0*pi)
          call gamma2(va0,ga0)
          Pv = 2.0d0**vb0*sv0/ga0
       endif
@@ -487,7 +487,7 @@
                x0 = x
                x = x - dj(i)/fj(i)
                if ( x1>xm ) goto 20
-               if ( dabs(x-x0)>1.0d-10 ) goto 10
+               if ( abs(x-x0)>1.0d-10 ) goto 10
             endif
             l1 = l1 + 1
             n1(l1) = i - 1
@@ -507,7 +507,7 @@
             x0 = x
             x = x - bj(i)/dj(i)
             if ( x<=xm ) then
-               if ( dabs(x-x0)>1.0d-10 ) goto 40
+               if ( abs(x-x0)>1.0d-10 ) goto 40
                l1 = l1 + 1
                n1(l1) = i - 1
                m1(l1) = j
@@ -595,7 +595,7 @@
                      r1 = r1*(i+m-j)/j
                   enddo
                   s1 = s1 + Ck(i+1)*(2.0*i+m)*r1
-                  if ( dabs(s1-sw)<dabs(s1)*eps ) exit
+                  if ( abs(s1-sw)<abs(s1)*eps ) exit
                   sw = s1
                endif
             enddo
@@ -614,7 +614,7 @@
                   enddo
                   if ( i>0 ) s1 = s1 + Ck(i)*(2.0*i+m-1)*r1
                   s1 = s1 - Ck(i+1)*(2.0*i+m)*r1
-                  if ( dabs(s1-sw)<dabs(s1)*eps ) exit
+                  if ( abs(s1-sw)<abs(s1)*eps ) exit
                   sw = s1
                endif
             enddo
@@ -661,7 +661,7 @@
             & nm2 , nm3
       dimension pm(0:251) , pd(0:251) , qm(0:251) , qd(0:251) , dn(200) &
               & , Df(200)
-      if ( dabs(Df(1))<1.0d-280 ) then
+      if ( abs(Df(1))<1.0d-280 ) then
          R2f = 1.0d+300
          R2d = 1.0d+300
          return
@@ -680,14 +680,14 @@
       do k = 1 , nm
          j = 2*k - 2 + m + ip
          su0 = su0 + Df(k)*qm(j)
-         if ( k>nm1 .and. dabs(su0-sw)<dabs(su0)*eps ) exit
+         if ( k>nm1 .and. abs(su0-sw)<abs(su0)*eps ) exit
          sw = su0
       enddo
       sd0 = 0.0d0
       do k = 1 , nm
          j = 2*k - 2 + m + ip
          sd0 = sd0 + Df(k)*qd(j)
-         if ( k>nm1 .and. dabs(sd0-sw)<dabs(sd0)*eps ) exit
+         if ( k>nm1 .and. abs(sd0-sw)<abs(sd0)*eps ) exit
          sw = sd0
       enddo
       su1 = 0.0d0
@@ -739,14 +739,14 @@
       do k = ki , nm3
          j = 2*k - 1 - m - ip
          su2 = su2 + dn(k)*pm(j)
-         if ( j>m .and. dabs(su2-sw)<dabs(su2)*eps ) exit
+         if ( j>m .and. abs(su2-sw)<abs(su2)*eps ) exit
          sw = su2
       enddo
       sd2 = 0.0d0
       do k = ki , nm3
          j = 2*k - 1 - m - ip
          sd2 = sd2 + dn(k)*pd(j)
-         if ( j>m .and. dabs(sd2-sw)<dabs(sd2)*eps ) exit
+         if ( j>m .and. abs(sd2-sw)<abs(sd2)*eps ) exit
          sw = sd2
       enddo
       sum = su0 + su1 + su2
@@ -1067,8 +1067,8 @@
       d4 = (527.0+15617.0/w2+69001.0/w4+41607.0/w6)/w3
       c1 = 128.0
       p2 = q/w4
-      p1 = dsqrt(p2)
-      cv1 = -2.0*q + 2.0*w*dsqrt(q) - (w2+1.0)/8.0
+      p1 = sqrt(p2)
+      cv1 = -2.0*q + 2.0*w*sqrt(q) - (w2+1.0)/8.0
       cv2 = (w+3.0/w) + d1/(32.0*p1) + d2/(8.0*c1*p2)
       cv2 = cv2 + d3/(64.0*c1*p1*p2) + d4/(16.0*c1*c1*p2*p2)
       a0 = cv1 - cv2/(c1*p1)
@@ -1090,7 +1090,7 @@
       implicit none
       double precision a0 , f , f0 , f1 , x
       integer it , Mp , n0 , n1 , nn
-      a0 = dabs(x)
+      a0 = abs(x)
       n0 = int(1.1d0*a0) + 1
       f0 = envj(n0,a0) - Mp
       n1 = n0 + 5
@@ -1123,7 +1123,7 @@
       implicit none
       double precision a0 , ejn , f , f0 , f1 , hmp , obj , x
       integer it , Mp , n , n0 , n1 , nn
-      a0 = dabs(x)
+      a0 = abs(x)
       hmp = 0.5d0*Mp
       ejn = envj(n,a0)
       if ( ejn<=hmp ) then
@@ -1152,7 +1152,7 @@
       implicit none
       integer n
       double precision x
-      envj = 0.5d0*dlog10(6.28d0*n) - n*dlog10(1.36d0*x/n)
+      envj = 0.5d0*log10(6.28d0*n) - n*log10(1.36d0*x/n)
       end
 
 !       **********************************
@@ -1184,7 +1184,7 @@
          Tty = (((((((-.3546d-5*t+.76217d-4)*t-.1059499d-2)*t+          &
              & .010787555d0)*t-.07810271d0)*t+.377255736d0)             &
              & *t-1.114084491d0)*t+1.909859297d0)*t
-         e0 = el + dlog(x/2.0d0)
+         e0 = el + log(x/2.0d0)
          Tty = pi/6.0d0 + e0/pi*(2.0d0*Ttj-e0) - Tty
       elseif ( x<=8.0d0 ) then
          xt = x + .25d0*pi
@@ -1194,9 +1194,9 @@
             & *t+.1608874d0)*t-.2021547d0)*t + .7977506d0
          g0 = ((((((.0160672d0*t-.0759339d0)*t+.1576116d0)*t-.1960154d0)&
             & *t+.1797457d0)*t-.1702778d0)*t+.3235819d0)*t1
-         Ttj = (f0*dcos(xt)+g0*dsin(xt))/(dsqrt(x)*x)
-         Ttj = Ttj + el + dlog(x/2.0d0)
-         Tty = (f0*dsin(xt)-g0*dcos(xt))/(dsqrt(x)*x)
+         Ttj = (f0*cos(xt)+g0*sin(xt))/(sqrt(x)*x)
+         Ttj = Ttj + el + log(x/2.0d0)
+         Tty = (f0*sin(xt)-g0*cos(xt))/(sqrt(x)*x)
       else
          t = 8.0d0/x
          xt = x + .25d0*pi
@@ -1204,9 +1204,9 @@
             & *t-.051445d0)*t-.11d-5)*t + .7978846d0
          g0 = (((((-.23731d-2*t+.59842d-2)*t+.24437d-2)*t-.0233178d0)   &
             & *t+.595d-4)*t+.1620695d0)*t
-         Ttj = (f0*dcos(xt)+g0*dsin(xt))/(dsqrt(x)*x)                   &
-             & + el + dlog(x/2.0d0)
-         Tty = (f0*dsin(xt)-g0*dcos(xt))/(dsqrt(x)*x)
+         Ttj = (f0*cos(xt)+g0*sin(xt))/(sqrt(x)*x)                   &
+             & + el + log(x/2.0d0)
+         Tty = (f0*sin(xt)-g0*cos(xt))/(sqrt(x)*x)
       endif
       end
 
@@ -1239,24 +1239,24 @@
          do k = 2 , 100
             r = -.25d0*r*(k-1.0d0)/(k*k*k)*x*x
             Ttj = Ttj + r
-            if ( dabs(r)<dabs(Ttj)*1.0d-12 ) exit
+            if ( abs(r)<abs(Ttj)*1.0d-12 ) exit
          enddo
          Ttj = Ttj*.125d0*x*x
-         e0 = .5d0*(pi*pi/6.0d0-el*el) - (.5d0*dlog(x/2.0d0)+el)        &
-            & *dlog(x/2.0d0)
-         b1 = el + dlog(x/2.0d0) - 1.5d0
+         e0 = .5d0*(pi*pi/6.0d0-el*el) - (.5d0*log(x/2.0d0)+el)        &
+            & *log(x/2.0d0)
+         b1 = el + log(x/2.0d0) - 1.5d0
          rs = 1.0d0
          r = -1.0d0
          do k = 2 , 100
             r = -.25d0*r*(k-1.0d0)/(k*k*k)*x*x
             rs = rs + 1.0d0/k
-            r2 = r*(rs+1.0d0/(2.0d0*k)-(el+dlog(x/2.0d0)))
+            r2 = r*(rs+1.0d0/(2.0d0*k)-(el+log(x/2.0d0)))
             b1 = b1 + r2
-            if ( dabs(r2)<dabs(b1)*1.0d-12 ) exit
+            if ( abs(r2)<abs(b1)*1.0d-12 ) exit
          enddo
          Tty = 2.0d0/pi*(e0+.125d0*x*x*b1)
       else
-         a0 = dsqrt(2.0d0/(pi*x))
+         a0 = sqrt(2.0d0/(pi*x))
          bj0 = 0.0d0
          by0 = 0.0d0
          bj1 = 0.0d0
@@ -1268,7 +1268,7 @@
                r = -.0078125d0*r*(vt-(4.0d0*k-3.0d0)**2)/(x*k)          &
                  & *(vt-(4.0d0*k-1.0d0)**2)/((2.0d0*k-1.0d0)*x)
                px = px + r
-               if ( dabs(r)<dabs(px)*1.0d-12 ) exit
+               if ( abs(r)<abs(px)*1.0d-12 ) exit
             enddo
             qx = 1.0d0
             r = 1.0d0
@@ -1276,12 +1276,12 @@
                r = -.0078125d0*r*(vt-(4.0d0*k-1.0d0)**2)/(x*k)          &
                  & *(vt-(4.0d0*k+1.0d0)**2)/(2.0d0*k+1.0d0)/x
                qx = qx + r
-               if ( dabs(r)<dabs(qx)*1.0d-12 ) exit
+               if ( abs(r)<abs(qx)*1.0d-12 ) exit
             enddo
             qx = .125d0*(vt-1.0d0)/x*qx
             xk = x - (.25d0+.5d0*l)*pi
-            bj1 = a0*(px*dcos(xk)-qx*dsin(xk))
-            by1 = a0*(px*dsin(xk)+qx*dcos(xk))
+            bj1 = a0*(px*cos(xk)-qx*sin(xk))
+            by1 = a0*(px*sin(xk)+qx*cos(xk))
             if ( l==0 ) then
                bj0 = bj1
                by0 = by1
@@ -1300,7 +1300,7 @@
             r1 = -k*(k+1.0d0)*t*t*r1
             g1 = g1 + r1
          enddo
-         Ttj = 2.0d0*g1*bj0/(x*x) - g0*bj1/x + el + dlog(x/2.0d0)
+         Ttj = 2.0d0*g1*bj0/(x*x) - g0*bj1/x + el + log(x/2.0d0)
          Tty = 2.0d0*g1*by0/(x*x) - g0*by1/x
       endif
       end
@@ -1407,7 +1407,7 @@
       do k = 2 , nm
          r = r*(m+k-1.0)*(m+k+ip-1.5d0)/(k-1.0d0)/(k+ip-1.5d0)
          suc = suc + r*Df(k)
-         if ( k>nm1 .and. dabs(suc-sw)<dabs(suc)*eps ) exit
+         if ( k>nm1 .and. abs(suc-sw)<abs(suc)*eps ) exit
          sw = suc
       enddo
       a0 = (1.0d0-Kd/(x*x))**(0.5d0*m)/suc
@@ -1425,11 +1425,11 @@
          endif
          np = m + 2*k - 2 + ip
          R2f = R2f + lg*r*(Df(k)*sy(np))
-         eps1 = dabs(R2f-sw)
-         if ( k>nm1 .and. eps1<dabs(R2f)*eps ) exit
+         eps1 = abs(R2f-sw)
+         if ( k>nm1 .and. eps1<abs(R2f)*eps ) exit
          sw = R2f
       enddo
-      id1 = int(log10(eps1/dabs(R2f)+eps))
+      id1 = int(log10(eps1/abs(R2f)+eps))
       R2f = R2f*a0
       if ( np>=nm2 ) then
          Id = 10
@@ -1449,12 +1449,12 @@
          endif
          np = m + 2*k - 2 + ip
          sud = sud + lg*r*(Df(k)*dy(np))
-         eps2 = dabs(sud-sw)
-         if ( k>nm1 .and. eps2<dabs(sud)*eps ) exit
+         eps2 = abs(sud-sw)
+         if ( k>nm1 .and. eps2<abs(sud)*eps ) exit
          sw = sud
       enddo
       R2d = b0 + a0*c*sud
-      id2 = int(log10(eps2/dabs(sud)+eps))
+      id2 = int(log10(eps2/abs(sud)+eps))
       Id = max(id1,id2)
       end
 
@@ -1474,7 +1474,7 @@
       double precision a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , el , pi ,&
                      & Ps , s , x , x2 , xa
       integer k , n
-      xa = dabs(x)
+      xa = abs(x)
       pi = 3.141592653589793d0
       el = .5772156649015329d0
       s = 0.0d0
@@ -1510,12 +1510,12 @@
          a6 = .21092796092796093d-01
          a7 = -.83333333333333333d-01
          a8 = .4432598039215686d0
-         Ps = dlog(xa) - .5d0/xa +                                      &
+         Ps = log(xa) - .5d0/xa +                                      &
             & x2*(((((((a8*x2+a7)*x2+a6)*x2+a5)*x2+a4)*x2+a3)*x2+a2)    &
             & *x2+a1)
          Ps = Ps - s
       endif
-      if ( x<0.0 ) Ps = Ps - pi*dcos(pi*x)/dsin(pi*x) - 1.0d0/x
+      if ( x<0.0 ) Ps = Ps - pi*cos(pi*x)/sin(pi*x) - 1.0d0/x
       end
 
 !       **********************************
@@ -1630,7 +1630,7 @@
          Pm(k) = 0.0d0
          Pd(k) = 0.0d0
       enddo
-      if ( dabs(x)==1.0d0 ) then
+      if ( abs(x)==1.0d0 ) then
          do k = 0 , n
             if ( m==0 ) then
                Pm(k) = 1.0d0
@@ -1648,11 +1648,11 @@
          enddo
          return
       endif
-      x0 = dabs(1.0d0-x*x)
+      x0 = abs(1.0d0-x*x)
       pm0 = 1.0d0
       pmk = pm0
       do k = 1 , m
-         pmk = (2.0d0*k-1.0d0)*dsqrt(x0)*pm0
+         pmk = (2.0d0*k-1.0d0)*sqrt(x0)*pm0
          pm0 = pmk
       enddo
       pm1 = (2.0d0*m+1.0d0)*x*pm0
@@ -1704,10 +1704,10 @@
          do k = 1 , 100
             r = r*x2/(k+0.5d0)
             er = er + r
-            if ( dabs(er-w)<=eps*dabs(er) ) exit
+            if ( abs(er-w)<=eps*abs(er) ) exit
             w = er
          enddo
-         c0 = 2.0d0/dsqrt(pi)*x*exp(-x2)
+         c0 = 2.0d0/sqrt(pi)*x*exp(-x2)
          er0 = c0*er
       else
          er = 1.0d0
@@ -1716,15 +1716,15 @@
             r = -r*(k-0.5d0)/x2
             er = er + r
          enddo
-         c0 = exp(-x2)/(x*dsqrt(pi))
+         c0 = exp(-x2)/(x*sqrt(pi))
          er0 = 1.0d0 - c0*er
       endif
       if ( y==0.0d0 ) then
          err = er0
          eri = 0.0d0
       else
-         cs = dcos(2.0d0*x*y)
-         ss = dsin(2.0d0*x*y)
+         cs = cos(2.0d0*x*y)
+         ss = sin(2.0d0*x*y)
          er1 = exp(-x2)*(1.0d0-cs)/(2.0d0*pi*x)
          ei1 = exp(-x2)*ss/(2.0d0*pi*x)
          er2 = 0.0d0
@@ -1732,7 +1732,7 @@
          do n = 1 , 100
             er2 = er2 + exp(-.25d0*n*n)/(n*n+4.0d0*x2)                  &
                 & *(2.0d0*x-2.0d0*x*dcosh(n*y)*cs+n*dsinh(n*y)*ss)
-            if ( dabs((er2-w1)/er2)<eps ) exit
+            if ( abs((er2-w1)/er2)<eps ) exit
             w1 = er2
          enddo
          c0 = 2.0d0*exp(-x2)/pi
@@ -1742,13 +1742,13 @@
          do n = 1 , 100
             ei2 = ei2 + exp(-.25d0*n*n)/(n*n+4.0d0*x2)                  &
                 & *(2.0d0*x*dcosh(n*y)*ss+n*dsinh(n*y)*cs)
-            if ( dabs((ei2-w2)/ei2)<eps ) exit
+            if ( abs((ei2-w2)/ei2)<eps ) exit
             w2 = ei2
          enddo
          eri = ei1 + c0*ei2
       endif
       Cer = dcmplx(err,eri)
-      Cder = 2.0d0/dsqrt(pi)*exp(-z*z)
+      Cder = 2.0d0/sqrt(pi)*exp(-z*z)
       end
 
 !       **********************************
@@ -1997,18 +1997,18 @@
          Si = 0.0d0
       elseif ( x<=16.0d0 ) then
          xr = -.25d0*x2
-         Ci = el + dlog(x) + xr
+         Ci = el + log(x) + xr
          do k = 2 , 40
             xr = -.5d0*xr*(k-1)/(k*k*(2*k-1))*x2
             Ci = Ci + xr
-            if ( dabs(xr)<dabs(Ci)*eps ) exit
+            if ( abs(xr)<abs(Ci)*eps ) exit
          enddo
          xr = x
          Si = x
          do k = 1 , 40
             xr = -.5d0*xr*(2*k-1)/k/(4*k*k+4*k+1)*x2
             Si = Si + xr
-            if ( dabs(xr)<dabs(Si)*eps ) return
+            if ( abs(xr)<abs(Si)*eps ) return
          enddo
       elseif ( x<=32.0d0 ) then
          m = int(47.2+.82*x)
@@ -2040,10 +2040,10 @@
             xr = .25d0*xr*(2.0*k-5.0)**2/((k-1.0)*(2.0*k-3.0)**2)*x
             xg2 = xg2 + bj(k)*xr
          enddo
-         xcs = dcos(x/2.0d0)
-         xss = dsin(x/2.0d0)
-         Ci = el + dlog(x) - x*xss*xg1 + 2*xcs*xg2 - 2*xcs*xcs
-         Si = x*xcs*xg1 + 2*xss*xg2 - dsin(x)
+         xcs = cos(x/2.0d0)
+         xss = sin(x/2.0d0)
+         Ci = el + log(x) - x*xss*xg1 + 2*xcs*xg2 - 2*xcs*xcs
+         Si = x*xcs*xg1 + 2*xss*xg2 - sin(x)
       else
          xr = 1.0d0
          xf = 1.0d0
@@ -2057,8 +2057,8 @@
             xr = -2.0d0*xr*(2*k+1)*k/x2
             xg = xg + xr
          enddo
-         Ci = xf*dsin(x)/x - xg*dcos(x)/x
-         Si = p2 - xf*dcos(x)/x - xg*dsin(x)/x
+         Ci = xf*sin(x)/x - xg*cos(x)/x
+         Si = p2 - xf*cos(x)/x - xg*sin(x)/x
       endif
       end
 
@@ -2088,7 +2088,7 @@
             if ( k==1 ) rd = 0.5d0
             r = r*rd*k/(k+1.0d0)*(x/(2.0d0*k+1.0d0))**2
             s = s + r
-            if ( dabs(r/s)<1.0d-12 ) exit
+            if ( abs(r/s)<1.0d-12 ) exit
          enddo
          Tl0 = 2.0d0/pi*x*x*s
       else
@@ -2096,10 +2096,10 @@
          do k = 1 , 10
             r = r*k/(k+1.0d0)*((2.0d0*k+1.0d0)/x)**2
             s = s + r
-            if ( dabs(r/s)<1.0d-12 ) exit
+            if ( abs(r/s)<1.0d-12 ) exit
          enddo
          el = .57721566490153d0
-         s0 = -s/(pi*x*x) + 2.0d0/pi*(dlog(2.0d0*x)+el)
+         s0 = -s/(pi*x*x) + 2.0d0/pi*(log(2.0d0*x)+el)
          a0 = 1.0d0
          a1 = 5.0d0/8.0d0
          a(1) = a1
@@ -2116,7 +2116,7 @@
             r = r/x
             ti = ti + a(k)*r
          enddo
-         Tl0 = ti/dsqrt(2*pi*x)*exp(x) + s0
+         Tl0 = ti/sqrt(2*pi*x)*exp(x) + s0
       endif
       end
 
@@ -2242,7 +2242,7 @@
          call airyb(x,ai,bi,ad,bd)
          if ( Kf==1 ) rt = rt0 - ai/ad
          if ( Kf==2 ) rt = rt0 - bi/bd
-         err = dabs((rt-rt0)/rt)
+         err = abs((rt-rt0)/rt)
          if ( err>1.d-12 ) then
             rt0 = rt
             goto 50
@@ -2279,7 +2279,7 @@
          call airyb(x,ai,bi,ad,bd)
          if ( Kf==1 ) rt = rt0 - ad/(ai*x)
          if ( Kf==2 ) rt = rt0 - bd/(bi*x)
-         err = dabs((rt-rt0)/rt)
+         err = abs((rt-rt0)/rt)
          if ( err>1.0d-12 ) then
             rt0 = rt
             goto 100
@@ -2310,15 +2310,15 @@
       eps = 1.0d-15
       pi = 3.141592653589793d0
       x2 = x*x
-      if ( dabs(x)<3.5d0 ) then
+      if ( abs(x)<3.5d0 ) then
          er = 1.0d0
          r = 1.0d0
          do k = 1 , 50
             r = r*x2/(k+0.5d0)
             er = er + r
-            if ( dabs(r)<=dabs(er)*eps ) exit
+            if ( abs(r)<=abs(er)*eps ) exit
          enddo
-         c0 = 2.0d0/dsqrt(pi)*x*exp(-x2)
+         c0 = 2.0d0/sqrt(pi)*x*exp(-x2)
          Err = c0*er
       else
          er = 1.0d0
@@ -2327,7 +2327,7 @@
             r = -r*(k-0.5d0)/x2
             er = er + r
          enddo
-         c0 = exp(-x2)/(dabs(x)*dsqrt(pi))
+         c0 = exp(-x2)/(abs(x)*sqrt(pi))
          Err = 1.0d0 - c0*er
          if ( x<0.0 ) Err = -Err
       endif
@@ -2372,7 +2372,7 @@
             cs = cs + cr
             if ( abs(cr/cs)<1.0d-15 ) exit
          enddo
-         Cer = 2.0d0*c0*cs/dsqrt(pi)
+         Cer = 2.0d0*c0*cs/sqrt(pi)
       else
          cl = 1.0d0/z1
          cr = cl
@@ -2389,7 +2389,7 @@
             cl = cl + cr
             if ( abs(cr/cl)<1.0d-15 ) exit
          enddo
-         Cer = 1.0d0 - c0*cl/dsqrt(pi)
+         Cer = 1.0d0 - c0*cl/sqrt(pi)
       endif
       if ( dble(z)<0.0 ) Cer = -Cer
       end
@@ -2472,7 +2472,7 @@
                e(i) = q
                f(i) = q*q
             enddo
-            e(2) = dsqrt(2.0d0)*q
+            e(2) = sqrt(2.0d0)*q
             f(2) = 2.0d0*q*q
          elseif ( Kd/=4 ) then
             d(1) = 1.0d0 + (-1)**Kd*q
@@ -2489,11 +2489,11 @@
                f(i) = q*q
             enddo
          endif
-         xa = d(nm) + dabs(e(nm))
-         xb = d(nm) - dabs(e(nm))
+         xa = d(nm) + abs(e(nm))
+         xb = d(nm) - abs(e(nm))
          nm1 = nm - 1
          do i = 1 , nm1
-            t = dabs(e(i)) + dabs(e(i+1))
+            t = abs(e(i)) + abs(e(i+1))
             t1 = d(i) + t
             if ( xa<t1 ) xa = t1
             t1 = d(i) - t
@@ -2513,7 +2513,7 @@
             if ( k/=1 .and. h(k)<h(k-1) ) h(k) = h(k-1)
  40         x1 = (g(k)+h(k))/2.0d0
             Cv(k) = x1
-            if ( dabs((g(k)-h(k))/x1)<eps ) then
+            if ( abs((g(k)-h(k))/x1)<eps ) then
                Cv(k) = x1
             else
                j = 0
@@ -2583,7 +2583,7 @@
              & 40.394734d0)*t-48.0524115d0)*t+28.1221478d0)             &
              & *t-8.6556013d0)*t+1.4780044d0)*t-.0493843d0)             &
              & *t+.1332055d0)*t + .3989314d0
-         Tti = Tti*exp(x)/(dsqrt(x)*x)
+         Tti = Tti*exp(x)/(sqrt(x)*x)
       endif
       if ( x==0.0d0 ) then
          Ttk = 1.0d+300
@@ -2592,18 +2592,18 @@
          t = t1*t1
          Ttk = (((((.77d-6*t+.1544d-4)*t+.48077d-3)*t+.925821d-2)       &
              & *t+.10937537d0)*t+.74999993d0)*t
-         e0 = el + dlog(x/2.0d0)
+         e0 = el + log(x/2.0d0)
          Ttk = pi*pi/24.0d0 + e0*(.5d0*e0+Tti) - Ttk
       elseif ( x<=4.0d0 ) then
          t = 2.0d0/x
          Ttk = (((.06084d0*t-.280367d0)*t+.590944d0)*t-.850013d0)       &
              & *t + 1.234684d0
-         Ttk = Ttk*exp(-x)/(dsqrt(x)*x)
+         Ttk = Ttk*exp(-x)/(sqrt(x)*x)
       else
          t = 4.0d0/x
          Ttk = (((((.02724d0*t-.1110396d0)*t+.2060126d0)*t-.2621446d0)  &
              & *t+.3219184d0)*t-.5091339d0)*t + 1.2533141d0
-         Ttk = Ttk*exp(-x)/(dsqrt(x)*x)
+         Ttk = Ttk*exp(-x)/(sqrt(x)*x)
       endif
       end
 
@@ -2625,7 +2625,7 @@
       integer j , k , l , n , nl
       dimension Qn(0:n) , Qd(0:n)
       eps = 1.0d-14
-      if ( dabs(x)==1.0d0 ) then
+      if ( abs(x)==1.0d0 ) then
          do k = 0 , n
             Qn(k) = 1.0d+300
             Qd(k) = 1.0d+300
@@ -2633,8 +2633,8 @@
          return
       endif
       if ( x<=1.021d0 ) then
-         x2 = dabs((1.0d0+x)/(1.0d0-x))
-         q0 = 0.5d0*dlog(x2)
+         x2 = abs((1.0d0+x)/(1.0d0-x))
+         q0 = 0.5d0*log(x2)
          q1 = x*q0 - 1.0d0
          Qn(0) = q0
          Qn(1) = q1
@@ -2662,7 +2662,7 @@
                qr = qr*(0.5d0*nl+k-1.0d0)*(0.5d0*(nl-1)+k)              &
                   & /((nl+k-0.5d0)*k*x*x)
                qf = qf + qr
-               if ( dabs(qr/qf)<eps ) exit
+               if ( abs(qr/qf)<eps ) exit
             enddo
             if ( l==0 ) then
                Qn(n-1) = qf*qc1
@@ -2759,7 +2759,7 @@
          do k = 2 , 50
             r = .25d0*r*(k-1.0d0)/(k*k*k)*x*x
             Tti = Tti + r
-            if ( dabs(r/Tti)<1.0d-12 ) exit
+            if ( abs(r/Tti)<1.0d-12 ) exit
          enddo
          Tti = Tti*.125d0*x*x
       else
@@ -2769,21 +2769,21 @@
             r = r/x
             Tti = Tti + c(k)*r
          enddo
-         rc = x*dsqrt(2.0d0*pi*x)
+         rc = x*sqrt(2.0d0*pi*x)
          Tti = Tti*exp(x)/rc
       endif
       if ( x<=12.0d0 ) then
-         e0 = (.5d0*dlog(x/2.0d0)+el)*dlog(x/2.0d0) + pi*pi/24.0d0 +    &
+         e0 = (.5d0*log(x/2.0d0)+el)*log(x/2.0d0) + pi*pi/24.0d0 +    &
             & .5d0*el*el
-         b1 = 1.5d0 - (el+dlog(x/2.0d0))
+         b1 = 1.5d0 - (el+log(x/2.0d0))
          rs = 1.0d0
          r = 1.0d0
          do k = 2 , 50
             r = .25d0*r*(k-1.0d0)/(k*k*k)*x*x
             rs = rs + 1.0d0/k
-            r2 = r*(rs+1.0d0/(2.0d0*k)-(el+dlog(x/2.0d0)))
+            r2 = r*(rs+1.0d0/(2.0d0*k)-(el+log(x/2.0d0)))
             b1 = b1 + r2
-            if ( dabs(r2/b1)<1.0d-12 ) exit
+            if ( abs(r2/b1)<1.0d-12 ) exit
          enddo
          Ttk = e0 - .125d0*x*x*b1
       else
@@ -2793,7 +2793,7 @@
             r = -r/x
             Ttk = Ttk + c(k)*r
          enddo
-         rc = x*dsqrt(2.0d0/pi*x)
+         rc = x*sqrt(2.0d0/pi*x)
          Ttk = Ttk*exp(-x)/rc
       endif
       end
@@ -2826,7 +2826,7 @@
       dimension Vl(0:*) , Dl(0:*)
       pi = 3.141592653589793d0
       rp2 = 0.63661977236758d0
-      x = dabs(x)
+      x = abs(x)
       x2 = x*x
       n = int(v)
       v0 = v - n
@@ -2839,7 +2839,7 @@
             do i = 1 , 50
                r = -0.25d0*r*x2/(i*(i+vk))
                bk = bk + r
-               if ( dabs(r)<dabs(bk)*1.0d-15 ) exit
+               if ( abs(r)<abs(bk)*1.0d-15 ) exit
             enddo
             Vl(k) = bk
             uk = 1.0d0
@@ -2847,7 +2847,7 @@
             do i = 1 , 50
                r = -0.25d0*r*x2/(i*(i+vk+1.0d0))
                uk = uk + r
-               if ( dabs(r)<dabs(uk)*1.0d-15 ) exit
+               if ( abs(r)<abs(uk)*1.0d-15 ) exit
             enddo
             Dl(k) = -0.5d0*x/(vk+1.0d0)*uk
          enddo
@@ -2876,9 +2876,9 @@
          enddo
          qx = 0.125d0*(vv-1.0d0)*qx/x
          xk = x - (0.5d0*(j+v0)+0.25d0)*pi
-         a0 = dsqrt(rp2/x)
-         ck = dcos(xk)
-         sk = dsin(xk)
+         a0 = sqrt(rp2/x)
+         ck = cos(xk)
+         sk = sin(xk)
          if ( j==0 ) bjv0 = a0*(px*ck-qx*sk)
          if ( j==1 ) bjv1 = a0*(px*ck-qx*sk)
       enddo
@@ -2927,7 +2927,7 @@
             f1 = f
          enddo
          cs = 0.0d0
-         if ( dabs(bjv0)>dabs(bjv1) ) then
+         if ( abs(bjv0)>abs(bjv1) ) then
             cs = bjv0/f
          else
             cs = bjv1/f2
@@ -3022,7 +3022,7 @@
             hu1 = hu1 + s*g
             d = d + 2.0d0*g
          enddo
-         if ( dabs(1.0d0-hu0/hu1)<1.0d-9 ) exit
+         if ( abs(1.0d0-hu0/hu1)<1.0d-9 ) exit
          hu0 = hu1
       enddo
       call gamma2(a,ga)
@@ -3047,7 +3047,7 @@
             hu2 = hu2 + s*g
             d = d + 2.0d0*g
          enddo
-         if ( dabs(1.0d0-hu0/hu2)<1.0d-9 ) exit
+         if ( abs(1.0d0-hu0/hu2)<1.0d-9 ) exit
          hu0 = hu2
       enddo
       call gamma2(a,ga)
@@ -3129,7 +3129,7 @@
       do k = 2 , nm
          r = r*(m+k-1.0)*(m+k+ip-1.5d0)/(k-1.0d0)/(k+ip-1.5d0)
          su0 = su0 + r*Df(k)
-         if ( k>nm1 .and. dabs((su0-sw)/su0)<1.0d-14 ) exit
+         if ( k>nm1 .and. abs((su0-sw)/su0)<1.0d-14 ) exit
          sw = su0
       enddo
       if ( Kd/=1 ) then
@@ -3212,7 +3212,7 @@
          enddo
          gd = (pd-q*fd)/p
          z = z - fd/gd
-         if ( it<=40 .and. dabs((z-z0)/z)>1.0d-15 ) goto 50
+         if ( it<=40 .and. abs((z-z0)/z)>1.0d-15 ) goto 50
          x(nr) = z
          w(nr) = 1.0d0/(z*pd*pd)
       enddo
@@ -3240,21 +3240,21 @@
       pi = 3.141592653589793d0
       eps = 1.0d-12
       qe = exp(0.25*x*x)
-      a0 = dabs(x)**(-Va-1.0d0)*dsqrt(2.0d0/pi)*qe
+      a0 = abs(x)**(-Va-1.0d0)*sqrt(2.0d0/pi)*qe
       r = 1.0d0
       Pv = 1.0d0
       do k = 1 , 18
          r = 0.5d0*r*(2.0*k+Va-1.0)*(2.0*k+Va)/(k*x*x)
          Pv = Pv + r
-         if ( dabs(r/Pv)<eps ) exit
+         if ( abs(r/Pv)<eps ) exit
       enddo
       Pv = a0*Pv
       if ( x<0.0d0 ) then
          x1 = -x
          call dvla(Va,x1,pdl)
          call gamma2(-Va,gl)
-         dsl = dsin(pi*Va)*dsin(pi*Va)
-         Pv = dsl*gl/pi*pdl - dcos(pi*Va)*Pv
+         dsl = sin(pi*Va)*sin(pi*Va)
+         Pv = dsl*gl/pi*pdl - cos(pi*Va)*Pv
       endif
       end
 
@@ -3390,8 +3390,8 @@
                if ( l==0 ) cju0 = cjvl*cb
                if ( l==1 ) cju1 = cjvl*cb
             enddo
-            cyv0 = (cjv0*dcos(pv0)-cju0)/dsin(pv0)
-            cyv1 = (cjv1*dcos(pv1)-cju1)/dsin(pv1)
+            cyv0 = (cjv0*cos(pv0)-cju0)/sin(pv0)
+            cyv1 = (cjv1*cos(pv1)-cju1)/sin(pv1)
          else
             cec = log(z1/2.0d0) + .5772156649015329d0
             cs0 = (0.0d0,0.0d0)
@@ -3418,13 +3418,13 @@
          cfac0 = exp(pv0*ci)
          cfac1 = exp(pv1*ci)
          if ( dimag(z)<0.0d0 ) then
-            cyv0 = cfac0*cyv0 - 2.0d0*ci*dcos(pv0)*cjv0
-            cyv1 = cfac1*cyv1 - 2.0d0*ci*dcos(pv1)*cjv1
+            cyv0 = cfac0*cyv0 - 2.0d0*ci*cos(pv0)*cjv0
+            cyv1 = cfac1*cyv1 - 2.0d0*ci*cos(pv1)*cjv1
             cjv0 = cjv0/cfac0
             cjv1 = cjv1/cfac1
          elseif ( dimag(z)>0.0d0 ) then
-            cyv0 = cyv0/cfac0 + 2.0d0*ci*dcos(pv0)*cjv0
-            cyv1 = cyv1/cfac1 + 2.0d0*ci*dcos(pv1)*cjv1
+            cyv0 = cyv0/cfac0 + 2.0d0*ci*cos(pv0)*cjv0
+            cyv1 = cyv1/cfac1 + 2.0d0*ci*cos(pv1)*cjv1
             cjv0 = cfac0*cjv0
             cjv1 = cfac1*cjv1
          endif
@@ -3652,7 +3652,7 @@
             call gamma2(vg,gb)
             cb = (2.0d0/z1)**v0/gb
             cju0 = cjvn*cb
-            cyv0 = (cjv0*dcos(pv0)-cju0)/dsin(pv0)
+            cyv0 = (cjv0*cos(pv0)-cju0)/sin(pv0)
          else
             cec = log(z1/2.0d0) + .5772156649015329d0
             cs0 = (0.0d0,0.0d0)
@@ -3688,9 +3688,9 @@
       if ( dble(z)<0.0d0 ) then
          cfac0 = exp(pv0*ci)
          if ( dimag(z)<0.0d0 ) then
-            cyv0 = cfac0*cyv0 - 2.0d0*ci*dcos(pv0)*cjv0
+            cyv0 = cfac0*cyv0 - 2.0d0*ci*cos(pv0)*cjv0
          elseif ( dimag(z)>0.0d0 ) then
-            cyv0 = cyv0/cfac0 + 2.0d0*ci*dcos(pv0)*cjv0
+            cyv0 = cyv0/cfac0 + 2.0d0*ci*cos(pv0)*cjv0
          endif
          do k = 0 , n
             if ( dimag(z)<0.0d0 ) then
@@ -3765,17 +3765,17 @@
          do k = 1 , 30
             r = -0.25d0*r*x2/(k*k)
             Bj0 = Bj0 + r
-            if ( dabs(r)<dabs(Bj0)*1.0d-15 ) exit
+            if ( abs(r)<abs(Bj0)*1.0d-15 ) exit
          enddo
          Bj1 = 1.0d0
          r = 1.0d0
          do k = 1 , 30
             r = -0.25d0*r*x2/(k*(k+1.0d0))
             Bj1 = Bj1 + r
-            if ( dabs(r)<dabs(Bj1)*1.0d-15 ) exit
+            if ( abs(r)<abs(Bj1)*1.0d-15 ) exit
          enddo
          Bj1 = 0.5d0*x*Bj1
-         ec = dlog(x/2.0d0) + 0.5772156649015329d0
+         ec = log(x/2.0d0) + 0.5772156649015329d0
          cs0 = 0.0d0
          w0 = 0.0d0
          r0 = 1.0d0
@@ -3784,7 +3784,7 @@
             r0 = -0.25d0*r0/(k*k)*x2
             r = r0*w0
             cs0 = cs0 + r
-            if ( dabs(r)<dabs(cs0)*1.0d-15 ) exit
+            if ( abs(r)<abs(cs0)*1.0d-15 ) exit
          enddo
          By0 = rp2*(ec*Bj0-cs0)
          cs1 = 1.0d0
@@ -3795,7 +3795,7 @@
             r1 = -0.25d0*r1/(k*(k+1))*x2
             r = r1*(2.0d0*w1+1.0d0/(k+1.0d0))
             cs1 = cs1 + r
-            if ( dabs(r)<dabs(cs1)*1.0d-15 ) exit
+            if ( abs(r)<abs(cs1)*1.0d-15 ) exit
          enddo
          By1 = rp2*(ec*Bj1-1.0d0/x-0.25d0*x*cs1)
       else
@@ -3833,9 +3833,9 @@
             p0 = p0 + a(k)*x**(-2*k)
             q0 = q0 + b(k)*x**(-2*k-1)
          enddo
-         cu = dsqrt(rp2/x)
-         Bj0 = cu*(p0*dcos(t1)-q0*dsin(t1))
-         By0 = cu*(p0*dsin(t1)+q0*dcos(t1))
+         cu = sqrt(rp2/x)
+         Bj0 = cu*(p0*cos(t1)-q0*sin(t1))
+         By0 = cu*(p0*sin(t1)+q0*cos(t1))
          t2 = x - 0.75d0*pi
          p1 = 1.0d0
          q1 = 0.375d0/x
@@ -3843,9 +3843,9 @@
             p1 = p1 + a1(k)*x**(-2*k)
             q1 = q1 + b1(k)*x**(-2*k-1)
          enddo
-         cu = dsqrt(rp2/x)
-         Bj1 = cu*(p1*dcos(t2)-q1*dsin(t2))
-         By1 = cu*(p1*dsin(t2)+q1*dcos(t2))
+         cu = sqrt(rp2/x)
+         Bj1 = cu*(p1*cos(t2)-q1*sin(t2))
+         By1 = cu*(p1*sin(t2)+q1*cos(t2))
       endif
       Dj0 = -Bj1
       Dj1 = Bj0 - Bj1/x
@@ -3873,7 +3873,7 @@
       double precision a , ga , Gim , Gin , Gip , r , s , t0 , x , xam
       integer Isfer , k
       Isfer = 0
-      xam = -x + a*dlog(x)
+      xam = -x + a*log(x)
       if ( xam>700.0 .or. a>170.0 ) then
          Isfer = 6
          return
@@ -3889,7 +3889,7 @@
          do k = 1 , 60
             r = r*x/(a+k)
             s = s + r
-            if ( dabs(r/s)<1.0d-15 ) exit
+            if ( abs(r/s)<1.0d-15 ) exit
          enddo
          Gin = exp(xam)*s
          call gamma2(a,ga)
@@ -3936,12 +3936,12 @@
          t = 5.0d0/x
          Ti = (((-.015166d0*t-.0202292d0)*t+.1294122d0)*t-.0302912d0)   &
             & *t + .4161224d0
-         Ti = Ti*exp(x)/dsqrt(x)
+         Ti = Ti*exp(x)/sqrt(x)
       else
          t = 8.0d0/x
          Ti = (((((-.0073995d0*t+.017744d0)*t-.0114858d0)*t+.55956d-2)  &
             & *t+.59191d-2)*t+.0311734d0)*t + .3989423d0
-         Ti = Ti*exp(x)/dsqrt(x)
+         Ti = Ti*exp(x)/sqrt(x)
       endif
       if ( x==0.0d0 ) then
          Tk = 0.0d0
@@ -3950,22 +3950,22 @@
          t = t1*t1
          Tk = ((((((.116d-5*t+.2069d-4)*t+.62664d-3)*t+.01110118d0)*t+  &
             & .11227902d0)*t+.50407836d0)*t+.84556868d0)*t1
-         Tk = Tk - dlog(x/2.0d0)*Ti
+         Tk = Tk - log(x/2.0d0)*Ti
       elseif ( x>2.0 .and. x<=4.0d0 ) then
          t = 2.0d0/x
          Tk = (((.0160395d0*t-.0781715d0)*t+.185984d0)*t-.3584641d0)    &
             & *t + 1.2494934d0
-         Tk = pi/2.0d0 - Tk*exp(-x)/dsqrt(x)
+         Tk = pi/2.0d0 - Tk*exp(-x)/sqrt(x)
       elseif ( x>4.0 .and. x<=7.0d0 ) then
          t = 4.0d0/x
          Tk = (((((.37128d-2*t-.0158449d0)*t+.0320504d0)*t-.0481455d0)  &
             & *t+.0787284d0)*t-.1958273d0)*t + 1.2533141d0
-         Tk = pi/2.0d0 - Tk*exp(-x)/dsqrt(x)
+         Tk = pi/2.0d0 - Tk*exp(-x)/sqrt(x)
       else
          t = 7.0d0/x
          Tk = (((((.33934d-3*t-.163271d-2)*t+.417454d-2)*t-.933944d-2)  &
             & *t+.02576646d0)*t-.11190289d0)*t + 1.25331414d0
-         Tk = pi/2.0d0 - Tk*exp(-x)/dsqrt(x)
+         Tk = pi/2.0d0 - Tk*exp(-x)/sqrt(x)
       endif
       end
 
@@ -4002,7 +4002,7 @@
          do k = 1 , 50
             r = .25d0*r*(2*k-1.0d0)/(2*k+1.0d0)/(k*k)*x2
             Ti = Ti + r
-            if ( dabs(r/Ti)<1.0d-12 ) exit
+            if ( abs(r/Ti)<1.0d-12 ) exit
          enddo
          Ti = Ti*x
       else
@@ -4013,11 +4013,11 @@
             r = r/x
             Ti = Ti + a(k)*r
          enddo
-         rc1 = 1.0d0/dsqrt(2.0d0*pi*x)
+         rc1 = 1.0d0/sqrt(2.0d0*pi*x)
          Ti = rc1*exp(x)*Ti
       endif
       if ( x<12.0d0 ) then
-         e0 = el + dlog(x/2.0d0)
+         e0 = el + log(x/2.0d0)
          b1 = 1.0d0 - e0
          b2 = 0.0d0
          rs = 0.0d0
@@ -4029,7 +4029,7 @@
             rs = rs + 1.0d0/k
             b2 = b2 + r*rs
             Tk = b1 + b2
-            if ( dabs((Tk-tw)/Tk)<1.0d-12 ) exit
+            if ( abs((Tk-tw)/Tk)<1.0d-12 ) exit
             tw = Tk
          enddo
          Tk = Tk*x
@@ -4040,7 +4040,7 @@
             r = -r/x
             Tk = Tk + a(k)*r
          enddo
-         rc2 = dsqrt(pi/(2.0d0*x))
+         rc2 = sqrt(pi/(2.0d0*x))
          Tk = pi/2.0d0 - rc2*Tk*exp(-x)
       endif
       end
@@ -4110,7 +4110,7 @@
             do k = 1 , 40
                r = -0.25d0*r*x2/(k*(k+vl))
                bjvl = bjvl + r
-               if ( dabs(r)<dabs(bjvl)*1.0d-15 ) exit
+               if ( abs(r)<abs(bjvl)*1.0d-15 ) exit
             enddo
             vg = 1.0d0 + vl
             call gamma2(vg,ga)
@@ -4140,9 +4140,9 @@
             enddo
             qx = 0.125d0*(vv-1.0)*qx/x
             xk = x - (0.5d0*(j+v0)+0.25d0)*pi
-            a0 = dsqrt(rp2/x)
-            ck = dcos(xk)
-            sk = dsin(xk)
+            a0 = sqrt(rp2/x)
+            ck = cos(xk)
+            sk = sin(xk)
             if ( j==0 ) then
                bjv0 = a0*(px*ck-qx*sk)
                byv0 = a0*(px*sk+qx*ck)
@@ -4181,7 +4181,7 @@
             f2 = f1
             f1 = f
          enddo
-         if ( dabs(bjv0)>dabs(bjv1) ) then
+         if ( abs(bjv0)>abs(bjv1) ) then
             cs = bjv0/f
          else
             cs = bjv1/f2
@@ -4204,7 +4204,7 @@
                do k = 1 , 40
                   r = -0.25d0*r*x2/(k*(k-vl))
                   bjvl = bjvl + r
-                  if ( dabs(r)<dabs(bjvl)*1.0d-15 ) exit
+                  if ( abs(r)<abs(bjvl)*1.0d-15 ) exit
                enddo
                vg = 1.0d0 - vl
                call gamma2(vg,gb)
@@ -4214,10 +4214,10 @@
             enddo
             pv0 = pi*v0
             pv1 = pi*(1.0d0+v0)
-            byv0 = (bjv0*dcos(pv0)-bju0)/dsin(pv0)
-            byv1 = (bjv1*dcos(pv1)-bju1)/dsin(pv1)
+            byv0 = (bjv0*cos(pv0)-bju0)/sin(pv0)
+            byv1 = (bjv1*cos(pv1)-bju1)/sin(pv1)
          else
-            ec = dlog(x/2.0d0) + el
+            ec = log(x/2.0d0) + el
             cs0 = 0.0d0
             w0 = 0.0d0
             r0 = 1.0d0
@@ -4368,7 +4368,7 @@
 !          Estimates for Yn at start of recurrence
          bj0 = f1/s0
          bj1 = f2/s0
-         ec = dlog(x/2.0d0) + 0.5772156649015329d0
+         ec = log(x/2.0d0) + 0.5772156649015329d0
          by0 = r2p*(ec*bj0-4.0d0*su/s0)
          by1 = r2p*((ec-1.0d0)*bj1-bj0/x-4.0d0*sv/s0)
          if ( 0>=Nmin ) By(0-Nmin) = by0
@@ -4391,9 +4391,9 @@
             p0 = p0 + a(k)*x**(-2*k)
             q0 = q0 + b(k)*x**(-2*k-1)
          enddo
-         cu = dsqrt(r2p/x)
-         bj0 = cu*(p0*dcos(t1)-q0*dsin(t1))
-         by0 = cu*(p0*dsin(t1)+q0*dcos(t1))
+         cu = sqrt(r2p/x)
+         bj0 = cu*(p0*cos(t1)-q0*sin(t1))
+         by0 = cu*(p0*sin(t1)+q0*cos(t1))
          if ( 0>=Nmin ) Bj(0-Nmin) = bj0
          if ( 0>=Nmin ) By(0-Nmin) = by0
          t2 = x - 0.75d0*pi
@@ -4403,8 +4403,8 @@
             p1 = p1 + a1(k)*x**(-2*k)
             q1 = q1 + b1(k)*x**(-2*k-1)
          enddo
-         bj1 = cu*(p1*dcos(t2)-q1*dsin(t2))
-         by1 = cu*(p1*dsin(t2)+q1*dcos(t2))
+         bj1 = cu*(p1*cos(t2)-q1*sin(t2))
+         by1 = cu*(p1*sin(t2)+q1*cos(t2))
          if ( 1>=Nmin ) Bj(1-Nmin) = bj1
          if ( 1>=Nmin ) By(1-Nmin) = by1
          do k = 2 , Nm
@@ -4447,7 +4447,7 @@
       pf = 0.0d0
       pd = 0.0d0
       do nr = 1 , n0
-         z = dcos(3.1415926d0*(nr-0.25d0)/n)
+         z = cos(3.1415926d0*(nr-0.25d0)/n)
  50      z0 = z
          p = 1.0d0
          do i = 1 , nr - 1
@@ -4474,7 +4474,7 @@
             enddo
             gd = (pd-q*fd)/p
             z = z - fd/gd
-            if ( dabs(z-z0)>dabs(z)*1.0d-15 ) goto 50
+            if ( abs(z-z0)>abs(z)*1.0d-15 ) goto 50
          endif
          x(nr) = z
          x(n+1-nr) = -z
@@ -4511,7 +4511,7 @@
       dimension ck(200) , df(200)
       eps = 1.0d-14
       x0 = x
-      x = dabs(x)
+      x = abs(x)
       ip = 1
       if ( n-m==2*int((n-m)/2) ) ip = 0
       nm = 40 + int((n-m)/2+c)
@@ -4528,7 +4528,7 @@
       do k = 1 , nm2
          r = ck(k+1)*x1**k
          su1 = su1 + r
-         if ( k>=10 .and. dabs(r/su1)<eps ) exit
+         if ( k>=10 .and. abs(r/su1)<eps ) exit
       enddo
       S1f = a0*x**ip*su1
       if ( x==1.0d0 ) then
@@ -4543,7 +4543,7 @@
          do k = 2 , nm2
             r = k*ck(k+1)*x1**(k-1.0d0)
             su2 = su2 + r
-            if ( k>=10 .and. dabs(r/su2)<eps ) exit
+            if ( k>=10 .and. abs(r/su2)<eps ) exit
          enddo
          S1d = d0*a0*su1 + d1*su2
       endif
@@ -4624,7 +4624,7 @@
             f2 = f1
             f1 = f
          enddo
-         if ( dabs(bj0)>dabs(bj1) ) then
+         if ( abs(bj0)>abs(bj1) ) then
             cs = bj0/f
          else
             cs = bj1/f2
@@ -4676,9 +4676,9 @@
                      & Pdd , Pdf , s0 , v , v0 , v1 , v2 , vh , x , xa
       integer ja , k , l , m , na , nk , nv
       dimension Dv(0:*) , Dp(0:*)
-      xa = dabs(x)
+      xa = abs(x)
       vh = v
-      v = v + dsign(1.0d0,v)
+      v = v + sign(1.0d0,v)
       nv = int(v)
       v0 = v - nv
       na = abs(nv)
@@ -4797,7 +4797,7 @@
             if ( k==1 ) rd = 0.5d0
             r = -r*rd*k/(k+1.0d0)*(x/(2.0d0*k+1.0d0))**2
             s = s + r
-            if ( dabs(r)<dabs(s)*1.0d-12 ) exit
+            if ( abs(r)<abs(s)*1.0d-12 ) exit
          enddo
          Th0 = 2.0d0/pi*x*x*s
       else
@@ -4805,10 +4805,10 @@
          do k = 1 , 12
             r = -r*k/(k+1.0d0)*((2.0d0*k+1.0d0)/x)**2
             s = s + r
-            if ( dabs(r)<dabs(s)*1.0d-12 ) exit
+            if ( abs(r)<abs(s)*1.0d-12 ) exit
          enddo
          el = .57721566490153d0
-         s0 = s/(pi*x*x) + 2.0d0/pi*(dlog(2.0d0*x)+el)
+         s0 = s/(pi*x*x) + 2.0d0/pi*(log(2.0d0*x)+el)
          a0 = 1.0d0
          a1 = 5.0d0/8.0d0
          a(1) = a1
@@ -4832,7 +4832,7 @@
             bg = bg + a(2*k+1)*r
          enddo
          xp = x + .25d0*pi
-         ty = dsqrt(2.0d0/(pi*x))*(bg*dcos(xp)-bf*dsin(xp))
+         ty = sqrt(2.0d0/(pi*x))*(bg*cos(xp)-bf*sin(xp))
          Th0 = ty + s0
       endif
       end
@@ -4857,10 +4857,10 @@
       pi = 3.141592653589793d0
       w = 0.0d0
       do nr = 1 , Nt
-         pu = dsqrt(pi*(4.0d0*nr-0.5d0))
-         pv = pi*dsqrt(2.0d0*nr-0.25d0)
-         px = 0.5*pu - 0.5*dlog(pv)/pu
-         py = 0.5*pu + 0.5*dlog(pv)/pu
+         pu = sqrt(pi*(4.0d0*nr-0.5d0))
+         pv = pi*sqrt(2.0d0*nr-0.25d0)
+         px = 0.5*pu - 0.5*log(pv)/pu
+         py = 0.5*pu + 0.5*log(pv)/pu
          z = dcmplx(px,py)
          it = 0
  50      it = it + 1
@@ -4882,7 +4882,7 @@
          z = z - zfd/zgd
          w0 = w
          w = abs(z)
-         if ( it<=50 .and. dabs((w-w0)/w)>1.0d-11 ) goto 50
+         if ( it<=50 .and. abs((w-w0)/w)>1.0d-11 ) goto 50
          Zo(nr) = z
       enddo
       end
@@ -4907,8 +4907,8 @@
       pi = 3.141592653589793d0
       if ( x/=int(x) ) then
          r = 1.0d0
-         if ( dabs(x)>1.0d0 ) then
-            z = dabs(x)
+         if ( abs(x)>1.0d0 ) then
+            z = abs(x)
             m = int(z)
             do k = 1 , m
                r = r*(z-k)
@@ -4931,9 +4931,9 @@
             gr = gr*z + g(k)
          enddo
          Ga = 1.0d0/(gr*z)
-         if ( dabs(x)>1.0d0 ) then
+         if ( abs(x)>1.0d0 ) then
             Ga = Ga*r
-            if ( x<0.0d0 ) Ga = -pi/(x*Ga*dsin(pi*x))
+            if ( x<0.0d0 ) Ga = -pi/(x*Ga*sin(pi*x))
          endif
       elseif ( x>0.0d0 ) then
          Ga = 1.0d0
@@ -5046,7 +5046,7 @@
       integer i , k , m , n , Nm
       dimension Bl(0:n) , Dl(0:n)
       Nm = n
-      if ( dabs(x)<1.0d-100 ) then
+      if ( abs(x)<1.0d-100 ) then
          do k = 0 , n
             Bl(k) = 0.0d0
             Dl(k) = 0.0d0
@@ -5063,7 +5063,7 @@
             do i = 1 , 50
                r = -0.25d0*r*x2/(i*(i+k))
                bk = bk + r
-               if ( dabs(r)<dabs(bk)*1.0d-15 ) exit
+               if ( abs(r)<abs(bk)*1.0d-15 ) exit
             enddo
             Bl(k) = bk
             if ( k>=1 ) Dl(k-1) = -0.5d0*x/k*bk
@@ -5073,7 +5073,7 @@
          do i = 1 , 50
             r = -0.25d0*r*x2/(i*(i+n+1.0d0))
             uk = uk + r
-            if ( dabs(r)<dabs(uk)*1.0d-15 ) exit
+            if ( abs(r)<abs(uk)*1.0d-15 ) exit
          enddo
          Dl(n) = -0.5d0*x/(n+1.0d0)*uk
          return
@@ -5136,12 +5136,12 @@
             & *pk+.09666344259d0)*pk + 1.38629436112d0
          bk = (((.00441787012d0*pk+.03328355346d0)*pk+.06880248576d0)   &
             & *pk+.12498593597d0)*pk + .5d0
-         Ck = ak - bk*dlog(pk)
+         Ck = ak - bk*log(pk)
          ae = (((.01736506451d0*pk+.04757383546d0)*pk+.0626060122d0)    &
             & *pk+.44325141463d0)*pk + 1.0d0
          be = (((.00526449639d0*pk+.04069697526d0)*pk+.09200180037d0)   &
             & *pk+.2499836831d0)*pk
-         Ce = ae - be*dlog(pk)
+         Ce = ae - be*log(pk)
       endif
       end
 
@@ -5279,7 +5279,7 @@
       do k = 2 , n
          cpf = (2.0d0*k-1.0d0)/k*z*cp1 - (k-1.0d0)/k*cp0
          Cpn(k) = cpf
-         if ( dabs(x)==1.0d0 .and. y==0.0d0 ) then
+         if ( abs(x)==1.0d0 .and. y==0.0d0 ) then
             Cpd(k) = 0.5d0*x**(k+1)*k*(k+1.0d0)
          else
             Cpd(k) = k*(cp1-z*cpf)/(1.0d0-z*z)
@@ -5314,7 +5314,7 @@
          Qm(k) = 0.0d0
          Qd(k) = 0.0d0
       enddo
-      if ( dabs(x)==1.0d0 ) then
+      if ( abs(x)==1.0d0 ) then
          do k = 0 , n
             Qm(k) = 1.0d+300
             Qd(k) = 1.0d+300
@@ -5322,9 +5322,9 @@
          return
       endif
       ls = 1
-      if ( dabs(x)>1.0d0 ) ls = -1
-      xq = dsqrt(ls*(1.0d0-x*x))
-      q0 = 0.5d0*dlog(dabs((x+1.0)/(x-1.0)))
+      if ( abs(x)>1.0d0 ) ls = -1
+      xq = sqrt(ls*(1.0d0-x*x))
+      q0 = 0.5d0*log(abs((x+1.0)/(x-1.0)))
       q00 = q0
       q10 = -1.0d0/xq
       q01 = x*q0 - 1.0d0
@@ -5341,7 +5341,7 @@
       if ( m==0 ) qm0 = q00
       if ( m==1 ) qm0 = q10
       Qm(0) = qm0
-      if ( dabs(x)<1.0001d0 ) then
+      if ( abs(x)<1.0001d0 ) then
          if ( m==0 .and. n>0 ) then
             qf0 = q00
             qf1 = q01
@@ -5396,7 +5396,7 @@
             enddo
          endif
       else
-         if ( dabs(x)>1.1 ) then
+         if ( abs(x)>1.1 ) then
             km = 40 + m + n
          else
             km = (40+m+n)*int(-1.0-1.8*log(x-1.0))
@@ -5413,7 +5413,7 @@
             Qm(k) = Qm(k)*qm0/qf0
          enddo
       endif
-      if ( dabs(x)<1.0d0 ) then
+      if ( abs(x)<1.0d0 ) then
          do k = 0 , n
             Qm(k) = (-1)**m*Qm(k)
          enddo
@@ -5506,27 +5506,27 @@
       g = 0.0d0
       pi = 3.14159265358979d0
       a0 = 1.0d0
-      b0 = dsqrt(1.0d0-Hk*Hk)
+      b0 = sqrt(1.0d0-Hk*Hk)
       d0 = (pi/180.0d0)*Phi
       r = Hk*Hk
       if ( Hk==1.0d0 .and. Phi==90.0d0 ) then
          Fe = 1.0d+300
          Ee = 1.0d0
       elseif ( Hk==1.0d0 ) then
-         Fe = dlog((1.0d0+dsin(d0))/dcos(d0))
-         Ee = dsin(d0)
+         Fe = log((1.0d0+sin(d0))/cos(d0))
+         Ee = sin(d0)
       else
          fac = 1.0d0
          d = 0.0d0
          do n = 1 , 40
             a = (a0+b0)/2.0d0
-            b = dsqrt(a0*b0)
+            b = sqrt(a0*b0)
             c = (a0-b0)/2.0d0
             fac = 2.0d0*fac
             r = r + fac*c*c
             if ( Phi/=90.0d0 ) then
-               d = d0 + datan((b0/a0)*dtan(d0))
-               g = g + c*dsin(d)
+               d = d0 + atan((b0/a0)*tan(d0))
+               g = g + c*sin(d)
                d0 = d + pi*int(d/pi+.5d0)
             endif
             a0 = a
@@ -5575,8 +5575,8 @@
          & .1019301198172404d0 , .1181945319615184d0 ,                  &
          & .1316886384491766d0 , .1420961093183820d0 ,                  &
          & .1491729864726037d0 , .1527533871307258d0/
-      lb1 = Hk==1.0d0 .and. dabs(Phi-90.0)<=1.0d-8
-      lb2 = c==1.0d0 .and. dabs(Phi-90.0)<=1.0d-8
+      lb1 = Hk==1.0d0 .and. abs(Phi-90.0)<=1.0d-8
+      lb2 = c==1.0d0 .and. abs(Phi-90.0)<=1.0d-8
       if ( lb1 .or. lb2 ) then
          El3 = 1.0d+300
          return
@@ -5588,10 +5588,10 @@
          c0 = c2*t(i)
          t1 = c1 + c0
          t2 = c1 - c0
-         f1 = 1.0d0/((1.0d0-c*dsin(t1)*dsin(t1))                        &
-            & *dsqrt(1.0d0-Hk*Hk*dsin(t1)*dsin(t1)))
-         f2 = 1.0d0/((1.0d0-c*dsin(t2)*dsin(t2))                        &
-            & *dsqrt(1.0d0-Hk*Hk*dsin(t2)*dsin(t2)))
+         f1 = 1.0d0/((1.0d0-c*sin(t1)*sin(t1))                        &
+            & *sqrt(1.0d0-Hk*Hk*sin(t1)*sin(t1)))
+         f2 = 1.0d0/((1.0d0-c*sin(t2)*sin(t2))                        &
+            & *sqrt(1.0d0-Hk*Hk*sin(t2)*sin(t2)))
          El3 = El3 + w(i)*(f1+f2)
       enddo
       El3 = c1*El3
@@ -5615,17 +5615,17 @@
       elseif ( x<0 ) then
          call e1xb(-x,Ei)
          Ei = -Ei
-      elseif ( dabs(x)<=40.0 ) then
+      elseif ( abs(x)<=40.0 ) then
 !          Power series around x=0
          Ei = 1.0d0
          r = 1.0d0
          do k = 1 , 100
             r = r*k*x/(k+1.0d0)**2
             Ei = Ei + r
-            if ( dabs(r/Ei)<=1.0d-15 ) exit
+            if ( abs(r/Ei)<=1.0d-15 ) exit
          enddo
          ga = 0.5772156649015328d0
-         Ei = ga + dlog(x) + x*Ei
+         Ei = ga + log(x) + x*Ei
       else
 !          Asymptotic expansion (the series is not convergent)
          Ei = 1.0d0
@@ -5659,7 +5659,7 @@
       elseif ( dimag(z)<0 ) then
          Cei = Cei - (0d0,1d0)*pi
       elseif ( dimag(z)==0 ) then
-         if ( dble(z)>0 ) Cei = Cei + (0d0,1d0)*dsign(pi,dimag(z))
+         if ( dble(z)>0 ) Cei = Cei + (0d0,1d0)*sign(pi,dimag(z))
       endif
       end
 
@@ -5684,10 +5684,10 @@
          do k = 1 , 25
             r = -r*k*x/(k+1.0d0)**2
             e1 = e1 + r
-            if ( dabs(r)<=dabs(e1)*1.0d-15 ) exit
+            if ( abs(r)<=abs(e1)*1.0d-15 ) exit
          enddo
          ga = 0.5772156649015328d0
-         e1 = -ga - dlog(x) + x*e1
+         e1 = -ga - log(x) + x*e1
       else
          m = 20 + int(80.0/x)
          t0 = 0.0d0
@@ -5729,7 +5729,7 @@
       if ( x<0.0d0 ) then
          a = b - a
          a0 = a
-         x = dabs(x)
+         x = abs(x)
       endif
       nl = 0
       la = 0
@@ -5743,13 +5743,13 @@
       y1 = 0.0d0
       do n = 0 , nl
          if ( a0>=2.0d0 ) a = a + 1.0d0
-         if ( x<=30.0d0+dabs(b) .or. a<0.0d0 ) then
+         if ( x<=30.0d0+abs(b) .or. a<0.0d0 ) then
             Hg = 1.0d0
             rg = 1.0d0
             do j = 1 , 500
                rg = rg*(a+j-1.0d0)/(j*(b+j-1.0d0))*x
                Hg = Hg + rg
-               if ( Hg/=0d0 .and. dabs(rg/Hg)<1.0d-15 ) then
+               if ( Hg/=0d0 .and. abs(rg/Hg)<1.0d-15 ) then
 !       DLMF 13.2.39 (cf. above)
                   if ( x0<0.0d0 ) Hg = Hg*exp(x0)
                   goto 50
@@ -5778,11 +5778,11 @@
                sum2 = sum2 + r2
             enddo
             if ( x0>=0.0d0 ) then
-               hg1 = dble(exp(ctb-ctba))*x**(-a)*dcos(pi*a)*sum1
+               hg1 = dble(exp(ctb-ctba))*x**(-a)*cos(pi*a)*sum1
                hg2 = dble(exp(ctb-cta+x))*x**(a-b)*sum2
             else
 !       DLMF 13.2.39 (cf. above)
-               hg1 = dble(exp(ctb-ctba+x0))*x**(-a)*dcos(pi*a)*sum1
+               hg1 = dble(exp(ctb-ctba+x0))*x**(-a)*cos(pi*a)*sum1
                hg2 = dble(exp(ctb-cta))*x**(a-b)*sum2
             endif
             Hg = hg1 + hg2
@@ -5855,8 +5855,8 @@
          call gamma2(c-b,gcb)
          Hf = gc*gcab/(gca*gcb)
          return
-      elseif ( 1.0d0+x<=eps .and. dabs(c-a+b-1.0)<=eps ) then
-         g0 = dsqrt(pi)*2.0d0**(-a)
+      elseif ( 1.0d0+x<=eps .and. abs(c-a+b-1.0)<=eps ) then
+         g0 = sqrt(pi)*2.0d0**(-a)
          call gamma2(c,g1)
          call gamma2(1.0d0+a/2.0-b,g2)
          call gamma2(0.5d0+0.5*a,g3)
@@ -5898,7 +5898,7 @@
       hw = 0.0d0
       if ( x>=0.75d0 ) then
          gm = 0.0d0
-         if ( dabs(c-a-b-int(c-a-b))<1.0d-15 ) then
+         if ( abs(c-a-b-int(c-a-b))<1.0d-15 ) then
             m = int(c-a-b)
             call gamma2(a,ga)
             call gamma2(b,gb)
@@ -5930,7 +5930,7 @@
                do k = 1 , m
                   sp0 = sp0 + 1.0d0/(a+k-1.0) + 1.0/(b+k-1.0) - 1.0/k
                enddo
-               f1 = pa + pb + sp0 + 2.0d0*el + dlog(1.0d0-x)
+               f1 = pa + pb + sp0 + 2.0d0*el + log(1.0d0-x)
                do k = 1 , 250
                   sp = sp + (1.0d0-a)/(k*(a+k-1.0)) + (1.0-b)           &
                      & /(k*(b+k-1.0))
@@ -5939,10 +5939,10 @@
                      sm = sm + (1.0d0-a)/((j+k)*(a+j+k-1.0))            &
                         & + 1.0/(b+j+k-1.0)
                   enddo
-                  rp = pa + pb + 2.0d0*el + sp + sm + dlog(1.0d0-x)
+                  rp = pa + pb + 2.0d0*el + sp + sm + log(1.0d0-x)
                   r1 = r1*(a+m+k-1.0d0)*(b+m+k-1.0)/(k*(m+k))*(1.0-x)
                   f1 = f1 + r1*rp
-                  if ( dabs(f1-hw)<dabs(f1)*eps ) exit
+                  if ( abs(f1-hw)<abs(f1)*eps ) exit
                   hw = f1
                enddo
                Hf = f0*c0 + f1*c1
@@ -5957,7 +5957,7 @@
                do k = 1 , m
                   sp0 = sp0 + 1.0d0/k
                enddo
-               f1 = pa + pb - sp0 + 2.0d0*el + dlog(1.0d0-x)
+               f1 = pa + pb - sp0 + 2.0d0*el + log(1.0d0-x)
                do k = 1 , 250
                   sp = sp + (1.0d0-a)/(k*(a+k-1.0)) + (1.0-b)           &
                      & /(k*(b+k-1.0))
@@ -5965,10 +5965,10 @@
                   do j = 1 , m
                      sm = sm + 1.0d0/(j+k)
                   enddo
-                  rp = pa + pb + 2.0d0*el + sp - sm + dlog(1.0d0-x)
+                  rp = pa + pb + 2.0d0*el + sp - sm + log(1.0d0-x)
                   r1 = r1*(a+k-1.0d0)*(b+k-1.0)/(k*(m+k))*(1.0-x)
                   f1 = f1 + r1*rp
-                  if ( dabs(f1-hw)<dabs(f1)*eps ) exit
+                  if ( abs(f1-hw)<abs(f1)*eps ) exit
                   hw = f1
                enddo
                Hf = f0*c0 + f1*c1
@@ -5990,7 +5990,7 @@
                r0 = r0*(a+k-1.0d0)*(b+k-1.0)/(k*(a+b-c+k))*(1.0-x)
                r1 = r1*(c-a+k-1.0d0)*(c-b+k-1.0)/(k*(c-a-b+k))*(1.0-x)
                Hf = Hf + r0 + r1
-               if ( dabs(Hf-hw)<dabs(Hf)*eps ) exit
+               if ( abs(Hf-hw)<abs(Hf)*eps ) exit
                hw = Hf
             enddo
             Hf = Hf + c0 + c1
@@ -6007,7 +6007,7 @@
          do k = 1 , 250
             r = r*(a+k-1.0d0)*(b+k-1.0d0)/(k*(c+k-1.0d0))*x
             Hf = Hf + r
-            if ( dabs(Hf-hw)<=dabs(Hf)*eps ) exit
+            if ( abs(Hf-hw)<=abs(Hf)*eps ) exit
             hw = Hf
          enddo
          Hf = a0*Hf
@@ -6124,12 +6124,12 @@
                elseif ( x==0.0 .and. y<=0.0 ) then
                   phi = -0.5d0*pi
                else
-                  phi = datan(y/x)
+                  phi = atan(y/x)
                endif
                if ( phi>-0.5*pi .and. phi<1.5*pi ) ns = 1
                if ( phi>-1.5*pi .and. phi<=-0.5*pi ) ns = -1
                cfac = exp(ns*ci*pi*a)
-               if ( y==0.0d0 ) cfac = dcos(pi*a)
+               if ( y==0.0d0 ) cfac = cos(pi*a)
                chg1 = exp(cg2-cg3)*z**(-a)*cfac*cs1
                chg2 = exp(cg2-cg1+z)*z**(a-b)*cs2
                Chg = chg1 + chg2
@@ -6188,8 +6188,8 @@
       eps = 1.0d-15
       Isfer = 0
       l0 = c==int(c) .and. c<0.0d0
-      l1 = dabs(1.0d0-x)<eps .and. y==0.0d0 .and. c - a - b<=0.0d0
-      l2 = abs(z+1.0d0)<eps .and. dabs(c-a+b-1.0d0)<eps
+      l1 = abs(1.0d0-x)<eps .and. y==0.0d0 .and. c - a - b<=0.0d0
+      l2 = abs(z+1.0d0)<eps .and. abs(c-a+b-1.0d0)<eps
       l3 = a==int(a) .and. a<0.0d0
       l4 = b==int(b) .and. b<0.0d0
       l5 = c - a==int(c-a) .and. c - a<=0.0d0
@@ -6214,7 +6214,7 @@
          call gamma2(c-b,gcb)
          Zhf = gc*gcab/(gca*gcb)
       elseif ( l2 ) then
-         g0 = dsqrt(pi)*2.0d0**(-a)
+         g0 = sqrt(pi)*2.0d0**(-a)
          call gamma2(c,g1)
          call gamma2(1.0d0+a/2.0d0-b,g2)
          call gamma2(0.5d0+0.5d0*a,g3)
@@ -6257,8 +6257,8 @@
             Zhf = zc0*Zhf
          elseif ( a0>=0.90d0 ) then
             gm = 0.0d0
-            mcab = int(c-a-b+eps*dsign(1.0d0,c-a-b))
-            if ( dabs(c-a-b-mcab)<eps ) then
+            mcab = int(c-a-b+eps*sign(1.0d0,c-a-b))
+            if ( abs(c-a-b-mcab)<eps ) then
                m = int(c-a-b)
                call gamma2(a,ga)
                call gamma2(b,gb)
@@ -6377,9 +6377,9 @@
             Zhf = z00*Zhf
          endif
       elseif ( a0>1.0d0 ) then
-         mab = int(a-b+eps*dsign(1.0d0,a-b))
-         if ( dabs(a-b-mab)<eps .and. a0<=1.1d0 ) b = b + eps
-         if ( dabs(a-b-mab)>eps ) then
+         mab = int(a-b+eps*sign(1.0d0,a-b))
+         if ( abs(a-b-mab)<eps .and. a0<=1.1d0 ) b = b + eps
+         if ( abs(a-b-mab)>eps ) then
             call gamma2(a,ga)
             call gamma2(b,gb)
             call gamma2(c,gc)
@@ -6407,9 +6407,9 @@
             endif
             ca = c - a
             cb = c - b
-            nca = int(ca+eps*dsign(1.0d0,ca))
-            ncb = int(cb+eps*dsign(1.0d0,cb))
-            if ( dabs(ca-nca)<eps .or. dabs(cb-ncb)<eps ) c = c + eps
+            nca = int(ca+eps*sign(1.0d0,ca))
+            ncb = int(cb+eps*sign(1.0d0,cb))
+            if ( abs(ca-nca)<eps .or. abs(cb-ncb)<eps ) c = c + eps
             call gamma2(a,ga)
             call gamma2(c,gc)
             call gamma2(c-b,gcb)
@@ -6458,10 +6458,10 @@
                   sj2 = sj2 + 1.0d0/j
                enddo
                zp = -2.0d0*el - pa - pac + sj2 - 1.0d0/(k+a-c)          &
-                  & - pi/dtan(pi*(k+a-c)) + log(-z)
+                  & - pi/tan(pi*(k+a-c)) + log(-z)
                zf1 = zf1 + rk2*zr*zp
                ws = abs(zf1)
-               if ( dabs((ws-w0)/ws)<eps ) exit
+               if ( abs((ws-w0)/ws)<eps ) exit
                w0 = ws
             enddo
             Zhf = zf0 + zf1
@@ -6505,7 +6505,7 @@
          Bpt = 0.0d0
          Ant = 0.0d0
          Bnt = 0.0d0
-      elseif ( dabs(x)<=9.25d0 ) then
+      elseif ( abs(x)<=9.25d0 ) then
          do l = 0 , 1
             x = (-1)**l*x
             fx = x
@@ -6514,7 +6514,7 @@
                r = r*(3.0*k-2.0d0)/(3.0*k+1.0d0)*x/(3.0*k)              &
                  & *x/(3.0*k-1.0d0)*x
                fx = fx + r
-               if ( dabs(r)<dabs(fx)*eps ) exit
+               if ( abs(r)<abs(fx)*eps ) exit
             enddo
             gx = .5d0*x*x
             r = gx
@@ -6522,7 +6522,7 @@
                r = r*(3.0*k-1.0d0)/(3.0*k+2.0d0)*x/(3.0*k)              &
                  & *x/(3.0*k+1.0d0)*x
                gx = gx + r
-               if ( dabs(r)<dabs(gx)*eps ) exit
+               if ( abs(r)<abs(gx)*eps ) exit
             enddo
             Ant = c1*fx - c2*gx
             Bnt = sr3*(c1*fx+c2*gx)
@@ -6547,8 +6547,8 @@
          q2 = 1.414213562373095d0
          q0 = .3333333333333333d0
          q1 = .6666666666666667d0
-         xe = x*dsqrt(x)/1.5d0
-         xp6 = 1.0d0/dsqrt(6.0d0*pi*xe)
+         xe = x*sqrt(x)/1.5d0
+         xp6 = 1.0d0/sqrt(6.0d0*pi*xe)
          su1 = 1.0d0
          r = 1.0d0
          xr1 = 1.0d0/xe
@@ -6579,8 +6579,8 @@
          enddo
          su5 = su3 + su4
          su6 = su3 - su4
-         Ant = q1 - q2*xp6*(su5*dcos(xe)-su6*dsin(xe))
-         Bnt = q2*xp6*(su5*dsin(xe)+su6*dcos(xe))
+         Ant = q1 - q2*xp6*(su5*cos(xe)-su6*sin(xe))
+         Bnt = q2*xp6*(su5*sin(xe)+su6*cos(xe))
       endif
       end
 
@@ -6710,7 +6710,7 @@
       el = 0.5772156649015329d0
       pi = 3.141592653589793d0
       r2p = .63661977236758d0
-      y0 = dabs(dimag(z))
+      y0 = abs(dimag(z))
       a0 = abs(z)
       Nm = n
       if ( a0<1.0d-100 ) then
@@ -6892,10 +6892,10 @@
          Bi(k) = s0*Bi(k)
       enddo
       if ( x<=8.0d0 ) then
-         Bk(0) = -(dlog(0.5d0*x)+el)*Bi(0) + s0*sk0
+         Bk(0) = -(log(0.5d0*x)+el)*Bi(0) + s0*sk0
          Bk(1) = (1.0d0/x-Bi(1)*Bk(0))/Bi(0)
       else
-         a0 = dsqrt(pi/(2.0d0*x))*exp(-x)
+         a0 = sqrt(pi/(2.0d0*x))*exp(-x)
          k0 = 16
          if ( x>=25.0 ) k0 = 10
          if ( x>=80.0 ) k0 = 8
@@ -6958,7 +6958,7 @@
       enddo
       Pm(0,0) = 1.0d0
       if ( n==0 ) return
-      if ( dabs(x)==1.0d0 ) then
+      if ( abs(x)==1.0d0 ) then
          do i = 1 , n
             Pm(0,i) = x**i
             Pd(0,i) = 0.5d0*i*(i+1.0d0)*x**(i+1)
@@ -6975,8 +6975,8 @@
          return
       endif
       ls = 1
-      if ( dabs(x)>1.0d0 ) ls = -1
-      xq = dsqrt(ls*(1.0d0-x*x))
+      if ( abs(x)>1.0d0 ) ls = -1
+      xq = sqrt(ls*(1.0d0-x*x))
 !       Ensure connection to the complex-valued function for |x| > 1
       if ( x<-1d0 ) xq = -xq
       xs = ls*(1.0d0-x*x)
@@ -7052,28 +7052,28 @@
       Csf = 0.0d0
       do k = 1 , km
          if ( kd==1 ) then
-            Csf = Csf + fg(k)*dcos((2*k-2)*xr)
+            Csf = Csf + fg(k)*cos((2*k-2)*xr)
          elseif ( kd==2 ) then
-            Csf = Csf + fg(k)*dcos((2*k-1)*xr)
+            Csf = Csf + fg(k)*cos((2*k-1)*xr)
          elseif ( kd==3 ) then
-            Csf = Csf + fg(k)*dsin((2*k-1)*xr)
+            Csf = Csf + fg(k)*sin((2*k-1)*xr)
          elseif ( kd==4 ) then
-            Csf = Csf + fg(k)*dsin(2*k*xr)
+            Csf = Csf + fg(k)*sin(2*k*xr)
          endif
-         if ( k>=ic .and. dabs(fg(k))<dabs(Csf)*eps ) exit
+         if ( k>=ic .and. abs(fg(k))<abs(Csf)*eps ) exit
       enddo
       Csd = 0.0d0
       do k = 1 , km
          if ( kd==1 ) then
-            Csd = Csd - (2*k-2)*fg(k)*dsin((2*k-2)*xr)
+            Csd = Csd - (2*k-2)*fg(k)*sin((2*k-2)*xr)
          elseif ( kd==2 ) then
-            Csd = Csd - (2*k-1)*fg(k)*dsin((2*k-1)*xr)
+            Csd = Csd - (2*k-1)*fg(k)*sin((2*k-1)*xr)
          elseif ( kd==3 ) then
-            Csd = Csd + (2*k-1)*fg(k)*dcos((2*k-1)*xr)
+            Csd = Csd + (2*k-1)*fg(k)*cos((2*k-1)*xr)
          elseif ( kd==4 ) then
-            Csd = Csd + 2.0d0*k*fg(k)*dcos(2*k*xr)
+            Csd = Csd + 2.0d0*k*fg(k)*cos(2*k*xr)
          endif
-         if ( k>=ic .and. dabs(fg(k))<dabs(Csd)*eps ) exit
+         if ( k>=ic .and. abs(fg(k))<abs(Csd)*eps ) exit
       enddo
       end
 
@@ -7265,13 +7265,13 @@
       pi = 3.141592653589793d0
       pp2 = 1.2533141373155d0
       p2p = .7978845608028654d0
-      xa = dabs(x)
+      xa = abs(x)
       x2 = x*x
       x4 = x2*x2
       if ( x==0.0d0 ) then
-         Fr = .5d0*dsqrt(0.5d0*pi)
+         Fr = .5d0*sqrt(0.5d0*pi)
          Fi = (-1)**Ks*Fr
-         Fm = dsqrt(0.25d0*pi)
+         Fm = sqrt(0.25d0*pi)
          Fa = (-1)**Ks*45.0d0
          Gr = .5d0
          Gi = 0.0d0
@@ -7285,7 +7285,7 @@
                xr = -.5d0*xr*(4.0d0*k-3.0d0)/k/(2.0d0*k-1.0d0)          &
                   & /(4.0d0*k+1.0d0)*x4
                c1 = c1 + xr
-               if ( dabs(xr/c1)<eps ) exit
+               if ( abs(xr/c1)<eps ) exit
             enddo
             s1 = p2p*xa*xa*xa/3.0d0
             xr = s1
@@ -7293,7 +7293,7 @@
                xr = -.5d0*xr*(4.0d0*k-1.0d0)/k/(2.0d0*k+1.0d0)          &
                   & /(4.0d0*k+3.0d0)*x4
                s1 = s1 + xr
-               if ( dabs(xr/s1)<eps ) goto 50
+               if ( abs(xr/s1)<eps ) goto 50
             enddo
          elseif ( xa<5.5d0 ) then
             m = int(42+1.75*x2)
@@ -7313,7 +7313,7 @@
                xf1 = xf0
                xf0 = xf
             enddo
-            xq = dsqrt(xsu)
+            xq = sqrt(xsu)
             xw = p2p*xa/xq
             c1 = xc*xw
             s1 = xs*xw
@@ -7330,43 +7330,43 @@
                xr = -.25d0*xr*(4.0d0*k+1.0d0)*(4.0d0*k-1.0d0)/x4
                xg = xg + xr
             enddo
-            c1 = .5d0 + (xf*dsin(x2)-xg*dcos(x2))/dsqrt(2.0d0*pi)/xa
-            s1 = .5d0 - (xf*dcos(x2)+xg*dsin(x2))/dsqrt(2.0d0*pi)/xa
+            c1 = .5d0 + (xf*sin(x2)-xg*cos(x2))/sqrt(2.0d0*pi)/xa
+            s1 = .5d0 - (xf*cos(x2)+xg*sin(x2))/sqrt(2.0d0*pi)/xa
          endif
  50      Fr = pp2*(.5d0-c1)
          fi0 = pp2*(.5d0-s1)
          Fi = (-1)**Ks*fi0
-         Fm = dsqrt(Fr*Fr+Fi*Fi)
+         Fm = sqrt(Fr*Fr+Fi*Fi)
          if ( Fr>=0.0 ) then
-            Fa = srd*datan(Fi/Fr)
+            Fa = srd*atan(Fi/Fr)
          elseif ( Fi>0.0 ) then
-            Fa = srd*(datan(Fi/Fr)+pi)
+            Fa = srd*(atan(Fi/Fr)+pi)
          elseif ( Fi<0.0 ) then
-            Fa = srd*(datan(Fi/Fr)-pi)
+            Fa = srd*(atan(Fi/Fr)-pi)
          endif
          xp = x*x + pi/4.0d0
-         cs = dcos(xp)
-         ss = dsin(xp)
-         xq2 = 1.0d0/dsqrt(pi)
+         cs = cos(xp)
+         ss = sin(xp)
+         xq2 = 1.0d0/sqrt(pi)
          Gr = xq2*(Fr*cs+fi0*ss)
          Gi = (-1)**Ks*xq2*(fi0*cs-Fr*ss)
-         Gm = dsqrt(Gr*Gr+Gi*Gi)
+         Gm = sqrt(Gr*Gr+Gi*Gi)
          if ( Gr>=0.0 ) then
-            Ga = srd*datan(Gi/Gr)
+            Ga = srd*atan(Gi/Gr)
          elseif ( Gi>0.0 ) then
-            Ga = srd*(datan(Gi/Gr)+pi)
+            Ga = srd*(atan(Gi/Gr)+pi)
          elseif ( Gi<0.0 ) then
-            Ga = srd*(datan(Gi/Gr)-pi)
+            Ga = srd*(atan(Gi/Gr)-pi)
          endif
          if ( x<0.0d0 ) then
             Fr = pp2 - Fr
             Fi = (-1)**Ks*pp2 - Fi
-            Fm = dsqrt(Fr*Fr+Fi*Fi)
-            Fa = srd*datan(Fi/Fr)
-            Gr = dcos(x*x) - Gr
-            Gi = -(-1)**Ks*dsin(x*x) - Gi
-            Gm = dsqrt(Gr*Gr+Gi*Gi)
-            Ga = srd*datan(Gi/Gr)
+            Fm = sqrt(Fr*Fr+Fi*Fi)
+            Fa = srd*atan(Fi/Fr)
+            Gr = cos(x*x) - Gr
+            Gi = -(-1)**Ks*sin(x*x) - Gi
+            Gm = sqrt(Gr*Gr+Gi*Gi)
+            Ga = srd*atan(Gi/Gr)
          endif
       endif
       end
@@ -7391,13 +7391,13 @@
       double precision Ad , Ai , Bd , Bi , c1 , c2 , pir , sr3 , vi1 ,  &
                      & vi2 , vj1 , vj2 , vk1 , vk2 , vy1 , vy2 , x ,    &
                      & xa , xq , z
-      xa = dabs(x)
+      xa = abs(x)
       pir = 0.318309886183891d0
       c1 = 0.355028053887817d0
       c2 = 0.258819403792807d0
       sr3 = 1.732050807568877d0
       z = xa**1.5/1.5d0
-      xq = dsqrt(xa)
+      xq = sqrt(xa)
       call ajyik(z,vj1,vj2,vy1,vy2,vi1,vi2,vk1,vk2)
       if ( x==0.0d0 ) then
          Ai = c1
@@ -7445,8 +7445,8 @@
       c1 = 0.355028053887817d0
       c2 = 0.258819403792807d0
       sr3 = 1.732050807568877d0
-      xa = dabs(x)
-      xq = dsqrt(xa)
+      xa = abs(x)
+      xq = sqrt(xa)
       xm = 8.0d0
       if ( x>0.0d0 ) xm = 5.0d0
       if ( x==0.0d0 ) then
@@ -7462,14 +7462,14 @@
          do k = 1 , 40
             r = r*x/(3.0d0*k)*x/(3.0d0*k-1.0d0)*x
             fx = fx + r
-            if ( dabs(r)<dabs(fx)*eps ) exit
+            if ( abs(r)<abs(fx)*eps ) exit
          enddo
          gx = x
          r = x
          do k = 1 , 40
             r = r*x/(3.0d0*k)*x/(3.0d0*k+1.0d0)*x
             gx = gx + r
-            if ( dabs(r)<dabs(gx)*eps ) exit
+            if ( abs(r)<abs(gx)*eps ) exit
          enddo
          Ai = c1*fx - c2*gx
          Bi = sr3*(c1*fx+c2*gx)
@@ -7478,14 +7478,14 @@
          do k = 1 , 40
             r = r*x/(3.0d0*k)*x/(3.0d0*k+2.0d0)*x
             df = df + r
-            if ( dabs(r)<dabs(df)*eps ) exit
+            if ( abs(r)<abs(df)*eps ) exit
          enddo
          dg = 1.0d0
          r = 1.0d0
          do k = 1 , 40
             r = r*x/(3.0d0*k)*x/(3.0d0*k-2.0d0)*x
             dg = dg + r
-            if ( dabs(r)<dabs(dg)*eps ) exit
+            if ( abs(r)<abs(dg)*eps ) exit
          enddo
          Ad = c1*df - c2*dg
          Bd = sr3*(c1*df+c2*dg)
@@ -7510,7 +7510,7 @@
          xe = xa*xq/1.5d0
          xr1 = 1.0d0/xe
          xar = 1.0d0/xq
-         xf = dsqrt(xar)
+         xf = sqrt(xar)
          rp = 0.5641895835477563d0
          r = 1.0d0
          do k = 1 , kmax
@@ -7542,8 +7542,8 @@
             Ad = -.5d0*rp/xf*xp1*sad
             Bd = rp/xf/xp1*sbd
          else
-            xcs = dcos(xe+pi/4.0d0)
-            xss = dsin(xe+pi/4.0d0)
+            xcs = cos(xe+pi/4.0d0)
+            xss = sin(xe+pi/4.0d0)
             ssa = 1.0d0
             sda = 1.0d0
             r = 1.0d0
@@ -7606,11 +7606,11 @@
       do k = nm , 1 , -1
          f = (((2.0d0*k+m+ip)*(2.0d0*k+m+1.0d0+ip)-Cv+cs)               &
            & *f0-4.0d0*(k+1.0d0)*(k+m+1.0d0)*f1)/cs
-         if ( dabs(f)>dabs(Ck(k+1)) ) then
+         if ( abs(f)>abs(Ck(k+1)) ) then
             Ck(k) = f
             f1 = f0
             f0 = f
-            if ( dabs(f)>1.0d+100 ) then
+            if ( abs(f)>1.0d+100 ) then
                do k1 = nm , k , -1
                   Ck(k1) = Ck(k1)*1.0d-100
                enddo
@@ -7721,7 +7721,7 @@
             d3 = i + m + ip - 0.5d0
             r = r*d2*(d2-1.0d0)*i*(d3+k)/(d1*(d1-1.0d0)*(i-k)*d3)
             sum = sum + r*Df(i+1)
-            if ( dabs(sw-sum)<dabs(sum)*1.0d-14 ) exit
+            if ( abs(sw-sum)<abs(sum)*1.0d-14 ) exit
             sw = sum
          enddo
          r1 = reg
@@ -7787,10 +7787,10 @@
       psq = 0.0d0
       w = 0.0d0
       do nr = 1 , Nt
-         if ( Kf==1 ) psq = dsqrt(4.0d0*nr-1.0d0)
+         if ( Kf==1 ) psq = sqrt(4.0d0*nr-1.0d0)
          if ( Kf==2 ) psq = 2.0d0*nr**(0.5)
-         px = psq - dlog(pi*psq)/(pi*pi*psq**3.0)
-         py = dlog(pi*psq)/(pi*psq)
+         px = psq - log(pi*psq)/(pi*pi*psq**3.0)
+         py = log(pi*psq)/(pi*psq)
          z = dcmplx(px,py)
          if ( Kf==2 ) then
             if ( nr==2 ) z = (2.8334,0.2443)
@@ -7818,7 +7818,7 @@
          z = z - zfd/zgd
          w0 = w
          w = abs(z)
-         if ( it<=50 .and. dabs((w-w0)/w)>1.0d-12 ) goto 50
+         if ( it<=50 .and. abs((w-w0)/w)>1.0d-12 ) goto 50
          Zo(nr) = z
       enddo
       end
@@ -7840,7 +7840,7 @@
       if ( x==0.0 ) then
          e1 = 1.0d+300
       elseif ( x<=1.0 ) then
-         e1 = -dlog(x) + ((((1.07857d-3*x-9.76004d-3)*x+5.519968d-2)*x- &
+         e1 = -log(x) + ((((1.07857d-3*x-9.76004d-3)*x+5.519968d-2)*x- &
             & 0.24991055d0)*x+0.99999193d0)*x - 0.57721566d0
       else
          es1 = (((x+8.5733287401d0)*x+18.059016973d0)*x+8.6347608925d0) &
@@ -7887,7 +7887,7 @@
          do j = 1 , m - 1
             rg = rg*(v*v-j*j)
          enddo
-         xq = dsqrt(1.0d0-x*x)
+         xq = sqrt(1.0d0-x*x)
          r0 = 1.0d0
          do j = 1 , m
             r0 = .5d0*r0*xq/j
@@ -7910,15 +7910,15 @@
          do k = 1 , 100
             r = 0.5d0*r*(-v+m+k-1.0d0)*(v+m+k)/(k*(m+k))*(1.0d0-x)
             Pmv = Pmv + r
-            if ( k>12 .and. dabs(r/Pmv)<eps ) exit
+            if ( k>12 .and. abs(r/Pmv)<eps ) exit
          enddo
          Pmv = (-1)**m*c0*Pmv
       else
 !             DLMF 14.3.5, 15.8.10
-         vs = dsin(v*pi)/pi
+         vs = sin(v*pi)/pi
          pv0 = 0.0d0
          if ( m/=0 ) then
-            qr = dsqrt((1.0d0-x)/(1.0d0+x))
+            qr = sqrt((1.0d0-x)/(1.0d0+x))
             r2 = 1.0d0
             do j = 1 , m
                r2 = r2*qr*j
@@ -7932,12 +7932,12 @@
             pv0 = -vs*r2/m*s0
          endif
          call psi_spec(v,psv)
-         pa = 2.0d0*(psv+el) + pi/dtan(pi*v) + 1.0d0/v
+         pa = 2.0d0*(psv+el) + pi/tan(pi*v) + 1.0d0/v
          s1 = 0.0d0
          do j = 1 , m
             s1 = s1 + (j*j+v*v)/(j*(j*j-v*v))
          enddo
-         Pmv = pa + s1 - 1.0d0/(m-v) + dlog(0.5d0*(1.0d0+x))
+         Pmv = pa + s1 - 1.0d0/(m-v) + log(0.5d0*(1.0d0+x))
          r = 1.0d0
          do k = 1 , 100
             r = 0.5d0*r*(-v+m+k-1.0d0)*(v+m+k)/(k*(k+m))*(1.0d0+x)
@@ -7950,10 +7950,10 @@
                s2 = s2 + 1.0d0/(j*(j*j-v*v))
             enddo
             pss = pa + s + 2.0d0*v*v*s2 - 1.0d0/(m+k-v)                 &
-                & + dlog(0.5d0*(1.0d0+x))
+                & + log(0.5d0*(1.0d0+x))
             r2 = pss*r
             Pmv = Pmv + r2
-            if ( dabs(r2/Pmv)<eps ) exit
+            if ( abs(r2/Pmv)<eps ) exit
          enddo
          Pmv = pv0 + Pmv*vs*c0
       endif
@@ -8068,42 +8068,42 @@
          na = int(7-x)
          x0 = x + na
       endif
-      z1 = dsqrt(x0*x0+y*y)
-      th = datan(y/x0)
-      Gr = (x0-.5d0)*dlog(z1) - th*y - x0 + 0.5d0*dlog(2.0d0*pi)
-      Gi = th*(x0-0.5d0) + y*dlog(z1) - y
+      z1 = sqrt(x0*x0+y*y)
+      th = atan(y/x0)
+      Gr = (x0-.5d0)*log(z1) - th*y - x0 + 0.5d0*log(2.0d0*pi)
+      Gi = th*(x0-0.5d0) + y*log(z1) - y
       do k = 1 , 10
          t = z1**(1-2*k)
-         Gr = Gr + a(k)*t*dcos((2.0d0*k-1.0d0)*th)
-         Gi = Gi - a(k)*t*dsin((2.0d0*k-1.0d0)*th)
+         Gr = Gr + a(k)*t*cos((2.0d0*k-1.0d0)*th)
+         Gi = Gi - a(k)*t*sin((2.0d0*k-1.0d0)*th)
       enddo
       if ( x<=7.0 ) then
          gr1 = 0.0d0
          gi1 = 0.0d0
          do j = 0 , na - 1
-            gr1 = gr1 + .5d0*dlog((x+j)**2+y*y)
-            gi1 = gi1 + datan(y/(x+j))
+            gr1 = gr1 + .5d0*log((x+j)**2+y*y)
+            gi1 = gi1 + atan(y/(x+j))
          enddo
          Gr = Gr - gr1
          Gi = Gi - gi1
       endif
       if ( x1<0.0d0 ) then
-         z1 = dsqrt(x*x+y*y)
-         th1 = datan(y/x)
-         sr = -dsin(pi*x)*dcosh(pi*y)
-         si = -dcos(pi*x)*dsinh(pi*y)
-         z2 = dsqrt(sr*sr+si*si)
-         th2 = datan(si/sr)
+         z1 = sqrt(x*x+y*y)
+         th1 = atan(y/x)
+         sr = -sin(pi*x)*dcosh(pi*y)
+         si = -cos(pi*x)*dsinh(pi*y)
+         z2 = sqrt(sr*sr+si*si)
+         th2 = atan(si/sr)
          if ( sr<0.0d0 ) th2 = pi + th2
-         Gr = dlog(pi/(z1*z2)) - Gr
+         Gr = log(pi/(z1*z2)) - Gr
          Gi = -th1 - th2 - Gi
          x = x1
          y = y1
       endif
       if ( Kf==1 ) then
          g0 = exp(Gr)
-         Gr = g0*dcos(Gi)
-         Gi = g0*dsin(Gi)
+         Gr = g0*cos(Gi)
+         Gi = g0*sin(Gi)
       endif
       end
 
@@ -8147,7 +8147,7 @@
       do k = 1 , nm
          mk = m + 2*(k-1) + ip
          su1 = su1 + df(k)*pm(mk)
-         if ( dabs(sw-su1)<dabs(su1)*eps ) exit
+         if ( abs(sw-su1)<abs(su1)*eps ) exit
          sw = su1
       enddo
       S1f = (-1)**m*su1
@@ -8155,7 +8155,7 @@
       do k = 1 , nm
          mk = m + 2*(k-1) + ip
          su1 = su1 + df(k)*pd(mk)
-         if ( dabs(sw-su1)<dabs(su1)*eps ) exit
+         if ( abs(sw-su1)<abs(su1)*eps ) exit
          sw = su1
       enddo
       S1d = (-1)**m*su1
@@ -8194,7 +8194,7 @@
       call gamma2(xg1,gab)
       xg2 = 2.0d0 - b
       call gamma2(xg2,gb2)
-      hu0 = pi/dsin(pi*b)
+      hu0 = pi/sin(pi*b)
       r1 = hu0/(gab*gb)
       r2 = hu0*x**(1.0d0-b)/(ga*gb2)
       Hu = r1 - r2
@@ -8205,10 +8205,10 @@
          r1 = r1*(a+j-1.0d0)/(j*(b+j-1.0d0))*x
          r2 = r2*(a-b+j)/(j*(1.0d0-b+j))*x
          Hu = Hu + r1 - r2
-         hua = dabs(Hu)
+         hua = abs(Hu)
          if ( hua>hmax ) hmax = hua
          if ( hua<hmin ) hmin = hua
-         if ( dabs(Hu-h0)<dabs(Hu)*1.0d-15 ) exit
+         if ( abs(Hu-h0)<abs(Hu)*1.0d-15 ) exit
          h0 = Hu
       enddo
       d1 = log10(hmax)
@@ -8240,14 +8240,14 @@
          do k = 1 , 60
             r = -r*x*x*(2.0*k-1.0d0)/(2.0*k+1.0d0)**3
             s = s + r
-            if ( dabs(r)<dabs(s)*1.0d-12 ) exit
+            if ( abs(r)<abs(s)*1.0d-12 ) exit
          enddo
          Tth = pi/2.0d0 - 2.0d0/pi*x*s
       else
          do k = 1 , 10
             r = -r*(2.0*k-1.0d0)**3/((2.0*k+1.0d0)*x*x)
             s = s + r
-            if ( dabs(r)<dabs(s)*1.0d-12 ) exit
+            if ( abs(r)<abs(s)*1.0d-12 ) exit
          enddo
          Tth = 2.0d0/(pi*x)*s
          t = 8.0d0/x
@@ -8256,7 +8256,7 @@
             & *t-.051445d0)*t-.11d-5)*t + .7978846d0
          g0 = (((((-.23731d-2*t+.59842d-2)*t+.24437d-2)*t-.0233178d0)   &
             & *t+.595d-4)*t+.1620695d0)*t
-         tty = (f0*dsin(xt)-g0*dcos(xt))/(dsqrt(x)*x)
+         tty = (f0*sin(xt)-g0*cos(xt))/(sqrt(x)*x)
          Tth = Tth + tty
       endif
       end
@@ -8297,10 +8297,10 @@
       do k = 9 , 1 , -1
          gl0 = gl0*x2 + a(k)
       enddo
-      Gl = gl0/x0 + 0.5d0*dlog(xp) + (x0-.5d0)*dlog(x0) - x0
+      Gl = gl0/x0 + 0.5d0*log(xp) + (x0-.5d0)*log(x0) - x0
       if ( x<=7.0 ) then
          do k = 1 , n
-            Gl = Gl - dlog(x0-1.0d0)
+            Gl = Gl - log(x0-1.0d0)
             x0 = x0 - 1.0d0
          enddo
       endif
@@ -8324,13 +8324,13 @@
       integer k , n
       double precision q0 , q1 , Qd , qf , Qn , x
       dimension Qn(0:n) , Qd(0:n)
-      if ( dabs(x)==1.0d0 ) then
+      if ( abs(x)==1.0d0 ) then
          do k = 0 , n
             Qn(k) = 1.0d+300
             Qd(k) = -1.0d+300
          enddo
-      elseif ( dabs(x)<1.0d0 ) then
-         q0 = 0.5d0*dlog((1.0d0+x)/(1.0d0-x))
+      elseif ( abs(x)<1.0d0 ) then
+         q0 = 0.5d0*log((1.0d0+x)/(1.0d0-x))
          q1 = x*q0 - 1.0d0
          Qn(0) = q0
          Qn(1) = q1
@@ -8368,20 +8368,20 @@
       pi = 3.141592653589793d0
       eps = 1.0d-12
       ep = exp(-.25*x*x)
-      a0 = dabs(x)**Va*ep
+      a0 = abs(x)**Va*ep
       r = 1.0d0
       Pd = 1.0d0
       do k = 1 , 16
          r = -0.5d0*r*(2.0*k-Va-1.0)*(2.0*k-Va-2.0)/(k*x*x)
          Pd = Pd + r
-         if ( dabs(r/Pd)<eps ) exit
+         if ( abs(r/Pd)<eps ) exit
       enddo
       Pd = a0*Pd
       if ( x<0.0d0 ) then
          x1 = -x
          call vvla(Va,x1,vl)
          call gamma2(-Va,gl)
-         Pd = pi*vl/gl + dcos(pi*Va)*Pd
+         Pd = pi*vl/gl + cos(pi*Va)*Pd
       endif
       end
 
@@ -8431,14 +8431,14 @@
          do k = 1 , 50
             r = 0.25d0*r*x2/(k*k)
             Bi0 = Bi0 + r
-            if ( dabs(r/Bi0)<1.0d-15 ) exit
+            if ( abs(r/Bi0)<1.0d-15 ) exit
          enddo
          Bi1 = 1.0d0
          r = 1.0d0
          do k = 1 , 50
             r = 0.25d0*r*x2/(k*(k+1))
             Bi1 = Bi1 + r
-            if ( dabs(r/Bi1)<1.0d-15 ) exit
+            if ( abs(r/Bi1)<1.0d-15 ) exit
          enddo
          Bi1 = 0.5d0*x*Bi1
       else
@@ -8457,7 +8457,7 @@
          k0 = 12
          if ( x>=35.0 ) k0 = 9
          if ( x>=50.0 ) k0 = 7
-         ca = exp(x)/dsqrt(2.0d0*pi*x)
+         ca = exp(x)/sqrt(2.0d0*pi*x)
          Bi0 = 1.0d0
          xr = 1.0d0/x
          do k = 1 , k0
@@ -8472,7 +8472,7 @@
       endif
       ww = 0.0d0
       if ( x<=9.0d0 ) then
-         ct = -(dlog(x/2.0d0)+el)
+         ct = -(log(x/2.0d0)+el)
          Bk0 = 0.0d0
          w0 = 0.0d0
          r = 1.0d0
@@ -8480,7 +8480,7 @@
             w0 = w0 + 1.0d0/k
             r = 0.25d0*r/(k*k)*x2
             Bk0 = Bk0 + r*(w0+ct)
-            if ( dabs((Bk0-ww)/Bk0)<1.0d-15 ) exit
+            if ( abs((Bk0-ww)/Bk0)<1.0d-15 ) exit
             ww = Bk0
          enddo
          Bk0 = Bk0 + ct
@@ -8554,7 +8554,7 @@
             else
                call cpdla(-1,z1,cf1)
             endif
-            cf1 = dsqrt(2.0d0*pi)/ca0 - cf1
+            cf1 = sqrt(2.0d0*pi)/ca0 - cf1
             Cpb(1) = cf1
             do k = 2 , n0
                cf = (-z*cf1+cf0)/(k-1.0d0)
@@ -8647,29 +8647,29 @@
          t = 3.75d0/x
          Bi0 = ((((((((.00392377d0*t-.01647633d0)*t+.02635537d0)*t-     &
              & .02057706d0)*t+.916281d-2)*t-.157565d-2)*t+.225319d-2)   &
-             & *t+.01328592d0)*t+.39894228d0)*exp(x)/dsqrt(x)
+             & *t+.01328592d0)*t+.39894228d0)*exp(x)/sqrt(x)
          Bi1 = ((((((((-.420059d-2*t+.01787654d0)*t-.02895312d0)*t+     &
              & .02282967d0)*t-.01031555d0)*t+.163801d-2)*t-.00362018d0) &
-             & *t-.03988024d0)*t+.39894228d0)*exp(x)/dsqrt(x)
+             & *t-.03988024d0)*t+.39894228d0)*exp(x)/sqrt(x)
       endif
       if ( x<=2.0d0 ) then
          t = x/2.0d0
          t2 = t*t
          Bk0 = (((((.0000074d0*t2+.0001075d0)*t2+.00262698d0)*t2+       &
              & .0348859d0)*t2+.23069756d0)*t2+.4227842d0)               &
-             & *t2 - .57721566d0 - Bi0*dlog(t)
+             & *t2 - .57721566d0 - Bi0*log(t)
          Bk1 = ((((((-.00004686d0*t2-.00110404d0)*t2-.01919402d0)*t2-   &
              & .18156897d0)*t2-.67278579d0)*t2+.15443144d0)*t2+1.0d0)   &
-             & /x + Bi1*dlog(t)
+             & /x + Bi1*log(t)
       else
          t = 2.0d0/x
          t2 = t*t
          Bk0 = ((((((.00053208d0*t-.0025154d0)*t+.00587872d0)*t-        &
              & .01062446d0)*t+.02189568d0)*t-.07832358d0)               &
-             & *t+1.25331414d0)*exp(-x)/dsqrt(x)
+             & *t+1.25331414d0)*exp(-x)/sqrt(x)
          Bk1 = ((((((-.00068245d0*t+.00325614d0)*t-.00780353d0)*t+      &
              & .01504268d0)*t-.0365562d0)*t+.23498619d0)*t+1.25331414d0)&
-             & *exp(-x)/dsqrt(x)
+             & *exp(-x)/sqrt(x)
       endif
       Di0 = Bi1
       Di1 = Bi0 - Bi1/x
@@ -8726,7 +8726,7 @@
       do k = 2 , n
          pf = (2.0d0*k-1.0d0)/k*x*p1 - (k-1.0d0)/k*p0
          Pn(k) = pf
-         if ( dabs(x)==1.0d0 ) then
+         if ( abs(x)==1.0d0 ) then
             Pd(k) = 0.5d0*x**(k+1)*k*(k+1.0d0)
          else
             Pd(k) = k*(p1-x*pf)/(1.0d0-x*x)
@@ -8769,7 +8769,7 @@
       do i = 1 , 251
          Fc(i) = 0.0d0
       enddo
-      if ( dabs(q)<=1.0d-7 ) then
+      if ( abs(q)<=1.0d-7 ) then
 !          Expansion up to order Q^1 (Abramowitz & Stegun 20.2.27-28)
          if ( Kd==1 ) then
             jm = m/2 + 1
@@ -8842,7 +8842,7 @@
             v = u
             u = f
             f = (a-4.0d0*k*k)*u/q - v
-            if ( dabs(f)<dabs(Fc(k+1)) ) then
+            if ( abs(f)<abs(Fc(k+1)) ) then
                kb = k
                Fc(1) = 1.0d-100
                sp = 0.0d0
@@ -8861,7 +8861,7 @@
                enddo
                sp = sp + 2.0d0*Fc(1)**2 + Fc(2)**2 + Fc(3)**2
                ss = s + sp*(f3/f2)**2
-               s0 = dsqrt(1.0d0/ss)
+               s0 = sqrt(1.0d0/ss)
                do j = 1 , km
                   if ( j<=kb+1 ) then
                      Fc(j) = s0*Fc(j)*f3/f2
@@ -8878,7 +8878,7 @@
          Fc(2) = q*Fc(3)/(a-4.0d0-2.0d0*q*q/a)
          Fc(1) = q/a*Fc(2)
          s = s + 2.0d0*Fc(1)**2 + Fc(2)**2
-         s0 = dsqrt(1.0d0/s)
+         s0 = sqrt(1.0d0/s)
          do k = 1 , km
             Fc(k) = s0*Fc(k)
          enddo
@@ -8887,7 +8887,7 @@
             v = u
             u = f
             f = (a-(2.0d0*k-1)**2)*u/q - v
-            if ( dabs(f)>=dabs(Fc(k)) ) then
+            if ( abs(f)>=abs(Fc(k)) ) then
                Fc(k-1) = f
                s = s + f*f
             else
@@ -8898,7 +8898,7 @@
          enddo
          Fc(1) = q/(a-1.0d0-(-1)**Kd*q)*Fc(2)
          s = s + Fc(1)*Fc(1)
-         s0 = dsqrt(1.0d0/s)
+         s0 = sqrt(1.0d0/s)
          do k = 1 , km
             Fc(k) = s0*Fc(k)
          enddo
@@ -8921,7 +8921,7 @@
          enddo
          sp = sp + Fc(1)**2 + Fc(2)**2
          ss = s + sp*(f3/f2)**2
-         s0 = 1.0d0/dsqrt(ss)
+         s0 = 1.0d0/sqrt(ss)
          do j = 1 , km
             if ( j<kb ) Fc(j) = s0*Fc(j)*f3/f2
             if ( j>=kb ) Fc(j) = s0*Fc(j)
@@ -8931,7 +8931,7 @@
             v = u
             u = f
             f = (a-4.0d0*k*k)*u/q - v
-            if ( dabs(f)>=dabs(Fc(k)) ) then
+            if ( abs(f)>=abs(Fc(k)) ) then
                Fc(k-1) = f
                s = s + f*f
             else
@@ -8942,7 +8942,7 @@
          enddo
          Fc(1) = q/(a-4.0d0)*Fc(2)
          s = s + Fc(1)*Fc(1)
-         s0 = dsqrt(1.0d0/s)
+         s0 = sqrt(1.0d0/s)
          do k = 1 , km
             Fc(k) = s0*Fc(k)
          enddo
@@ -8965,7 +8965,7 @@
          enddo
          sp = sp + Fc(1)**2 + Fc(2)**2
          ss = s + sp*(f3/f2)**2
-         s0 = 1.0d0/dsqrt(ss)
+         s0 = 1.0d0/sqrt(ss)
          do j = 1 , km
             if ( j<kb ) Fc(j) = s0*Fc(j)*f3/f2
             if ( j>=kb ) Fc(j) = s0*Fc(j)
@@ -9002,7 +9002,7 @@
       integer k , m , n , Nm
       dimension Si(0:n) , Di(0:n)
       Nm = n
-      if ( dabs(x)<1.0d-100 ) then
+      if ( abs(x)<1.0d-100 ) then
          do k = 0 , n
             Si(k) = 0.0d0
             Di(k) = 0.0d0
@@ -9076,13 +9076,13 @@
          x1 = 0.25d0
          y1 = 0.5d0*a
          call cgama(x1,y1,1,ugr,ugi)
-         g1 = dsqrt(ugr*ugr+ugi*ugi)
+         g1 = sqrt(ugr*ugr+ugi*ugi)
          x2 = 0.75d0
          call cgama(x2,y1,1,vgr,vgi)
-         g2 = dsqrt(vgr*vgr+vgi*vgi)
+         g2 = sqrt(vgr*vgr+vgi*vgi)
       endif
-      f1 = dsqrt(g1/g2)
-      f2 = dsqrt(2.0d0*g2/g1)
+      f1 = sqrt(g1/g2)
+      f2 = sqrt(2.0d0*g2/g1)
       h0 = 1.0d0
       h1 = a
       h(1) = a
@@ -9099,7 +9099,7 @@
          r = 0.5d0*r*x*x/(k*(2.0d0*k-1.0d0))
          r1 = h(k)*r
          y1f = y1f + r1
-         if ( dabs(r1)<=eps*dabs(y1f) .and. k>30 ) exit
+         if ( abs(r1)<=eps*abs(y1f) .and. k>30 ) exit
       enddo
       y1d = a
       r = 1.0d0
@@ -9107,7 +9107,7 @@
          r = 0.5d0*r*x*x/(k*(2.0d0*k+1.0d0))
          r1 = h(k+1)*r
          y1d = y1d + r1
-         if ( dabs(r1)<=eps*dabs(y1d) .and. k>30 ) exit
+         if ( abs(r1)<=eps*abs(y1d) .and. k>30 ) exit
       enddo
       y1d = x*y1d
       d1 = 1.0d0
@@ -9127,7 +9127,7 @@
          r = 0.5d0*r*x*x/(k*(2.0d0*k+1.0d0))
          r1 = d(k+1)*r
          y2f = y2f + r1
-         if ( dabs(r1)<=eps*dabs(y2f) .and. k>30 ) exit
+         if ( abs(r1)<=eps*abs(y2f) .and. k>30 ) exit
       enddo
       y2f = x*y2f
       y2d = 1.0d0
@@ -9136,7 +9136,7 @@
          r = 0.5d0*r*x*x/(k*(2.0d0*k-1.0d0))
          r1 = d(k+1)*r
          y2d = y2d + r1
-         if ( dabs(r1)<=eps*dabs(y2f) .and. k>30 ) exit
+         if ( abs(r1)<=eps*abs(y2f) .and. k>30 ) exit
       enddo
       W1f = p0*(f1*y1f-f2*y2f)
       W2f = p0*(f1*y1f+f2*y2f)
@@ -9184,7 +9184,7 @@
       do k = 2 , nm
          r = r*(m+k-1.0)*(m+k+ip-1.5d0)/(k-1.0d0)/(k+ip-1.5d0)
          suc = suc + r*Df(k)
-         if ( k>nm1 .and. dabs(suc-sw)<dabs(suc)*eps ) exit
+         if ( k>nm1 .and. abs(suc-sw)<abs(suc)*eps ) exit
          sw = suc
       enddo
       if ( x==0.0 ) then
@@ -9193,7 +9193,7 @@
          sw1 = 0.0d0
          do j = 1 , nm
             sum = sum + ck(j)
-            if ( dabs(sum-sw1)<dabs(sum)*eps ) exit
+            if ( abs(sum-sw1)<abs(sum)*eps ) exit
             sw1 = sum
          enddo
          r1 = 1.0d0
@@ -9236,7 +9236,7 @@
          endif
          np = m + 2*k - 2 + ip
          R1f = R1f + lg*r*Df(k)*sj(np)
-         if ( k>nm1 .and. dabs(R1f-sw)<dabs(R1f)*eps ) exit
+         if ( k>nm1 .and. abs(R1f-sw)<abs(R1f)*eps ) exit
          sw = R1f
       enddo
       R1f = R1f*a0
@@ -9254,7 +9254,7 @@
          endif
          np = m + 2*k - 2 + ip
          sud = sud + lg*r*Df(k)*dj(np)
-         if ( k>nm1 .and. dabs(sud-sw)<dabs(sud)*eps ) exit
+         if ( k>nm1 .and. abs(sud-sw)<abs(sud)*eps ) exit
          sw = sud
       enddo
       R1d = b0 + a0*c*sud
@@ -9281,7 +9281,7 @@
       integer m
       eps = 1.0d-15
       pi = 3.141592653589793d0
-      sq2 = dsqrt(2.0d0)
+      sq2 = sqrt(2.0d0)
       ep = exp(-.25d0*x*x)
       va0 = 0.5d0*(1.0d0-Va)
       if ( Va==0.0 ) then
@@ -9291,7 +9291,7 @@
             Pd = 0.0d0
          else
             call gamma2(va0,ga0)
-            Pd = dsqrt(pi)/(2.0d0**(-.5d0*Va)*ga0)
+            Pd = sqrt(pi)/(2.0d0**(-.5d0*Va)*ga0)
          endif
       else
          call gamma2(-Va,g1)
@@ -9306,7 +9306,7 @@
             r = -r*sq2*x/m
             r1 = gm*r
             Pd = Pd + r1
-            if ( dabs(r1)<dabs(Pd)*eps ) exit
+            if ( abs(r1)<abs(Pd)*eps ) exit
          enddo
          Pd = a0*Pd
       endif
@@ -9334,7 +9334,7 @@
       a0 = abs(z)
 !       Continued fraction converges slowly near negative real axis,
 !       so use power series in a wedge around it until radius 40.0
-      xt = -2*dabs(dimag(z))
+      xt = -2*abs(dimag(z))
       if ( a0==0.0d0 ) then
          Ce1 = (1.0d+300,0.0d0)
       elseif ( a0<=5.0 .or. x<xt .and. a0<40.0 ) then
@@ -9349,7 +9349,7 @@
          if ( x<=0.0 .and. dimag(z)==0.0 ) then
 !     Careful on the branch cut -- use the sign of the imaginary part
 !     to get the right sign on the factor if pi.
-            Ce1 = -el - log(-z) + z*Ce1 - dsign(pi,dimag(z))            &
+            Ce1 = -el - log(-z) + z*Ce1 - sign(pi,dimag(z))            &
                 & *(0.0d0,1.0d0)
          else
             Ce1 = -el - log(z) + z*Ce1
@@ -9407,7 +9407,7 @@
          Ty = ((((((((.13351d-4*t-.235002d-3)*t+.3034322d-2)*t-         &
             & .029600855d0)*t+.203380298d0)*t-.904755062d0)             &
             & *t+2.287317974d0)*t-2.567250468d0)*t+1.076611469d0)*x1
-         Ty = 2.0d0/pi*dlog(x/2.0d0)*Tj - Ty
+         Ty = 2.0d0/pi*log(x/2.0d0)*Tj - Ty
       elseif ( x<=8.0d0 ) then
          xt = x - .25d0*pi
          t = 16.0d0/(x*x)
@@ -9417,8 +9417,8 @@
          g0 = (((((.1076103d-2*t-.5434851d-2)*t+.01242264d0)*t-         &
             & .018255209)*t+.023664841d0)*t-.049635633d0)               &
             & *t + .79784879d0
-         Tj = 1.0d0 - (f0*dcos(xt)-g0*dsin(xt))/dsqrt(x)
-         Ty = -(f0*dsin(xt)+g0*dcos(xt))/dsqrt(x)
+         Tj = 1.0d0 - (f0*cos(xt)-g0*sin(xt))/sqrt(x)
+         Ty = -(f0*sin(xt)+g0*cos(xt))/sqrt(x)
       else
          t = 64.0d0/(x*x)
          xt = x - .25d0*pi
@@ -9428,8 +9428,8 @@
          g0 = ((((((-.226238d-4*t+.1107299d-3)*t-.2543955d-3)*t+        &
             & .4100676d-3)*t-.6740148d-3)*t+.17870944d-2)               &
             & *t-.01256424405d0)*t + .79788456d0
-         Tj = 1.0d0 - (f0*dcos(xt)-g0*dsin(xt))/dsqrt(x)
-         Ty = -(f0*dsin(xt)+g0*dcos(xt))/dsqrt(x)
+         Tj = 1.0d0 - (f0*cos(xt)-g0*sin(xt))/sqrt(x)
+         Ty = -(f0*sin(xt)+g0*cos(xt))/sqrt(x)
       endif
       end
 
@@ -9476,7 +9476,7 @@
          r = 1.0d0
          do k = 1 , 25
             r = -r*(a+k-1.0d0)*(a-b+k)/(k*x)
-            ra = dabs(r)
+            ra = abs(r)
             if ( k>5 .and. ra>=r0 .or. ra<1.0d-15 ) exit
             r0 = ra
             Hu = Hu + r
@@ -9511,7 +9511,7 @@
       gw = 0.0d0
       do k = 1 , nm
          gf0 = gf0 + Bk(k)*x**(2.0*k-2.0)
-         if ( dabs((gf0-gw)/gf0)<eps .and. k>=10 ) exit
+         if ( abs((gf0-gw)/gf0)<eps .and. k>=10 ) exit
          gw = gf0
       enddo
       Gf = xm*gf0*x**(1-ip)
@@ -9523,7 +9523,7 @@
          else
             gd0 = gd0 + 2.0d0*k*Bk(k+1)*x**(2.0*k-1.0)
          endif
-         if ( dabs((gd0-gw)/gd0)<eps .and. k>=10 ) exit
+         if ( abs((gd0-gw)/gd0)<eps .and. k>=10 ) exit
          gw = gd0
       enddo
       Gd = gd1 + xm*gd0
@@ -9561,9 +9561,9 @@
          do k = 1 , 60
             r = -.25d0*r*(2*k-1.0d0)/(2*k+1.0d0)/(k*k)*x2
             Tj = Tj + r
-            if ( dabs(r)<dabs(Tj)*eps ) exit
+            if ( abs(r)<abs(Tj)*eps ) exit
          enddo
-         ty1 = (el+dlog(x/2.0d0))*Tj
+         ty1 = (el+log(x/2.0d0))*Tj
          rs = 0.0d0
          ty2 = 1.0d0
          r = 1.0d0
@@ -9572,7 +9572,7 @@
             rs = rs + 1.0d0/k
             r2 = r*(rs+1.0d0/(2.0d0*k+1.0d0))
             ty2 = ty2 + r2
-            if ( dabs(r2)<dabs(ty2)*eps ) exit
+            if ( abs(r2)<abs(ty2)*eps ) exit
          enddo
          Ty = (ty1-x*ty2)*2.0d0/pi
       else
@@ -9599,9 +9599,9 @@
             bg = bg + a(2*k+1)*r
          enddo
          xp = x + .25d0*pi
-         rc = dsqrt(2.0d0/(pi*x))
-         Tj = 1.0d0 - rc*(bf*dcos(xp)+bg*dsin(xp))
-         Ty = rc*(bg*dcos(xp)-bf*dsin(xp))
+         rc = sqrt(2.0d0/(pi*x))
+         Tj = 1.0d0 - rc*(bf*cos(xp)+bg*sin(xp))
+         Ty = rc*(bg*cos(xp)-bf*sin(xp))
       endif
       end
 
@@ -9633,19 +9633,19 @@
          Dy(0) = 0.0d0
          return
       endif
-      Ry(0) = -dcos(x)
-      Ry(1) = Ry(0)/x - dsin(x)
+      Ry(0) = -cos(x)
+      Ry(1) = Ry(0)/x - sin(x)
       rf0 = Ry(0)
       rf1 = Ry(1)
       do k = 2 , n
          rf2 = (2.0d0*k-1.0d0)*rf1/x - rf0
-         if ( dabs(rf2)>1.0d+300 ) exit
+         if ( abs(rf2)>1.0d+300 ) exit
          Ry(k) = rf2
          rf0 = rf1
          rf1 = rf2
       enddo
       Nm = k - 1
-      Dy(0) = dsin(x)
+      Dy(0) = sin(x)
       do k = 1 , Nm
          Dy(k) = -k*Ry(k)/x + Ry(k-1)
       enddo
@@ -9680,7 +9680,7 @@
       do k = 2 , n
          pf = (2.0d0*k-1.0d0)/k*x*p1 - (k-1.0d0)/k*p0
          Pn(k) = pf
-         if ( dabs(x)==1.0d0 ) then
+         if ( abs(x)==1.0d0 ) then
             Pd(k) = 0.5d0*x**(k+1)*k*(k+1.0d0)
          else
             Pd(k) = k*(p1-x*pf)/(1.0d0-x*x)
@@ -9742,70 +9742,70 @@
       endif
       x2 = 0.25d0*x*x
       x4 = x2*x2
-      if ( dabs(x)<10.0d0 ) then
+      if ( abs(x)<10.0d0 ) then
          Ber = 1.0d0
          r = 1.0d0
          do m = 1 , 60
             r = -0.25d0*r/(m*m)/(2.0d0*m-1.0d0)**2*x4
             Ber = Ber + r
-            if ( dabs(r)<dabs(Ber)*eps ) exit
+            if ( abs(r)<abs(Ber)*eps ) exit
          enddo
          Bei = x2
          r = x2
          do m = 1 , 60
             r = -0.25d0*r/(m*m)/(2.0d0*m+1.0d0)**2*x4
             Bei = Bei + r
-            if ( dabs(r)<dabs(Bei)*eps ) exit
+            if ( abs(r)<abs(Bei)*eps ) exit
          enddo
-         Ger = -(dlog(x/2.0d0)+el)*Ber + 0.25d0*pi*Bei
+         Ger = -(log(x/2.0d0)+el)*Ber + 0.25d0*pi*Bei
          r = 1.0d0
          gs = 0.0d0
          do m = 1 , 60
             r = -0.25d0*r/(m*m)/(2.0d0*m-1.0d0)**2*x4
             gs = gs + 1.0d0/(2.0d0*m-1.0d0) + 1.0d0/(2.0d0*m)
             Ger = Ger + r*gs
-            if ( dabs(r*gs)<dabs(Ger)*eps ) exit
+            if ( abs(r*gs)<abs(Ger)*eps ) exit
          enddo
-         Gei = x2 - (dlog(x/2.0d0)+el)*Bei - 0.25d0*pi*Ber
+         Gei = x2 - (log(x/2.0d0)+el)*Bei - 0.25d0*pi*Ber
          r = x2
          gs = 1.0d0
          do m = 1 , 60
             r = -0.25d0*r/(m*m)/(2.0d0*m+1.0d0)**2*x4
             gs = gs + 1.0d0/(2.0d0*m) + 1.0d0/(2.0d0*m+1.0d0)
             Gei = Gei + r*gs
-            if ( dabs(r*gs)<dabs(Gei)*eps ) exit
+            if ( abs(r*gs)<abs(Gei)*eps ) exit
          enddo
          Der = -0.25d0*x*x2
          r = Der
          do m = 1 , 60
             r = -0.25d0*r/m/(m+1.0d0)/(2.0d0*m+1.0d0)**2*x4
             Der = Der + r
-            if ( dabs(r)<dabs(Der)*eps ) exit
+            if ( abs(r)<abs(Der)*eps ) exit
          enddo
          Dei = 0.5d0*x
          r = Dei
          do m = 1 , 60
             r = -0.25d0*r/(m*m)/(2.d0*m-1.d0)/(2.d0*m+1.d0)*x4
             Dei = Dei + r
-            if ( dabs(r)<dabs(Dei)*eps ) exit
+            if ( abs(r)<abs(Dei)*eps ) exit
          enddo
          r = -0.25d0*x*x2
          gs = 1.5d0
-         Her = 1.5d0*r - Ber/x - (dlog(x/2.d0)+el)*Der + 0.25*pi*Dei
+         Her = 1.5d0*r - Ber/x - (log(x/2.d0)+el)*Der + 0.25*pi*Dei
          do m = 1 , 60
             r = -0.25d0*r/m/(m+1.0d0)/(2.0d0*m+1.0d0)**2*x4
             gs = gs + 1.0d0/(2*m+1.0d0) + 1.0d0/(2*m+2.0d0)
             Her = Her + r*gs
-            if ( dabs(r*gs)<dabs(Her)*eps ) exit
+            if ( abs(r*gs)<abs(Her)*eps ) exit
          enddo
          r = 0.5d0*x
          gs = 1.0d0
-         Hei = 0.5d0*x - Bei/x - (dlog(x/2.d0)+el)*Dei - 0.25*pi*Der
+         Hei = 0.5d0*x - Bei/x - (log(x/2.d0)+el)*Dei - 0.25*pi*Der
          do m = 1 , 60
             r = -0.25d0*r/(m*m)/(2*m-1.0d0)/(2*m+1.0d0)*x4
             gs = gs + 1.0d0/(2.0d0*m) + 1.0d0/(2*m+1.0d0)
             Hei = Hei + r*gs
-            if ( dabs(r*gs)<dabs(Hei)*eps ) return
+            if ( abs(r*gs)<abs(Hei)*eps ) return
          enddo
       else
          pp0 = 1.0d0
@@ -9814,7 +9814,7 @@
          qn0 = 0.0d0
          r0 = 1.0d0
          km = 18
-         if ( dabs(x)>=40.0 ) km = 10
+         if ( abs(x)>=40.0 ) km = 10
          fac = 1.0d0
          do k = 1 , km
             fac = -fac
@@ -9829,15 +9829,15 @@
             qp0 = qp0 + rs
             qn0 = qn0 + fac*rs
          enddo
-         xd = x/dsqrt(2.0d0)
+         xd = x/sqrt(2.0d0)
          xe1 = exp(xd)
          xe2 = exp(-xd)
-         xc1 = 1.d0/dsqrt(2.0d0*pi*x)
-         xc2 = dsqrt(.5d0*pi/x)
-         cp0 = dcos(xd+0.125d0*pi)
-         cn0 = dcos(xd-0.125d0*pi)
-         sp0 = dsin(xd+0.125d0*pi)
-         sn0 = dsin(xd-0.125d0*pi)
+         xc1 = 1.d0/sqrt(2.0d0*pi*x)
+         xc2 = sqrt(.5d0*pi/x)
+         cp0 = cos(xd+0.125d0*pi)
+         cn0 = cos(xd-0.125d0*pi)
+         sp0 = sin(xd+0.125d0*pi)
+         sn0 = sin(xd-0.125d0*pi)
          Ger = xc2*xe2*(pn0*cp0-qn0*sp0)
          Gei = xc2*xe2*(-pn0*sp0-qn0*cp0)
          Ber = xc1*xe1*(pp0*cn0+qp0*sn0) - Gei/pi
@@ -9851,8 +9851,8 @@
          do k = 1 , km
             fac = -fac
             xt = 0.25d0*k*pi - int(0.125d0*k)*2.0d0*pi
-            cs = dcos(xt)
-            ss = dsin(xt)
+            cs = cos(xt)
+            ss = sin(xt)
             r1 = 0.125d0*r1*(4.d0-(2.0d0*k-1.0d0)**2)/k/x
             rc = r1*cs
             rs = r1*ss
@@ -9926,17 +9926,17 @@
       do k = 1 , 150
          r = r*(a0+k-1.0d0)*x/((n+k)*k)
          hm1 = hm1 + r
-         hu1 = dabs(hm1)
+         hu1 = abs(hm1)
          if ( hu1>hmax ) hmax = hu1
          if ( hu1<hmin ) hmin = hu1
-         if ( dabs(hm1-h0)<dabs(hm1)*1.0d-15 ) exit
+         if ( abs(hm1-h0)<abs(hm1)*1.0d-15 ) exit
          h0 = hm1
       enddo
       da1 = log10(hmax)
       da2 = 0.0d0
       if ( hmin/=0.0 ) da2 = log10(hmin)
       Id = 15 - abs(da1-da2)
-      hm1 = hm1*dlog(x)
+      hm1 = hm1*log(x)
       s0 = 0.0d0
       do m = 1 , n
          if ( b>=0.0 ) s0 = s0 - 1.0d0/m
@@ -9967,10 +9967,10 @@
          hw = 2.0d0*el + ps + s1 - s2
          r = r*(a0+k-1.0d0)*x/((n+k)*k)
          hm2 = hm2 + r*hw
-         hu2 = dabs(hm2)
+         hu2 = abs(hm2)
          if ( hu2>hmax ) hmax = hu2
          if ( hu2<hmin ) hmin = hu2
-         if ( dabs((hm2-h0)/hm2)<1.0d-15 ) exit
+         if ( abs((hm2-h0)/hm2)<1.0d-15 ) exit
          h0 = hm2
       enddo
       db1 = log10(hmax)
@@ -10062,7 +10062,7 @@
          z = z - zfd/zgd
          w0 = w
          w = abs(z)
-         if ( it<=50 .and. dabs((w-w0)/w)>1.0d-12 ) goto 50
+         if ( it<=50 .and. abs((w-w0)/w)>1.0d-12 ) goto 50
          Zo(nr) = z
       enddo
       do i = 1 , Nt
@@ -10127,11 +10127,11 @@
          Ger = ((((((-.2458d-4*u+.309699d-2)*u-.19636347d0)*u+          &
              & 5.65539121d0)*u-60.60977451d0)*u+171.36272133d0)         &
              & *u-59.05819744d0)*u - .57721566d0
-         Ger = Ger - dlog(.5d0*x)*Ber + .25d0*pi*Bei
+         Ger = Ger - log(.5d0*x)*Ber + .25d0*pi*Bei
          Gei = t2*((((((.29532d-3*u-.02695875d0)*u+1.17509064d0)*u-     &
              & 21.30060904d0)*u+124.2356965d0)*u-142.91827687d0)        &
              & *u+6.76454936d0)
-         Gei = Gei - dlog(.5d0*x)*Bei - .25d0*pi*Ber
+         Gei = Gei - log(.5d0*x)*Bei - .25d0*pi*Ber
          Der = x*t2*                                                    &
              & ((((((-.394d-5*u+.45957d-3)*u-.02609253d0)*u+.66047849d0)&
              & *u-6.0681481d0)*u+14.22222222d0)*u-4.0d0)
@@ -10140,11 +10140,11 @@
          Her = x*t2*((((((-.1075d-4*u+.116137d-2)*u-.06136358d0)*u+     &
              & 1.4138478d0)*u-11.36433272d0)*u+21.42034017d0)           &
              & *u-3.69113734d0)
-         Her = Her - dlog(.5d0*x)*Der - Ber/x + .25d0*pi*Dei
+         Her = Her - log(.5d0*x)*Der - Ber/x + .25d0*pi*Dei
          Hei = x*((((((.11997d-3*u-.926707d-2)*u+.33049424d0)*u-        &
              & 4.65950823d0)*u+19.41182758d0)*u-13.39858846d0)          &
              & *u+.21139217d0)
-         Hei = Hei - dlog(.5d0*x)*Dei - Bei/x - .25d0*pi*Der
+         Hei = Hei - log(.5d0*x)*Dei - Bei/x - .25d0*pi*Der
       else
          t = 8.0d0/x
          tnr = 0.0d0
@@ -10160,15 +10160,15 @@
                tni = tpi
             endif
          enddo
-         yd = x/dsqrt(2.0d0)
+         yd = x/sqrt(2.0d0)
          ye1 = exp(yd+tpr)
          ye2 = exp(-yd+tnr)
-         yc1 = 1.0d0/dsqrt(2.0d0*pi*x)
-         yc2 = dsqrt(pi/(2.0d0*x))
-         csp = dcos(yd+tpi)
-         ssp = dsin(yd+tpi)
-         csn = dcos(-yd+tni)
-         ssn = dsin(-yd+tni)
+         yc1 = 1.0d0/sqrt(2.0d0*pi*x)
+         yc2 = sqrt(pi/(2.0d0*x))
+         csp = cos(yd+tpi)
+         ssp = sin(yd+tpi)
+         csn = cos(-yd+tni)
+         ssn = sin(-yd+tni)
          Ger = yc2*ye2*csn
          Gei = yc2*ye2*ssn
          fxr = yc1*ye1*csp
@@ -10220,7 +10220,7 @@
       double precision sw , x
       integer ip , j , Kd , m , n , nm
       dimension bk(200) , ck(200) , Df(200) , dn(200)
-      if ( dabs(Df(1))<=1.0d-280 ) then
+      if ( abs(Df(1))<=1.0d-280 ) then
          R2f = 1.0d+300
          R2d = 1.0d+300
          return
@@ -10239,7 +10239,7 @@
          sw = 0.0d0
          do j = 1 , nm
             sum = sum + ck(j)
-            if ( dabs(sum-sw)<dabs(sum)*eps ) exit
+            if ( abs(sum-sw)<abs(sum)*eps ) exit
             sw = sum
          enddo
          if ( ip==0 ) then
@@ -10255,7 +10255,7 @@
       else
          call gmn(m,n,c,x,bk,gf,gd)
          call rmn1(m,n,c,x,Df,Kd,r1f,r1d)
-         h0 = datan(x) - 0.5d0*pi
+         h0 = atan(x) - 0.5d0*pi
          R2f = qs*r1f*h0 + gf
          R2d = qs*(r1d*h0+r1f/(1.0d0+x*x)) + gd
       endif
@@ -10282,7 +10282,7 @@
       integer k , m , mt , n , nt
       dimension Bj(101) , Dj(101) , Fj(101)
       do nt = 1 , 900
-         mt = int(0.5*log10(6.28*nt)-nt*log10(1.36*dabs(x)/nt))
+         mt = int(0.5*log10(6.28*nt)-nt*log10(1.36*abs(x)/nt))
          if ( mt>20 ) exit
       enddo
       m = nt
@@ -10332,7 +10332,7 @@
       integer k , m , n , Nm
       dimension Sj(0:n) , Dj(0:n)
       Nm = n
-      if ( dabs(x)<1.0d-100 ) then
+      if ( abs(x)<1.0d-100 ) then
          do k = 0 , n
             Sj(k) = 0.0d0
             Dj(k) = 0.0d0
@@ -10341,10 +10341,10 @@
          if ( n>0 ) Dj(1) = .3333333333333333d0
          return
       endif
-      Sj(0) = dsin(x)/x
-      Dj(0) = (dcos(x)-dsin(x)/x)/x
+      Sj(0) = sin(x)/x
+      Dj(0) = (cos(x)-sin(x)/x)/x
       if ( n<1 ) return
-      Sj(1) = (Sj(0)-dcos(x))/x
+      Sj(1) = (Sj(0)-cos(x))/x
       if ( n>=2 ) then
          sa = Sj(0)
          sb = Sj(1)
@@ -10364,8 +10364,8 @@
             f1 = f
          enddo
          cs = 0.0d0
-         if ( dabs(sa)>dabs(sb) ) cs = sa/f
-         if ( dabs(sa)<=dabs(sb) ) cs = sb/f0
+         if ( abs(sa)>abs(sb) ) cs = sa/f
+         if ( abs(sa)<=abs(sb) ) cs = sb/f0
          do k = 0 , Nm
             Sj(k) = cs*Sj(k)
          enddo
@@ -10496,7 +10496,7 @@
             gdi = ger - hei/rt
             rt = rt - hei/gdi
          endif
-         if ( dabs(rt-rt0(Kd))>5.0d-10 ) then
+         if ( abs(rt-rt0(Kd))>5.0d-10 ) then
             rt0(Kd) = rt
             cycle
          endif
@@ -10666,7 +10666,7 @@
       x = x - bjn/djn
       if ( x-x0<-1 ) x = x0 - 1
       if ( x-x0>1 ) x = x0 + 1
-      if ( dabs(x-x0)>1.0d-11 ) goto 100
+      if ( abs(x-x0)>1.0d-11 ) goto 100
 !       3) initial guess for j_{N,L+1}
       if ( l>=1 ) then
          if ( x<=Rj0(l)+0.5 ) then
@@ -10694,7 +10694,7 @@
       x = x - djn/fjn
       if ( x-x0<-1 ) x = x0 - 1
       if ( x-x0>1 ) x = x0 + 1
-      if ( dabs(x-x0)>1.0d-11 ) goto 200
+      if ( abs(x-x0)>1.0d-11 ) goto 200
       if ( l>=1 ) then
          if ( x<=Rj1(l)+0.5 ) then
             x = xguess + pi
@@ -10720,7 +10720,7 @@
       x = x - byn/dyn
       if ( x-x0<-1 ) x = x0 - 1
       if ( x-x0>1 ) x = x0 + 1
-      if ( dabs(x-x0)>1.0d-11 ) goto 300
+      if ( abs(x-x0)>1.0d-11 ) goto 300
       if ( l>=1 ) then
          if ( x<=Ry0(l)+0.5 ) then
             x = xguess + pi
@@ -10744,7 +10744,7 @@
  400  x0 = x
       call jyndd(n,x,bjn,djn,fjn,byn,dyn,fyn)
       x = x - dyn/fyn
-      if ( dabs(x-x0)>1.0d-11 ) goto 400
+      if ( abs(x-x0)>1.0d-11 ) goto 400
       if ( l>=1 ) then
          if ( x<=Ry1(l)+0.5 ) then
             x = xguess + pi
@@ -10827,11 +10827,11 @@
          do k = 1 , 30
             r = 0.25d0*r*x2/(k*(k+v0))
             bi0 = bi0 + r
-            if ( dabs(r/bi0)<1.0d-15 ) exit
+            if ( abs(r/bi0)<1.0d-15 ) exit
          enddo
          bi0 = bi0*a1
       else
-         ca = exp(x)/dsqrt(2.0d0*pi*x)
+         ca = exp(x)/sqrt(2.0d0*pi*x)
          sum = 1.0d0
          r = 1.0d0
          do k = 1 , k0
@@ -10865,7 +10865,7 @@
          Di(k) = -(k+v0)/x*Bi(k) + Bi(k-1)
       enddo
       if ( x>9.0d0 ) then
-         cb = exp(-x)*dsqrt(0.5d0*pi/x)
+         cb = exp(-x)*sqrt(0.5d0*pi/x)
          sum = 1.0d0
          r = 1.0d0
          do k = 1 , k0
@@ -10874,7 +10874,7 @@
          enddo
          bk0 = cb*sum
       elseif ( v0==0.0d0 ) then
-         ct = -dlog(0.5d0*x) - 0.5772156649015329d0
+         ct = -log(0.5d0*x) - 0.5772156649015329d0
          cs = 0.0d0
          w0 = 0.0d0
          r = 1.0d0
@@ -10882,8 +10882,8 @@
             w0 = w0 + 1.0d0/k
             r = 0.25d0*r/(k*k)*x2
             cs = cs + r*(w0+ct)
-            wa = dabs(cs)
-            if ( dabs((wa-ww)/wa)<1.0d-15 ) exit
+            wa = abs(cs)
+            if ( abs((wa-ww)/wa)<1.0d-15 ) exit
             ww = wa
          enddo
          bk0 = ct + cs
@@ -10899,11 +10899,11 @@
             r1 = 0.25d0*r1*x2/(k*(k-v0))
             r2 = 0.25d0*r2*x2/(k*(k+v0))
             sum = sum + a2*r1 - a1*r2
-            wa = dabs(sum)
-            if ( dabs((wa-ww)/wa)<1.0d-15 ) exit
+            wa = abs(sum)
+            if ( abs((wa-ww)/wa)<1.0d-15 ) exit
             ww = wa
          enddo
-         bk0 = 0.5d0*pi*sum/dsin(piv)
+         bk0 = 0.5d0*pi*sum/sin(piv)
       endif
       bk1 = (1.0d0/x-Bi(1)*bk0)/Bi(0)
       Bk(0) = bk0
@@ -10981,11 +10981,11 @@
       fl = 0.0d0
       do k = nm , 1 , -1
          f = -((d(k+1)-Cv)*f0+a(k+1)*f1)/g(k+1)
-         if ( dabs(f)>dabs(Df(k+1)) ) then
+         if ( abs(f)>abs(Df(k+1)) ) then
             Df(k) = f
             f1 = f0
             f0 = f
-            if ( dabs(f)>1.0d+100 ) then
+            if ( abs(f)>1.0d+100 ) then
                do k1 = k , nm
                   Df(k1) = Df(k1)*1.0d-100
                enddo
@@ -11008,7 +11008,7 @@
                do j = 3 , kb + 1
                   f = -((d(j-1)-Cv)*f2+g(j-1)*f1)/a(j-1)
                   if ( j<=kb ) Df(j) = f
-                  if ( dabs(f)>1.0d+100 ) then
+                  if ( abs(f)>1.0d+100 ) then
                      do k1 = 1 , j
                         Df(k1) = Df(k1)*1.0d-100
                      enddo
@@ -11038,7 +11038,7 @@
       do k = kb + 1 , nm
          if ( k/=1 ) r1 = -r1*(k+m+ip-1.5d0)/(k-1.0d0)
          su2 = su2 + r1*Df(k)
-         if ( dabs(sw-su2)<dabs(su2)*1.0d-14 ) exit
+         if ( abs(sw-su2)<abs(su2)*1.0d-14 ) exit
          sw = su2
       enddo
       r3 = 1.0d0
@@ -11120,7 +11120,7 @@
             do k = 1 , 40
                r = -0.25d0*r*x2/(k*(k+vl))
                vjl = vjl + r
-               if ( dabs(r)<1.0d-15 ) exit
+               if ( abs(r)<1.0d-15 ) exit
             enddo
             a0 = (0.5d0*x)**vl
             if ( l==1 ) Vj1 = a0/gp1*vjl
@@ -11145,9 +11145,9 @@
             enddo
             qx = 0.125d0*(vv-1.0)*qx/x
             xk = x - (0.5d0*l/3.0d0+0.25d0)*pi
-            a0 = dsqrt(rp2/x)
-            ck = dcos(xk)
-            sk = dsin(xk)
+            a0 = sqrt(rp2/x)
+            ck = cos(xk)
+            sk = sin(xk)
             if ( l==1 ) then
                Vj1 = a0*(px*ck-qx*sk)
                Vy1 = a0*(px*sk+qx*ck)
@@ -11167,7 +11167,7 @@
             do k = 1 , 40
                r = -0.25d0*r*x2/(k*(k-vl))
                vjl = vjl + r
-               if ( dabs(r)<1.0d-15 ) exit
+               if ( abs(r)<1.0d-15 ) exit
             enddo
             b0 = (2.0d0/x)**vl
             if ( l==1 ) uj1 = b0*vjl/gn1
@@ -11175,8 +11175,8 @@
          enddo
          pv1 = pi/3.0d0
          pv2 = pi/1.5d0
-         Vy1 = uu0*(Vj1*dcos(pv1)-uj1)
-         Vy2 = uu0*(Vj2*dcos(pv2)-uj2)
+         Vy1 = uu0*(Vj1*cos(pv1)-uj1)
+         Vy2 = uu0*(Vj2*cos(pv2)-uj2)
       endif
       if ( x<=18.0 ) then
          do l = 1 , 2
@@ -11186,14 +11186,14 @@
             do k = 1 , 40
                r = 0.25d0*r*x2/(k*(k+vl))
                vil = vil + r
-               if ( dabs(r)<1.0d-15 ) exit
+               if ( abs(r)<1.0d-15 ) exit
             enddo
             a0 = (0.5d0*x)**vl
             if ( l==1 ) Vi1 = a0/gp1*vil
             if ( l==2 ) Vi2 = a0/gp2*vil
          enddo
       else
-         c0 = exp(x)/dsqrt(2.0d0*pi*x)
+         c0 = exp(x)/sqrt(2.0d0*pi*x)
          do l = 1 , 2
             vv = vv0*l*l
             vsl = 1.0d0
@@ -11218,13 +11218,13 @@
             do k = 1 , 60
                r = 0.25d0*r*x2/(k*(k-vl))
                sum = sum + r
-               if ( dabs(r)<1.0d-15 ) exit
+               if ( abs(r)<1.0d-15 ) exit
             enddo
             if ( l==1 ) Vk1 = 0.5d0*uu0*pi*(sum*a0-Vi1)
             if ( l==2 ) Vk2 = 0.5d0*uu0*pi*(sum*a0-Vi2)
          enddo
       else
-         c0 = exp(-x)*dsqrt(0.5d0*pi/x)
+         c0 = exp(-x)*sqrt(0.5d0*pi/x)
          do l = 1 , 2
             vv = vv0*l*l
             sum = 1.0d0
@@ -11381,7 +11381,7 @@
             csu = csu + cp
             if ( k>=10 .and. abs(cp/csu)<1.0d-15 ) exit
          enddo
-         cbk0 = 0.5d0*pi*csu/dsin(piv)
+         cbk0 = 0.5d0*pi*csu/sin(piv)
       endif
       Cbk(0) = cbk0
       if ( dble(z)<0.0 ) then
@@ -11550,10 +11550,10 @@
             cr2 = 0.25d0*cr2*z2/(k*(k+v0))
             csu = csu + ca2*cr1 - ca1*cr2
             ws = abs(csu)
-            if ( k>=10 .and. dabs(ws-ws0)/ws<1.0d-15 ) exit
+            if ( k>=10 .and. abs(ws-ws0)/ws<1.0d-15 ) exit
             ws0 = ws
          enddo
-         cbk0 = 0.5d0*pi*csu/dsin(piv)
+         cbk0 = 0.5d0*pi*csu/sin(piv)
       endif
       cbk1 = (1.0d0/z1-Cbi(1)*cbk0)/Cbi(0)
       Cbk(0) = cbk0
@@ -11622,7 +11622,7 @@
                & /(4.0d0*k+1.0d0)*zp2
             c = c + cr
             wa = abs(c)
-            if ( dabs((wa-wa0)/wa)<eps .and. k>10 ) goto 100
+            if ( abs((wa-wa0)/wa)<eps .and. k>10 ) goto 100
             wa0 = wa
          enddo
       elseif ( w0>2.5 .and. w0<4.5 ) then
@@ -11689,7 +11689,7 @@
       integer k , m
       eps = 1.0d-15
       pi = 3.141592653589793d0
-      xa = dabs(x)
+      xa = abs(x)
       px = pi*xa
       t = .5d0*px*xa
       t2 = t*t
@@ -11703,7 +11703,7 @@
             r = -.5d0*r*(4.0d0*k-3.0d0)/k/(2.0d0*k-1.0d0)               &
               & /(4.0d0*k+1.0d0)*t2
             c = c + r
-            if ( dabs(r)<dabs(c)*eps ) exit
+            if ( abs(r)<abs(c)*eps ) exit
          enddo
          s = xa*t/3.0d0
          r = s
@@ -11711,7 +11711,7 @@
             r = -.5d0*r*(4.0d0*k-1.0d0)/k/(2.0d0*k+1.0d0)               &
               & /(4.0d0*k+3.0d0)*t2
             s = s + r
-            if ( dabs(r)<dabs(s)*eps ) goto 100
+            if ( abs(r)<abs(s)*eps ) goto 100
          enddo
       elseif ( xa<4.5d0 ) then
          m = int(42.0+1.75*t)
@@ -11731,7 +11731,7 @@
             f1 = f0
             f0 = f
          enddo
-         q = dsqrt(su)
+         q = sqrt(su)
          c = c*xa/q
          s = s*xa/q
       else
@@ -11748,8 +11748,8 @@
             g = g + r
          enddo
          t0 = t - int(t/(2.0d0*pi))*2.0d0*pi
-         c = .5d0 + (f*dsin(t0)-g*dcos(t0))/px
-         s = .5d0 - (f*dcos(t0)+g*dsin(t0))/px
+         c = .5d0 + (f*sin(t0)-g*cos(t0))/px
+         s = .5d0 - (f*cos(t0)+g*sin(t0))/px
       endif
  100  if ( x<0.0d0 ) then
          c = -c
@@ -11779,7 +11779,7 @@
       integer k , m , n , Nm
       dimension Rj(0:n) , Dj(0:n)
       Nm = n
-      if ( dabs(x)<1.0d-100 ) then
+      if ( abs(x)<1.0d-100 ) then
          do k = 0 , n
             Rj(k) = 0.0d0
             Dj(k) = 0.0d0
@@ -11787,8 +11787,8 @@
          Dj(0) = 1.0d0
          return
       endif
-      Rj(0) = dsin(x)
-      Rj(1) = Rj(0)/x - dcos(x)
+      Rj(0) = sin(x)
+      Rj(1) = Rj(0)/x - cos(x)
       rj0 = Rj(0)
       rj1 = Rj(1)
       cs = 0.0d0
@@ -11808,13 +11808,13 @@
             f0 = f1
             f1 = f
          enddo
-         if ( dabs(rj0)>dabs(rj1) ) cs = rj0/f
-         if ( dabs(rj0)<=dabs(rj1) ) cs = rj1/f0
+         if ( abs(rj0)>abs(rj1) ) cs = rj0/f
+         if ( abs(rj0)<=abs(rj1) ) cs = rj1/f0
          do k = 0 , Nm
             Rj(k) = cs*Rj(k)
          enddo
       endif
-      Dj(0) = dcos(x)
+      Dj(0) = cos(x)
       do k = 1 , Nm
          Dj(k) = -k*Rj(k)/x + Rj(k-1)
       enddo
@@ -11875,7 +11875,7 @@
          enddo
          gd = (hd-q*fd)/p
          z = z - fd/gd
-         if ( it<=40 .and. dabs((z-z0)/z)>1.0d-15 ) goto 50
+         if ( it<=40 .and. abs((z-z0)/z)>1.0d-15 ) goto 50
          x(nr) = z
          x(n+1-nr) = -z
          r = 1.0d0
@@ -11943,30 +11943,30 @@
          By0 = (((((((-.567433d-4*t2+.859977d-3)*t2-.94855882d-2)*t2+   &
              & .0772975809d0)*t2-.4261737419d0)*t2+1.4216421221d0)      &
              & *t2-2.3498519931d0)*t2+1.0766115157d0)*t2 + .3674669052d0
-         By0 = 2.0d0/pi*dlog(x/2.0d0)*Bj0 + By0
+         By0 = 2.0d0/pi*log(x/2.0d0)*Bj0 + By0
          By1 = ((((((((.6535773d-3*t2-.0108175626d0)*t2+.107657606d0)*t2&
              & -.7268945577d0)*t2+3.1261399273d0)*t2-7.3980241381d0)    &
              & *t2+6.8529236342d0)*t2+.3932562018d0)*t2-.6366197726d0)/x
-         By1 = 2.0d0/pi*dlog(x/2.0d0)*Bj1 + By1
+         By1 = 2.0d0/pi*log(x/2.0d0)*Bj1 + By1
       else
          t = 4.0d0/x
          t2 = t*t
-         a0 = dsqrt(2.0d0/(pi*x))
+         a0 = sqrt(2.0d0/(pi*x))
          p0 = ((((-.9285d-5*t2+.43506d-4)*t2-.122226d-3)*t2+.434725d-3) &
             & *t2-.4394275d-2)*t2 + .999999997d0
          q0 = t*(((((.8099d-5*t2-.35614d-4)*t2+.85844d-4)*t2-.218024d-3)&
             & *t2+.1144106d-2)*t2-.031249995d0)
          ta0 = x - .25d0*pi
-         Bj0 = a0*(p0*dcos(ta0)-q0*dsin(ta0))
-         By0 = a0*(p0*dsin(ta0)+q0*dcos(ta0))
+         Bj0 = a0*(p0*cos(ta0)-q0*sin(ta0))
+         By0 = a0*(p0*sin(ta0)+q0*cos(ta0))
          p1 = ((((.10632d-4*t2-.50363d-4)*t2+.145575d-3)*t2-.559487d-3) &
             & *t2+.7323931d-2)*t2 + 1.000000004d0
          q1 = t*                                                        &
             & (((((-.9173d-5*t2+.40658d-4)*t2-.99941d-4)*t2+.266891d-3) &
             & *t2-.1601836d-2)*t2+.093749994d0)
          ta1 = x - .75d0*pi
-         Bj1 = a0*(p1*dcos(ta1)-q1*dsin(ta1))
-         By1 = a0*(p1*dsin(ta1)+q1*dcos(ta1))
+         Bj1 = a0*(p1*cos(ta1)-q1*sin(ta1))
+         By1 = a0*(p1*sin(ta1)+q1*cos(ta1))
       endif
       Dj0 = -Bj1
       Dj1 = Bj0 - Bj1/x
@@ -12008,7 +12008,7 @@
             do m = 1 , l - 1
                ps = ps + 1.0d0/m
             enddo
-            ens = rp*(-dlog(x)+ps)
+            ens = rp*(-log(x)+ps)
             s = 0.0d0
             do m = 0 , 20
                if ( m/=l-1 ) then
@@ -12017,7 +12017,7 @@
                      r = -r*x/j
                   enddo
                   s = s + r/(m-l+1.0d0)
-                  if ( dabs(s-s0)<dabs(s)*1.0d-15 ) exit
+                  if ( abs(s-s0)<abs(s)*1.0d-15 ) exit
                   s0 = s
                endif
             enddo
@@ -12071,7 +12071,7 @@
       do k = 2 , n
          f = (2.0d0*k-1.0d0)*f1/x + f0
          Sk(k) = f
-         if ( dabs(f)>1.0d+300 ) exit
+         if ( abs(f)>1.0d+300 ) exit
          f0 = f1
          f1 = f
       enddo
@@ -12132,7 +12132,7 @@
          enddo
       elseif ( x+.5d0==int(x+.5d0) .and. x>0.0 ) then
          m = int(x)
-         Ga = dsqrt(pi)
+         Ga = sqrt(pi)
          do k = 1 , m
             Ga = 0.5d0*Ga*(2.0d0*k-1.0d0)
          enddo
@@ -12165,14 +12165,14 @@
       integer ja , k , kv , l , m , na , nv
       dimension Vv(0:*) , Vp(0:*)
       pi = 3.141592653589793d0
-      xa = dabs(x)
+      xa = abs(x)
       vh = v
-      v = v + dsign(1.0d0,v)
+      v = v + sign(1.0d0,v)
       nv = int(v)
       v0 = v - nv
       na = abs(nv)
       qe = exp(0.25d0*x*x)
-      q2p = dsqrt(2.0d0/pi)
+      q2p = sqrt(2.0d0/pi)
       ja = 0
       if ( na>=1 ) ja = 1
       f = 0.0d0
@@ -12292,7 +12292,7 @@
       double precision x , xc , y
       dimension Cqm(0:Mm,0:n) , Cqd(0:Mm,0:n)
       z = dcmplx(x,y)
-      if ( dabs(x)==1.0d0 .and. y==0.0d0 ) then
+      if ( abs(x)==1.0d0 .and. y==0.0d0 ) then
          do i = 0 , m
             do j = 0 , n
                Cqm(i,j) = (1.0d+300,0.0d0)
@@ -12426,16 +12426,16 @@
             g(i) = k*(k-1.0)/((dk2-3.0)*(dk2-1.0))*cs
          enddo
          do k = 2 , nm
-            e(k) = dsqrt(a(k-1)*g(k))
+            e(k) = sqrt(a(k-1)*g(k))
             f(k) = e(k)*e(k)
          enddo
          f(1) = 0.0d0
          e(1) = 0.0d0
-         xa = d(nm) + dabs(e(nm))
-         xb = d(nm) - dabs(e(nm))
+         xa = d(nm) + abs(e(nm))
+         xb = d(nm) - abs(e(nm))
          nm1 = nm - 1
          do i = 1 , nm1
-            t = dabs(e(i)) + dabs(e(i+1))
+            t = abs(e(i)) + abs(e(i+1))
             t1 = d(i) + t
             if ( xa<t1 ) xa = t1
             t1 = d(i) - t
@@ -12457,7 +12457,7 @@
             endif
  40         x1 = (b(k)+h(k))/2.0d0
             cv0(k) = x1
-            if ( dabs((b(k)-h(k))/x1)<1.0d-14 ) then
+            if ( abs((b(k)-h(k))/x1)<1.0d-14 ) then
                cv0(k) = x1
                if ( l==0 ) Eg(2*k-1) = cv0(k)
                if ( l==1 ) Eg(2*k) = cv0(k)
@@ -12752,8 +12752,8 @@
       if ( kd==4 ) ic = m/2
       c1 = exp(-x)
       c2 = exp(x)
-      u1 = dsqrt(q)*c1
-      u2 = dsqrt(q)*c2
+      u1 = sqrt(q)*c1
+      u2 = sqrt(q)*c2
       call jynb(km+1,u1,nm,bj1,dj1,by1,dy1)
       call jynb(km+1,u2,nm,bj2,dj2,by2,dy2)
       w1 = 0.0d0
@@ -12770,7 +12770,7 @@
                F1r = F1r + (-1)**(ic+k)*fg(k)                           &
                    & *(bj1(k-1)*bj2(k+1)-bj1(k+1)*bj2(k-1))
             endif
-            if ( k>=5 .and. dabs(F1r-w1)<dabs(F1r)*eps ) exit
+            if ( k>=5 .and. abs(F1r-w1)<abs(F1r)*eps ) exit
             w1 = F1r
          enddo
          F1r = F1r/fg(1)
@@ -12788,10 +12788,10 @@
                    & *(c2*(bj1(k-1)*dj2(k+1)-bj1(k+1)*dj2(k-1))         &
                    & -c1*(dj1(k-1)*bj2(k+1)-dj1(k+1)*bj2(k-1)))
             endif
-            if ( k>=5 .and. dabs(D1r-w2)<dabs(D1r)*eps ) exit
+            if ( k>=5 .and. abs(D1r-w2)<abs(D1r)*eps ) exit
             w2 = D1r
          enddo
-         D1r = D1r*dsqrt(q)/fg(1)
+         D1r = D1r*sqrt(q)/fg(1)
          if ( Kc==1 ) return
       endif
       F2r = 0.0d0
@@ -12805,7 +12805,7 @@
             F2r = F2r + (-1)**(ic+k)*fg(k)                              &
                 & *(bj1(k-1)*by2(k+1)-bj1(k+1)*by2(k-1))
          endif
-         if ( k>=5 .and. dabs(F2r-w1)<dabs(F2r)*eps ) exit
+         if ( k>=5 .and. abs(F2r-w1)<abs(F2r)*eps ) exit
          w1 = F2r
       enddo
       F2r = F2r/fg(1)
@@ -12823,10 +12823,10 @@
                 & *(c2*(bj1(k-1)*dy2(k+1)-bj1(k+1)*dy2(k-1))            &
                 & -c1*(dj1(k-1)*by2(k+1)-dj1(k+1)*by2(k-1)))
          endif
-         if ( k>=5 .and. dabs(D2r-w2)<dabs(D2r)*eps ) exit
+         if ( k>=5 .and. abs(D2r-w2)<abs(D2r)*eps ) exit
          w2 = D2r
       enddo
-      D2r = D2r*dsqrt(q)/fg(1)
+      D2r = D2r*sqrt(q)/fg(1)
       end
 
 
@@ -13001,14 +13001,14 @@
          endif
          th = 0.0d0
          if ( x0==0.0d0 .and. y/=0.0d0 ) th = 0.5d0*pi
-         if ( x0/=0.0d0 ) th = datan(y/x0)
+         if ( x0/=0.0d0 ) th = atan(y/x0)
          z2 = x0*x0 + y*y
-         z0 = dsqrt(z2)
-         Psr = dlog(z0) - 0.5d0*x0/z2
+         z0 = sqrt(z2)
+         Psr = log(z0) - 0.5d0*x0/z2
          Psi = th + 0.5d0*y/z2
          do k = 1 , 8
-            Psr = Psr + a(k)*z2**(-k)*dcos(2.0d0*k*th)
-            Psi = Psi - a(k)*z2**(-k)*dsin(2.0d0*k*th)
+            Psr = Psr + a(k)*z2**(-k)*cos(2.0d0*k*th)
+            Psi = Psi - a(k)*z2**(-k)*sin(2.0d0*k*th)
          enddo
          if ( x<8.0d0 ) then
             rr = 0.0d0
@@ -13021,7 +13021,7 @@
             Psi = Psi + ri
          endif
          if ( x1<0.0d0 ) then
-            tn = dtan(pi*x)
+            tn = tan(pi*x)
             tm = dtanh(pi*y)
             ct2 = tn*tn + tm*tm
             Psr = Psr + x/(x*x+y*y) + pi*(tn-tn*tm*tm)/ct2
@@ -13058,16 +13058,16 @@
          enddo
          return
       endif
-      Sy(0) = -dcos(x)/x
+      Sy(0) = -cos(x)/x
       f0 = Sy(0)
-      Dy(0) = (dsin(x)+dcos(x)/x)/x
+      Dy(0) = (sin(x)+cos(x)/x)/x
       if ( n<1 ) return
-      Sy(1) = (Sy(0)-dsin(x))/x
+      Sy(1) = (Sy(0)-sin(x))/x
       f1 = Sy(1)
       do k = 2 , n
          f = (2.0d0*k-1.0d0)*f1/x - f0
          Sy(k) = f
-         if ( dabs(f)>=1.0d+300 ) exit
+         if ( abs(f)>=1.0d+300 ) exit
          f0 = f1
          f1 = f
       enddo
@@ -13099,10 +13099,10 @@
       dimension r(40)
       pi = 3.14159265358979d0
       a0 = 1.0d0
-      b0 = dsqrt(1.0d0-Hk*Hk)
+      b0 = sqrt(1.0d0-Hk*Hk)
       do n = 1 , 40
          a = (a0+b0)/2.0d0
-         b = dsqrt(a0*b0)
+         b = sqrt(a0*b0)
          c = (a0-b0)/2.0d0
          r(n) = c/a
          if ( c<1.0d-7 ) exit
@@ -13112,15 +13112,15 @@
       dn = 2.0d0**n*a*u
       d = 0.0d0
       do j = n , 1 , -1
-         t = r(j)*dsin(dn)
-         sa = datan(t/dsqrt(dabs(1.0d0-t*t)))
+         t = r(j)*sin(dn)
+         sa = atan(t/sqrt(abs(1.0d0-t*t)))
          d = .5d0*(dn+sa)
          dn = d
       enddo
       Eph = d*180.0d0/pi
-      Esn = dsin(d)
-      Ecn = dcos(d)
-      Edn = dsqrt(1.0d0-Hk*Hk*Esn*Esn)
+      Esn = sin(d)
+      Ecn = cos(d)
+      Edn = sqrt(1.0d0-Hk*Hk*Esn*Esn)
       end
 
     end module specfun_module
