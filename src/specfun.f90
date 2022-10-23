@@ -272,14 +272,12 @@
       enddo
    end subroutine lqmn
 
-!       **********************************
+   subroutine clpmn(Mm,m,n,x,y,Ntype,Cpm,Cpd)
 
-      subroutine clpmn(Mm,m,n,x,y,Ntype,Cpm,Cpd)
-!
-!       =========================================================
-!       Purpose: Compute the associated Legendre functions Pmn(z)
-!                and their derivatives Pmn'(z) for a complex
-!                argument
+      !! Compute the associated Legendre functions Pmn(z)
+      !! and their derivatives Pmn'(z) for a complex
+      !! argument
+
 !       Input :  x     --- Real part of z
 !                y     --- Imaginary part of z
 !                m     --- Order of Pmn(z),  m = 0,1,2,...,n
@@ -289,7 +287,7 @@
 !       Output:  CPM(m,n) --- Pmn(z)
 !                CPD(m,n) --- Pmn'(z)
 !       =========================================================
-!
+
       implicit none
       complex(wp) Cpd , Cpm , z , zq , zs
       real(wp)  x , y
@@ -365,10 +363,10 @@
 !       **********************************
 
       subroutine vvsa(Va,x,Pv)
-!
-!       ===================================================
-!       Purpose: Compute parabolic cylinder function Vv(x)
-!                for small argument
+
+         !! Compute parabolic cylinder function Vv(x)
+         !! for small argument
+
 !       Input:   x  --- Argument
 !                va --- Order
 !       Output:  PV --- Vv(x)
@@ -419,11 +417,11 @@
 !       **********************************
 !       SciPy: Changed P from a character array to an integer array.
       subroutine jdzo(Nt,n,m,p,Zo)
-!
-!       ===========================================================
-!       Purpose: Compute the zeros of Bessel functions Jn(x) and
-!                Jn'(x), and arrange them in the order of their
-!                magnitudes
+
+         !! Compute the zeros of Bessel functions Jn(x) and
+         !! Jn'(x), and arrange them in the order of their
+         !! magnitudes
+
 !       Input :  NT    --- Number of total zeros ( NT ≤ 1200 )
 !       Output:  ZO(L) --- Value of the L-th zero of Jn(x)
 !                          and Jn'(x)
@@ -538,17 +536,11 @@
       enddo
       end
 
-
-
-!       **********************************
-
       subroutine cbk(m,n,c,Cv,Qt,Ck,Bk)
-!
-!       =====================================================
-!       Purpose: Compute coefficient Bk's for oblate radial
-!                functions with a small argument
-!       =====================================================
-!
+
+         !!Compute coefficient Bk's for oblate radial
+         !!functions with a small argument
+
       implicit none
       real(wp) Bk , c , Ck , Cv , eps , Qt , r1 , s1 , sw , t , &
                      & u , v , w
@@ -619,15 +611,11 @@
       enddo
       end
 
-
-
-!       **********************************
-
       subroutine rmn2sp(m,n,c,x,Cv,Df,Kd,R2f,R2d)
-!
-!       ======================================================
-!       Purpose: Compute prolate spheroidal radial function
-!                of the second kind with a small argument
+
+         !! Compute prolate spheroidal radial function
+         !! of the second kind with a small argument
+
 !       Routines called:
 !            (1) LPMNS for computing the associated Legendre
 !                functions of the first kind
@@ -741,18 +729,13 @@
       R2d = sdm/ck2
       end
 
-
-
-!       **********************************
-
       subroutine bernob(n,Bn)
-!
-!       ======================================
-!       Purpose: Compute Bernoulli number Bn
+
+         !! Compute Bernoulli number Bn
+
 !       Input :  n --- Serial number
 !       Output:  BN(n) --- Bn
-!       ======================================
-!
+
       implicit none
       real(wp) Bn , r1 , r2 , s , tpi
       integer k , m , n
@@ -774,16 +757,13 @@
       enddo
       end
 
-!       **********************************
-
       subroutine bernoa(n,Bn)
-!
-!       ======================================
-!       Purpose: Compute Bernoulli number Bn
+
+         !! Compute Bernoulli number Bn
+
 !       Input :  n --- Serial number
 !       Output:  BN(n) --- Bn
-!       ======================================
-!
+
       implicit none
       real(wp) Bn , r , s
       integer j , k , m , n
@@ -806,15 +786,11 @@
       enddo
       end
 
-!       **********************************
-
       subroutine qstar(m,n,c,Ck,Ck1,Qs,Qt)
-!
-!       =========================================================
-!       Purpose: Compute Q*mn(-ic) for oblate radial functions
-!                with a small argument
-!       =========================================================
-!
+
+         !! Compute Q*mn(-ic) for oblate radial functions
+         !! with a small argument
+
       implicit none
       real(wp) ap , c , Ck , Ck1 , Qs , qs0 , Qt , r , s , sk
       integer i , ip , k , l , m , n
@@ -846,12 +822,8 @@
       Qt = -2.0_wp/Ck1*Qs
       end
 
-
-
-!       **********************************
-
       subroutine cv0(Kd,m,q,a0)
-!
+
 !       =====================================================
 !       Purpose: Compute the initial characteristic value of
 !                Mathieu functions for m ≤ 12  or q ≤ 300 or
@@ -865,7 +837,7 @@
 !             (2) CVQL for computing initial characteristic
 !                 value for q ≥ m*m
 !       ====================================================
-!
+
       implicit none
       real(wp) a0 , q , q2
       integer Kd , m
