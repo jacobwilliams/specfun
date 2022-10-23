@@ -87,9 +87,9 @@
             cr = -cr*sq2*z/m
             cdw = gm*cr
             Cdn = Cdn + cdw
-            if ( abs(cdw)<abs(Cdn)*eps ) goto 50
+            if ( abs(cdw)<abs(Cdn)*eps ) exit
          enddo
- 50      Cdn = cb0*Cdn
+         Cdn = cb0*Cdn
       endif
       end
 
@@ -128,7 +128,7 @@
                & /(4.0d0*k+3.0d0)*zp2
             s = s + cr
             wb = abs(s)
-            if ( dabs(wb-wb0)<eps .and. k>10 ) goto 100
+            if ( dabs(wb-wb0)<eps .and. k>10 ) exit
             wb0 = wb
          enddo
       elseif ( w0>2.5 .and. w0<4.5 ) then
@@ -178,7 +178,7 @@
          cg = cg/(pi*z*z)
          s = d - (cf*cos(zp)+cg*sin(zp))/(pi*z)
       endif
- 100  Zf = s
+      Zf = s
       Zd = sin(0.5*pi*z*z)
       end
 
@@ -415,9 +415,9 @@
             gw = fac*sv + 1.0d0
             r1 = gw*r*gm
             Pv = Pv + r1
-            if ( dabs(r1/Pv)<eps .and. gw/=0.0 ) goto 50
+            if ( dabs(r1/Pv)<eps .and. gw/=0.0 ) exit
          enddo
- 50      Pv = a0*Pv
+         Pv = a0*Pv
       elseif ( va0<=0.0 .and. va0==int(va0) .or. Va==0.0 ) then
          Pv = 0.0d0
       else
@@ -595,11 +595,11 @@
                      r1 = r1*(i+m-j)/j
                   enddo
                   s1 = s1 + Ck(i+1)*(2.0*i+m)*r1
-                  if ( dabs(s1-sw)<dabs(s1)*eps ) goto 20
+                  if ( dabs(s1-sw)<dabs(s1)*eps ) exit
                   sw = s1
                endif
             enddo
- 20         Bk(k+1) = Qt*s1
+            Bk(k+1) = Qt*s1
          enddo
       elseif ( ip==1 ) then
          sw = 0.0d0
@@ -614,11 +614,11 @@
                   enddo
                   if ( i>0 ) s1 = s1 + Ck(i)*(2.0*i+m-1)*r1
                   s1 = s1 - Ck(i+1)*(2.0*i+m)*r1
-                  if ( dabs(s1-sw)<dabs(s1)*eps ) goto 40
+                  if ( dabs(s1-sw)<dabs(s1)*eps ) exit
                   sw = s1
                endif
             enddo
- 40         Bk(k+1) = Qt*s1
+            Bk(k+1) = Qt*s1
          enddo
       endif
       w(1) = w(1)/v(1)
@@ -680,17 +680,17 @@
       do k = 1 , nm
          j = 2*k - 2 + m + ip
          su0 = su0 + Df(k)*qm(j)
-         if ( k>nm1 .and. dabs(su0-sw)<dabs(su0)*eps ) goto 100
+         if ( k>nm1 .and. dabs(su0-sw)<dabs(su0)*eps ) exit
          sw = su0
       enddo
- 100  sd0 = 0.0d0
+      sd0 = 0.0d0
       do k = 1 , nm
          j = 2*k - 2 + m + ip
          sd0 = sd0 + Df(k)*qd(j)
-         if ( k>nm1 .and. dabs(sd0-sw)<dabs(sd0)*eps ) goto 200
+         if ( k>nm1 .and. dabs(sd0-sw)<dabs(sd0)*eps ) exit
          sw = sd0
       enddo
- 200  su1 = 0.0d0
+      su1 = 0.0d0
       sd1 = 0.0d0
       do k = 1 , m
          j = m - 2*k + ip
@@ -739,17 +739,17 @@
       do k = ki , nm3
          j = 2*k - 1 - m - ip
          su2 = su2 + dn(k)*pm(j)
-         if ( j>m .and. dabs(su2-sw)<dabs(su2)*eps ) goto 300
+         if ( j>m .and. dabs(su2-sw)<dabs(su2)*eps ) exit
          sw = su2
       enddo
- 300  sd2 = 0.0d0
+      sd2 = 0.0d0
       do k = ki , nm3
          j = 2*k - 1 - m - ip
          sd2 = sd2 + dn(k)*pd(j)
-         if ( j>m .and. dabs(sd2-sw)<dabs(sd2)*eps ) goto 400
+         if ( j>m .and. dabs(sd2-sw)<dabs(sd2)*eps ) exit
          sw = sd2
       enddo
- 400  sum = su0 + su1 + su2
+      sum = su0 + su1 + su2
       sdm = sd0 + sd1 + sd2
       R2f = sum/ck2
       R2d = sdm/ck2
@@ -782,9 +782,9 @@
          do k = 2 , 10000
             s = (1.0d0/k)**m
             r2 = r2 + s
-            if ( s<1.0d-15 ) goto 50
+            if ( s<1.0d-15 ) exit
          enddo
- 50      Bn(m) = r1*r2
+         Bn(m) = r1*r2
       enddo
       end
 
@@ -1098,13 +1098,13 @@
       do it = 1 , 20
          nn = n1 - (n1-n0)/(1.0d0-f0/f1)
          f = envj(nn,a0) - Mp
-         if ( abs(nn-n1)<1 ) goto 100
+         if ( abs(nn-n1)<1 ) exit
          n0 = n1
          f0 = f1
          n1 = nn
          f1 = f
       enddo
- 100  msta1 = nn
+      msta1 = nn
       end
 
 
@@ -1139,13 +1139,13 @@
       do it = 1 , 20
          nn = n1 - (n1-n0)/(1.0d0-f0/f1)
          f = envj(nn,a0) - obj
-         if ( abs(nn-n1)<1 ) goto 100
+         if ( abs(nn-n1)<1 ) exit
          n0 = n1
          f0 = f1
          n1 = nn
          f1 = f
       enddo
- 100  msta2 = nn + 10
+      msta2 = nn + 10
       end
 
       real*8 function envj(n,x)
@@ -1239,9 +1239,9 @@
          do k = 2 , 100
             r = -.25d0*r*(k-1.0d0)/(k*k*k)*x*x
             Ttj = Ttj + r
-            if ( dabs(r)<dabs(Ttj)*1.0d-12 ) goto 50
+            if ( dabs(r)<dabs(Ttj)*1.0d-12 ) exit
          enddo
- 50      Ttj = Ttj*.125d0*x*x
+         Ttj = Ttj*.125d0*x*x
          e0 = .5d0*(pi*pi/6.0d0-el*el) - (.5d0*dlog(x/2.0d0)+el)        &
             & *dlog(x/2.0d0)
          b1 = el + dlog(x/2.0d0) - 1.5d0
@@ -1252,9 +1252,9 @@
             rs = rs + 1.0d0/k
             r2 = r*(rs+1.0d0/(2.0d0*k)-(el+dlog(x/2.0d0)))
             b1 = b1 + r2
-            if ( dabs(r2)<dabs(b1)*1.0d-12 ) goto 100
+            if ( dabs(r2)<dabs(b1)*1.0d-12 ) exit
          enddo
- 100     Tty = 2.0d0/pi*(e0+.125d0*x*x*b1)
+         Tty = 2.0d0/pi*(e0+.125d0*x*x*b1)
       else
          a0 = dsqrt(2.0d0/(pi*x))
          bj0 = 0.0d0
@@ -1268,17 +1268,17 @@
                r = -.0078125d0*r*(vt-(4.0d0*k-3.0d0)**2)/(x*k)          &
                  & *(vt-(4.0d0*k-1.0d0)**2)/((2.0d0*k-1.0d0)*x)
                px = px + r
-               if ( dabs(r)<dabs(px)*1.0d-12 ) goto 120
+               if ( dabs(r)<dabs(px)*1.0d-12 ) exit
             enddo
- 120        qx = 1.0d0
+            qx = 1.0d0
             r = 1.0d0
             do k = 1 , 14
                r = -.0078125d0*r*(vt-(4.0d0*k-1.0d0)**2)/(x*k)          &
                  & *(vt-(4.0d0*k+1.0d0)**2)/(2.0d0*k+1.0d0)/x
                qx = qx + r
-               if ( dabs(r)<dabs(qx)*1.0d-12 ) goto 140
+               if ( dabs(r)<dabs(qx)*1.0d-12 ) exit
             enddo
- 140        qx = .125d0*(vt-1.0d0)/x*qx
+            qx = .125d0*(vt-1.0d0)/x*qx
             xk = x - (.25d0+.5d0*l)*pi
             bj1 = a0*(px*dcos(xk)-qx*dsin(xk))
             by1 = a0*(px*dsin(xk)+qx*dcos(xk))
@@ -1407,10 +1407,10 @@
       do k = 2 , nm
          r = r*(m+k-1.0)*(m+k+ip-1.5d0)/(k-1.0d0)/(k+ip-1.5d0)
          suc = suc + r*Df(k)
-         if ( k>nm1 .and. dabs(suc-sw)<dabs(suc)*eps ) goto 100
+         if ( k>nm1 .and. dabs(suc-sw)<dabs(suc)*eps ) exit
          sw = suc
       enddo
- 100  a0 = (1.0d0-Kd/(x*x))**(0.5d0*m)/suc
+      a0 = (1.0d0-Kd/(x*x))**(0.5d0*m)/suc
       R2f = 0.0d0
       eps1 = 0.0d0
       np = 0
@@ -1426,10 +1426,10 @@
          np = m + 2*k - 2 + ip
          R2f = R2f + lg*r*(Df(k)*sy(np))
          eps1 = dabs(R2f-sw)
-         if ( k>nm1 .and. eps1<dabs(R2f)*eps ) goto 200
+         if ( k>nm1 .and. eps1<dabs(R2f)*eps ) exit
          sw = R2f
       enddo
- 200  id1 = int(log10(eps1/dabs(R2f)+eps))
+      id1 = int(log10(eps1/dabs(R2f)+eps))
       R2f = R2f*a0
       if ( np>=nm2 ) then
          Id = 10
@@ -1450,10 +1450,10 @@
          np = m + 2*k - 2 + ip
          sud = sud + lg*r*(Df(k)*dy(np))
          eps2 = dabs(sud-sw)
-         if ( k>nm1 .and. eps2<dabs(sud)*eps ) goto 300
+         if ( k>nm1 .and. eps2<dabs(sud)*eps ) exit
          sw = sud
       enddo
- 300  R2d = b0 + a0*c*sud
+      R2d = b0 + a0*c*sud
       id2 = int(log10(eps2/dabs(sud)+eps))
       Id = max(id1,id2)
       end
@@ -1704,10 +1704,10 @@
          do k = 1 , 100
             r = r*x2/(k+0.5d0)
             er = er + r
-            if ( dabs(er-w)<=eps*dabs(er) ) goto 50
+            if ( dabs(er-w)<=eps*dabs(er) ) exit
             w = er
          enddo
- 50      c0 = 2.0d0/dsqrt(pi)*x*exp(-x2)
+         c0 = 2.0d0/dsqrt(pi)*x*exp(-x2)
          er0 = c0*er
       else
          er = 1.0d0
@@ -1732,20 +1732,20 @@
          do n = 1 , 100
             er2 = er2 + exp(-.25d0*n*n)/(n*n+4.0d0*x2)                  &
                 & *(2.0d0*x-2.0d0*x*dcosh(n*y)*cs+n*dsinh(n*y)*ss)
-            if ( dabs((er2-w1)/er2)<eps ) goto 100
+            if ( dabs((er2-w1)/er2)<eps ) exit
             w1 = er2
          enddo
- 100     c0 = 2.0d0*exp(-x2)/pi
+         c0 = 2.0d0*exp(-x2)/pi
          err = er0 + er1 + c0*er2
          ei2 = 0.0d0
          w2 = 0.0d0
          do n = 1 , 100
             ei2 = ei2 + exp(-.25d0*n*n)/(n*n+4.0d0*x2)                  &
                 & *(2.0d0*x*dcosh(n*y)*ss+n*dsinh(n*y)*cs)
-            if ( dabs((ei2-w2)/ei2)<eps ) goto 150
+            if ( dabs((ei2-w2)/ei2)<eps ) exit
             w2 = ei2
          enddo
- 150     eri = ei1 + c0*ei2
+         eri = ei1 + c0*ei2
       endif
       Cer = dcmplx(err,eri)
       Cder = 2.0d0/dsqrt(pi)*exp(-z*z)
@@ -1959,13 +1959,13 @@
          mj = mj + 1
          x = x1 - (x1-x0)/(1.0d0-f0/f1)
          call cvf(Kd,m,q,x,mj,f)
-         if ( abs(1.0-x1/x)<eps .or. f==0.0 ) goto 100
+         if ( abs(1.0-x1/x)<eps .or. f==0.0 ) exit
          x0 = x1
          f0 = f1
          x1 = x
          f1 = f
       enddo
- 100  a = x
+      a = x
       end
 
 
@@ -2001,9 +2001,9 @@
          do k = 2 , 40
             xr = -.5d0*xr*(k-1)/(k*k*(2*k-1))*x2
             Ci = Ci + xr
-            if ( dabs(xr)<dabs(Ci)*eps ) goto 50
+            if ( dabs(xr)<dabs(Ci)*eps ) exit
          enddo
- 50      xr = x
+         xr = x
          Si = x
          do k = 1 , 40
             xr = -.5d0*xr*(2*k-1)/k/(4*k*k+4*k+1)*x2
@@ -2088,17 +2088,17 @@
             if ( k==1 ) rd = 0.5d0
             r = r*rd*k/(k+1.0d0)*(x/(2.0d0*k+1.0d0))**2
             s = s + r
-            if ( dabs(r/s)<1.0d-12 ) goto 50
+            if ( dabs(r/s)<1.0d-12 ) exit
          enddo
- 50      Tl0 = 2.0d0/pi*x*x*s
+         Tl0 = 2.0d0/pi*x*x*s
       else
          s = 1.0d0
          do k = 1 , 10
             r = r*k/(k+1.0d0)*((2.0d0*k+1.0d0)/x)**2
             s = s + r
-            if ( dabs(r/s)<1.0d-12 ) goto 100
+            if ( dabs(r/s)<1.0d-12 ) exit
          enddo
- 100     el = .57721566490153d0
+         el = .57721566490153d0
          s0 = -s/(pi*x*x) + 2.0d0/pi*(dlog(2.0d0*x)+el)
          a0 = 1.0d0
          a1 = 5.0d0/8.0d0
@@ -2316,9 +2316,9 @@
          do k = 1 , 50
             r = r*x2/(k+0.5d0)
             er = er + r
-            if ( dabs(r)<=dabs(er)*eps ) goto 50
+            if ( dabs(r)<=dabs(er)*eps ) exit
          enddo
- 50      c0 = 2.0d0/dsqrt(pi)*x*exp(-x2)
+         c0 = 2.0d0/dsqrt(pi)*x*exp(-x2)
          Err = c0*er
       else
          er = 1.0d0
@@ -2370,9 +2370,9 @@
          do k = 1 , 120
             cr = cr*z1*z1/(k+0.5d0)
             cs = cs + cr
-            if ( abs(cr/cs)<1.0d-15 ) goto 50
+            if ( abs(cr/cs)<1.0d-15 ) exit
          enddo
- 50      Cer = 2.0d0*c0*cs/dsqrt(pi)
+         Cer = 2.0d0*c0*cs/dsqrt(pi)
       else
          cl = 1.0d0/z1
          cr = cl
@@ -2387,9 +2387,9 @@
          do k = 1 , 20
             cr = -cr*(k-0.5d0)/(z1*z1)
             cl = cl + cr
-            if ( abs(cr/cl)<1.0d-15 ) goto 100
+            if ( abs(cr/cl)<1.0d-15 ) exit
          enddo
- 100     Cer = 1.0d0 - c0*cl/dsqrt(pi)
+         Cer = 1.0d0 - c0*cl/dsqrt(pi)
       endif
       if ( dble(z)<0.0 ) Cer = -Cer
       end
@@ -2422,9 +2422,9 @@
             isgn = -isgn
             s = (1.0d0/k)**(m+1)
             r2 = r2 + isgn*s
-            if ( s<1.0d-15 ) goto 50
+            if ( s<1.0d-15 ) exit
          enddo
- 50      En(m) = r1*r2
+         En(m) = r1*r2
       enddo
       end
 
@@ -2507,10 +2507,10 @@
             do k1 = k , icm
                if ( g(k1)<g(k) ) then
                   g(k) = g(k1)
-                  goto 20
+                  exit
                endif
             enddo
- 20         if ( k/=1 .and. h(k)<h(k-1) ) h(k) = h(k-1)
+            if ( k/=1 .and. h(k)<h(k-1) ) h(k) = h(k-1)
  40         x1 = (g(k)+h(k))/2.0d0
             Cv(k) = x1
             if ( dabs((g(k)-h(k))/x1)<eps ) then
@@ -2662,9 +2662,9 @@
                qr = qr*(0.5d0*nl+k-1.0d0)*(0.5d0*(nl-1)+k)              &
                   & /((nl+k-0.5d0)*k*x*x)
                qf = qf + qr
-               if ( dabs(qr/qf)<eps ) goto 20
+               if ( dabs(qr/qf)<eps ) exit
             enddo
- 20         if ( l==0 ) then
+            if ( l==0 ) then
                Qn(n-1) = qf*qc1
             else
                Qn(n) = qf*qc2
@@ -2759,9 +2759,9 @@
          do k = 2 , 50
             r = .25d0*r*(k-1.0d0)/(k*k*k)*x*x
             Tti = Tti + r
-            if ( dabs(r/Tti)<1.0d-12 ) goto 50
+            if ( dabs(r/Tti)<1.0d-12 ) exit
          enddo
- 50      Tti = Tti*.125d0*x*x
+         Tti = Tti*.125d0*x*x
       else
          Tti = 1.0d0
          r = 1.0d0
@@ -2783,9 +2783,9 @@
             rs = rs + 1.0d0/k
             r2 = r*(rs+1.0d0/(2.0d0*k)-(el+dlog(x/2.0d0)))
             b1 = b1 + r2
-            if ( dabs(r2/b1)<1.0d-12 ) goto 100
+            if ( dabs(r2/b1)<1.0d-12 ) exit
          enddo
- 100     Ttk = e0 - .125d0*x*x*b1
+         Ttk = e0 - .125d0*x*x*b1
       else
          Ttk = 1.0d0
          r = 1.0d0
@@ -2839,17 +2839,17 @@
             do i = 1 , 50
                r = -0.25d0*r*x2/(i*(i+vk))
                bk = bk + r
-               if ( dabs(r)<dabs(bk)*1.0d-15 ) goto 20
+               if ( dabs(r)<dabs(bk)*1.0d-15 ) exit
             enddo
- 20         Vl(k) = bk
+            Vl(k) = bk
             uk = 1.0d0
             r = 1.0d0
             do i = 1 , 50
                r = -0.25d0*r*x2/(i*(i+vk+1.0d0))
                uk = uk + r
-               if ( dabs(r)<dabs(uk)*1.0d-15 ) goto 40
+               if ( dabs(r)<dabs(uk)*1.0d-15 ) exit
             enddo
- 40         Dl(k) = -0.5d0*x/(vk+1.0d0)*uk
+            Dl(k) = -0.5d0*x/(vk+1.0d0)*uk
          enddo
          return
       endif
@@ -3022,10 +3022,10 @@
             hu1 = hu1 + s*g
             d = d + 2.0d0*g
          enddo
-         if ( dabs(1.0d0-hu0/hu1)<1.0d-9 ) goto 100
+         if ( dabs(1.0d0-hu0/hu1)<1.0d-9 ) exit
          hu0 = hu1
       enddo
- 100  call gamma2(a,ga)
+      call gamma2(a,ga)
       hu1 = hu1/ga
 !       DLMF 13.4.4 with substitution t=C/(1-u)
 !       integration u from 0 to 1, i.e. t from C=12/X to infinity
@@ -3047,10 +3047,10 @@
             hu2 = hu2 + s*g
             d = d + 2.0d0*g
          enddo
-         if ( dabs(1.0d0-hu0/hu2)<1.0d-9 ) goto 200
+         if ( dabs(1.0d0-hu0/hu2)<1.0d-9 ) exit
          hu0 = hu2
       enddo
- 200  call gamma2(a,ga)
+      call gamma2(a,ga)
       hu2 = hu2/ga
       Hu = hu1 + hu2
       end
@@ -3129,10 +3129,10 @@
       do k = 2 , nm
          r = r*(m+k-1.0)*(m+k+ip-1.5d0)/(k-1.0d0)/(k+ip-1.5d0)
          su0 = su0 + r*Df(k)
-         if ( k>nm1 .and. dabs((su0-sw)/su0)<1.0d-14 ) goto 100
+         if ( k>nm1 .and. dabs((su0-sw)/su0)<1.0d-14 ) exit
          sw = su0
       enddo
- 100  if ( Kd/=1 ) then
+      if ( Kd/=1 ) then
          r2 = 1.0d0
          do j = 1 , m
             r2 = 2.0d0*c*r2*j
@@ -3246,9 +3246,9 @@
       do k = 1 , 18
          r = 0.5d0*r*(2.0*k+Va-1.0)*(2.0*k+Va)/(k*x*x)
          Pv = Pv + r
-         if ( dabs(r/Pv)<eps ) goto 100
+         if ( dabs(r/Pv)<eps ) exit
       enddo
- 100  Pv = a0*Pv
+      Pv = a0*Pv
       if ( x<0.0d0 ) then
          x1 = -x
          call dvla(Va,x1,pdl)
@@ -3331,9 +3331,9 @@
             do k = 1 , 40
                cr = -0.25d0*cr*z2/(k*(k+vl))
                cjvl = cjvl + cr
-               if ( abs(cr)<abs(cjvl)*1.0d-15 ) goto 20
+               if ( abs(cr)<abs(cjvl)*1.0d-15 ) exit
             enddo
- 20         vg = 1.0d0 + vl
+            vg = 1.0d0 + vl
             call gamma2(vg,ga)
             ca = (0.5d0*z1)**vl/ga
             if ( l==0 ) cjv0 = cjvl*ca
@@ -3382,9 +3382,9 @@
                do k = 1 , 40
                   cr = -0.25d0*cr*z2/(k*(k-vl))
                   cjvl = cjvl + cr
-                  if ( abs(cr)<abs(cjvl)*1.0d-15 ) goto 30
+                  if ( abs(cr)<abs(cjvl)*1.0d-15 ) exit
                enddo
- 30            vg = 1.0d0 - vl
+               vg = 1.0d0 - vl
                call gamma2(vg,gb)
                cb = (2.0d0/z1)**vl/gb
                if ( l==0 ) cju0 = cjvl*cb
@@ -3606,9 +3606,9 @@
          do k = 1 , 40
             cr = -0.25d0*cr*z2/(k*(k+v0))
             cjv0 = cjv0 + cr
-            if ( abs(cr)<abs(cjv0)*1.0d-15 ) goto 50
+            if ( abs(cr)<abs(cjv0)*1.0d-15 ) exit
          enddo
- 50      vg = 1.0d0 + v0
+         vg = 1.0d0 + v0
          call gamma2(vg,ga)
          ca = (0.5d0*z1)**v0/ga
          cjv0 = cjv0*ca
@@ -3646,9 +3646,9 @@
             do k = 1 , 40
                cr = -0.25d0*cr*z2/(k*(k-v0))
                cjvn = cjvn + cr
-               if ( abs(cr)<abs(cjvn)*1.0d-15 ) goto 60
+               if ( abs(cr)<abs(cjvn)*1.0d-15 ) exit
             enddo
- 60         vg = 1.0d0 - v0
+            vg = 1.0d0 - v0
             call gamma2(vg,gb)
             cb = (2.0d0/z1)**v0/gb
             cju0 = cjvn*cb
@@ -3765,16 +3765,16 @@
          do k = 1 , 30
             r = -0.25d0*r*x2/(k*k)
             Bj0 = Bj0 + r
-            if ( dabs(r)<dabs(Bj0)*1.0d-15 ) goto 50
+            if ( dabs(r)<dabs(Bj0)*1.0d-15 ) exit
          enddo
- 50      Bj1 = 1.0d0
+         Bj1 = 1.0d0
          r = 1.0d0
          do k = 1 , 30
             r = -0.25d0*r*x2/(k*(k+1.0d0))
             Bj1 = Bj1 + r
-            if ( dabs(r)<dabs(Bj1)*1.0d-15 ) goto 100
+            if ( dabs(r)<dabs(Bj1)*1.0d-15 ) exit
          enddo
- 100     Bj1 = 0.5d0*x*Bj1
+         Bj1 = 0.5d0*x*Bj1
          ec = dlog(x/2.0d0) + 0.5772156649015329d0
          cs0 = 0.0d0
          w0 = 0.0d0
@@ -3784,9 +3784,9 @@
             r0 = -0.25d0*r0/(k*k)*x2
             r = r0*w0
             cs0 = cs0 + r
-            if ( dabs(r)<dabs(cs0)*1.0d-15 ) goto 150
+            if ( dabs(r)<dabs(cs0)*1.0d-15 ) exit
          enddo
- 150     By0 = rp2*(ec*Bj0-cs0)
+         By0 = rp2*(ec*Bj0-cs0)
          cs1 = 1.0d0
          w1 = 0.0d0
          r1 = 1.0d0
@@ -3795,9 +3795,9 @@
             r1 = -0.25d0*r1/(k*(k+1))*x2
             r = r1*(2.0d0*w1+1.0d0/(k+1.0d0))
             cs1 = cs1 + r
-            if ( dabs(r)<dabs(cs1)*1.0d-15 ) goto 200
+            if ( dabs(r)<dabs(cs1)*1.0d-15 ) exit
          enddo
- 200     By1 = rp2*(ec*Bj1-1.0d0/x-0.25d0*x*cs1)
+         By1 = rp2*(ec*Bj1-1.0d0/x-0.25d0*x*cs1)
       else
          data a/ - .7031250000000000d-01 , .1121520996093750d+00 ,      &
             & -.5725014209747314d+00 , .6074042001273483d+01 ,          &
@@ -3889,9 +3889,9 @@
          do k = 1 , 60
             r = r*x/(a+k)
             s = s + r
-            if ( dabs(r/s)<1.0d-15 ) goto 50
+            if ( dabs(r/s)<1.0d-15 ) exit
          enddo
- 50      Gin = exp(xam)*s
+         Gin = exp(xam)*s
          call gamma2(a,ga)
          Gip = Gin/ga
          Gim = ga - Gin
@@ -4002,9 +4002,9 @@
          do k = 1 , 50
             r = .25d0*r*(2*k-1.0d0)/(2*k+1.0d0)/(k*k)*x2
             Ti = Ti + r
-            if ( dabs(r/Ti)<1.0d-12 ) goto 50
+            if ( dabs(r/Ti)<1.0d-12 ) exit
          enddo
- 50      Ti = Ti*x
+         Ti = Ti*x
       else
          x2 = 0.0d0
          Ti = 1.0d0
@@ -4029,10 +4029,10 @@
             rs = rs + 1.0d0/k
             b2 = b2 + r*rs
             Tk = b1 + b2
-            if ( dabs((Tk-tw)/Tk)<1.0d-12 ) goto 100
+            if ( dabs((Tk-tw)/Tk)<1.0d-12 ) exit
             tw = Tk
          enddo
- 100     Tk = Tk*x
+         Tk = Tk*x
       else
          Tk = 1.0d0
          r = 1.0d0
@@ -4110,9 +4110,9 @@
             do k = 1 , 40
                r = -0.25d0*r*x2/(k*(k+vl))
                bjvl = bjvl + r
-               if ( dabs(r)<dabs(bjvl)*1.0d-15 ) goto 20
+               if ( dabs(r)<dabs(bjvl)*1.0d-15 ) exit
             enddo
- 20         vg = 1.0d0 + vl
+            vg = 1.0d0 + vl
             call gamma2(vg,ga)
             a = (0.5d0*x)**vl/ga
             if ( l==0 ) bjv0 = bjvl*a
@@ -4204,9 +4204,9 @@
                do k = 1 , 40
                   r = -0.25d0*r*x2/(k*(k-vl))
                   bjvl = bjvl + r
-                  if ( dabs(r)<dabs(bjvl)*1.0d-15 ) goto 30
+                  if ( dabs(r)<dabs(bjvl)*1.0d-15 ) exit
                enddo
- 30            vg = 1.0d0 - vl
+               vg = 1.0d0 - vl
                call gamma2(vg,gb)
                b = (2.0d0/x)**vl/gb
                if ( l==0 ) bju0 = bjvl*b
@@ -4528,9 +4528,9 @@
       do k = 1 , nm2
          r = ck(k+1)*x1**k
          su1 = su1 + r
-         if ( k>=10 .and. dabs(r/su1)<eps ) goto 100
+         if ( k>=10 .and. dabs(r/su1)<eps ) exit
       enddo
- 100  S1f = a0*x**ip*su1
+      S1f = a0*x**ip*su1
       if ( x==1.0d0 ) then
          if ( m==0 ) S1d = ip*ck(1) - 2.0d0*ck(2)
          if ( m==1 ) S1d = -1.0d+100
@@ -4543,9 +4543,9 @@
          do k = 2 , nm2
             r = k*ck(k+1)*x1**(k-1.0d0)
             su2 = su2 + r
-            if ( k>=10 .and. dabs(r/su2)<eps ) goto 150
+            if ( k>=10 .and. dabs(r/su2)<eps ) exit
          enddo
- 150     S1d = d0*a0*su1 + d1*su2
+         S1d = d0*a0*su1 + d1*su2
       endif
       if ( x0<0.0d0 .and. ip==0 ) S1d = -S1d
       if ( x0<0.0d0 .and. ip==1 ) S1f = -S1f
@@ -4797,17 +4797,17 @@
             if ( k==1 ) rd = 0.5d0
             r = -r*rd*k/(k+1.0d0)*(x/(2.0d0*k+1.0d0))**2
             s = s + r
-            if ( dabs(r)<dabs(s)*1.0d-12 ) goto 50
+            if ( dabs(r)<dabs(s)*1.0d-12 ) exit
          enddo
- 50      Th0 = 2.0d0/pi*x*x*s
+         Th0 = 2.0d0/pi*x*x*s
       else
          s = 1.0d0
          do k = 1 , 12
             r = -r*k/(k+1.0d0)*((2.0d0*k+1.0d0)/x)**2
             s = s + r
-            if ( dabs(r)<dabs(s)*1.0d-12 ) goto 100
+            if ( dabs(r)<dabs(s)*1.0d-12 ) exit
          enddo
- 100     el = .57721566490153d0
+         el = .57721566490153d0
          s0 = s/(pi*x*x) + 2.0d0/pi*(dlog(2.0d0*x)+el)
          a0 = 1.0d0
          a1 = 5.0d0/8.0d0
@@ -5063,9 +5063,9 @@
             do i = 1 , 50
                r = -0.25d0*r*x2/(i*(i+k))
                bk = bk + r
-               if ( dabs(r)<dabs(bk)*1.0d-15 ) goto 20
+               if ( dabs(r)<dabs(bk)*1.0d-15 ) exit
             enddo
- 20         Bl(k) = bk
+            Bl(k) = bk
             if ( k>=1 ) Dl(k-1) = -0.5d0*x/k*bk
          enddo
          uk = 1.0d0
@@ -5073,9 +5073,9 @@
          do i = 1 , 50
             r = -0.25d0*r*x2/(i*(i+n+1.0d0))
             uk = uk + r
-            if ( dabs(r)<dabs(uk)*1.0d-15 ) goto 50
+            if ( dabs(r)<dabs(uk)*1.0d-15 ) exit
          enddo
- 50      Dl(n) = -0.5d0*x/(n+1.0d0)*uk
+         Dl(n) = -0.5d0*x/(n+1.0d0)*uk
          return
       endif
       if ( n==0 ) Nm = 1
@@ -5531,9 +5531,9 @@
             endif
             a0 = a
             b0 = b
-            if ( c<1.0d-7 ) goto 50
+            if ( c<1.0d-7 ) exit
          enddo
- 50      ck = pi/(2.0d0*a)
+         ck = pi/(2.0d0*a)
          ce = pi*(2.0d0-r)/(4.0d0*a)
          if ( Phi==90.0d0 ) then
             Fe = ck
@@ -5622,9 +5622,9 @@
          do k = 1 , 100
             r = r*k*x/(k+1.0d0)**2
             Ei = Ei + r
-            if ( dabs(r/Ei)<=1.0d-15 ) goto 50
+            if ( dabs(r/Ei)<=1.0d-15 ) exit
          enddo
- 50      ga = 0.5772156649015328d0
+         ga = 0.5772156649015328d0
          Ei = ga + dlog(x) + x*Ei
       else
 !          Asymptotic expansion (the series is not convergent)
@@ -5684,9 +5684,9 @@
          do k = 1 , 25
             r = -r*k*x/(k+1.0d0)**2
             e1 = e1 + r
-            if ( dabs(r)<=dabs(e1)*1.0d-15 ) goto 50
+            if ( dabs(r)<=dabs(e1)*1.0d-15 ) exit
          enddo
- 50      ga = 0.5772156649015328d0
+         ga = 0.5772156649015328d0
          e1 = -ga - dlog(x) + x*e1
       else
          m = 20 + int(80.0/x)
@@ -5942,10 +5942,10 @@
                   rp = pa + pb + 2.0d0*el + sp + sm + dlog(1.0d0-x)
                   r1 = r1*(a+m+k-1.0d0)*(b+m+k-1.0)/(k*(m+k))*(1.0-x)
                   f1 = f1 + r1*rp
-                  if ( dabs(f1-hw)<dabs(f1)*eps ) goto 10
+                  if ( dabs(f1-hw)<dabs(f1)*eps ) exit
                   hw = f1
                enddo
- 10            Hf = f0*c0 + f1*c1
+               Hf = f0*c0 + f1*c1
             elseif ( m<0 ) then
                m = -m
                c0 = gm*gc/(ga*gb*(1.0d0-x)**m)
@@ -5968,10 +5968,10 @@
                   rp = pa + pb + 2.0d0*el + sp - sm + dlog(1.0d0-x)
                   r1 = r1*(a+k-1.0d0)*(b+k-1.0)/(k*(m+k))*(1.0-x)
                   f1 = f1 + r1*rp
-                  if ( dabs(f1-hw)<dabs(f1)*eps ) goto 20
+                  if ( dabs(f1-hw)<dabs(f1)*eps ) exit
                   hw = f1
                enddo
- 20            Hf = f0*c0 + f1*c1
+               Hf = f0*c0 + f1*c1
             endif
          else
             call gamma2(a,ga)
@@ -5990,10 +5990,10 @@
                r0 = r0*(a+k-1.0d0)*(b+k-1.0)/(k*(a+b-c+k))*(1.0-x)
                r1 = r1*(c-a+k-1.0d0)*(c-b+k-1.0)/(k*(c-a-b+k))*(1.0-x)
                Hf = Hf + r0 + r1
-               if ( dabs(Hf-hw)<dabs(Hf)*eps ) goto 40
+               if ( dabs(Hf-hw)<dabs(Hf)*eps ) exit
                hw = Hf
             enddo
- 40         Hf = Hf + c0 + c1
+            Hf = Hf + c0 + c1
          endif
       else
          a0 = 1.0d0
@@ -6007,10 +6007,10 @@
          do k = 1 , 250
             r = r*(a+k-1.0d0)*(b+k-1.0d0)/(k*(c+k-1.0d0))*x
             Hf = Hf + r
-            if ( dabs(Hf-hw)<=dabs(Hf)*eps ) goto 50
+            if ( dabs(Hf-hw)<=dabs(Hf)*eps ) exit
             hw = Hf
          enddo
- 50      Hf = a0*Hf
+         Hf = a0*Hf
       endif
       if ( x1<0.0d0 ) then
          x = x1
@@ -6251,10 +6251,10 @@
             do k = 1 , 500
                zr0 = zr0*(a+k-1.0d0)*(c-b+k-1.0d0)/(k*(c+k-1.0d0))*z1
                Zhf = Zhf + zr0
-               if ( abs(Zhf-zw)<abs(Zhf)*eps ) goto 20
+               if ( abs(Zhf-zw)<abs(Zhf)*eps ) exit
                zw = Zhf
             enddo
- 20         Zhf = zc0*Zhf
+            Zhf = zc0*Zhf
          elseif ( a0>=0.90d0 ) then
             gm = 0.0d0
             mcab = int(c-a-b+eps*dsign(1.0d0,c-a-b))
@@ -6304,10 +6304,10 @@
                      zr1 = zr1*(a+m+k-1.0d0)*(b+m+k-1.0d0)/(k*(m+k))    &
                          & *(1.0d0-z)
                      zf1 = zf1 + zr1*zp
-                     if ( abs(zf1-zw)<abs(zf1)*eps ) goto 25
+                     if ( abs(zf1-zw)<abs(zf1)*eps ) exit
                      zw = zf1
                   enddo
- 25               Zhf = zf0*zc0 + zf1*zc1
+                  Zhf = zf0*zc0 + zf1*zc1
                elseif ( m<0 ) then
                   m = -m
                   zc0 = gm*gc/(ga*gb*(1.0d0-z)**m)
@@ -6331,10 +6331,10 @@
                      zp = pa + pb + 2.0d0*el + sp - sm + log(1.0d0-z)
                      zr1 = zr1*(a+k-1.d0)*(b+k-1.d0)/(k*(m+k))*(1.d0-z)
                      zf1 = zf1 + zr1*zp
-                     if ( abs(zf1-zw)<abs(zf1)*eps ) goto 30
+                     if ( abs(zf1-zw)<abs(zf1)*eps ) exit
                      zw = zf1
                   enddo
- 30               Zhf = zf0*zc0 + zf1*zc1
+                  Zhf = zf0*zc0 + zf1*zc1
                endif
             else
                call gamma2(a,ga)
@@ -6354,10 +6354,10 @@
                   zr1 = zr1*(c-a+k-1.0d0)*(c-b+k-1.0d0)/(k*(c-a-b+k))   &
                       & *(1.0d0-z)
                   Zhf = Zhf + zr0 + zr1
-                  if ( abs(Zhf-zw)<abs(Zhf)*eps ) goto 40
+                  if ( abs(Zhf-zw)<abs(Zhf)*eps ) exit
                   zw = Zhf
                enddo
- 40            Zhf = Zhf + zc0 + zc1
+               Zhf = Zhf + zc0 + zc1
             endif
          else
             z00 = (1.0d0,0.0d0)
@@ -6371,10 +6371,10 @@
             do k = 1 , 1500
                zr = zr*(a+k-1.0d0)*(b+k-1.0d0)/(k*(c+k-1.0d0))*z
                Zhf = Zhf + zr
-               if ( abs(Zhf-zw)<=abs(Zhf)*eps ) goto 60
+               if ( abs(Zhf-zw)<=abs(Zhf)*eps ) exit
                zw = Zhf
             enddo
- 60         Zhf = z00*Zhf
+            Zhf = z00*Zhf
          endif
       elseif ( a0>1.0d0 ) then
          mab = int(a-b+eps*dsign(1.0d0,a-b))
@@ -6396,10 +6396,10 @@
                zr0 = zr0*(a+k-1.0d0)*(a-c+k)/((a-b+k)*k*z)
                zr1 = zr1*(b+k-1.0d0)*(b-c+k)/((b-a+k)*k*z)
                Zhf = Zhf + zr0 + zr1
-               if ( abs((Zhf-zw)/Zhf)<=eps ) goto 80
+               if ( abs((Zhf-zw)/Zhf)<=eps ) exit
                zw = Zhf
             enddo
- 80         Zhf = Zhf + zc0 + zc1
+            Zhf = Zhf + zc0 + zc1
          else
             if ( a-b<0.0d0 ) then
                a = bb
@@ -6461,10 +6461,10 @@
                   & - pi/dtan(pi*(k+a-c)) + log(-z)
                zf1 = zf1 + rk2*zr*zp
                ws = abs(zf1)
-               if ( dabs((ws-w0)/ws)<eps ) goto 100
+               if ( dabs((ws-w0)/ws)<eps ) exit
                w0 = ws
             enddo
- 100        Zhf = zf0 + zf1
+            Zhf = zf0 + zf1
          endif
       endif
       a = aa
@@ -6514,17 +6514,17 @@
                r = r*(3.0*k-2.0d0)/(3.0*k+1.0d0)*x/(3.0*k)              &
                  & *x/(3.0*k-1.0d0)*x
                fx = fx + r
-               if ( dabs(r)<dabs(fx)*eps ) goto 20
+               if ( dabs(r)<dabs(fx)*eps ) exit
             enddo
- 20         gx = .5d0*x*x
+            gx = .5d0*x*x
             r = gx
             do k = 1 , 40
                r = r*(3.0*k-1.0d0)/(3.0*k+2.0d0)*x/(3.0*k)              &
                  & *x/(3.0*k+1.0d0)*x
                gx = gx + r
-               if ( dabs(r)<dabs(gx)*eps ) goto 40
+               if ( dabs(r)<dabs(gx)*eps ) exit
             enddo
- 40         Ant = c1*fx - c2*gx
+            Ant = c1*fx - c2*gx
             Bnt = sr3*(c1*fx+c2*gx)
             if ( l==0 ) then
                Apt = Ant
@@ -7060,9 +7060,9 @@
          elseif ( kd==4 ) then
             Csf = Csf + fg(k)*dsin(2*k*xr)
          endif
-         if ( k>=ic .and. dabs(fg(k))<dabs(Csf)*eps ) goto 100
+         if ( k>=ic .and. dabs(fg(k))<dabs(Csf)*eps ) exit
       enddo
- 100  Csd = 0.0d0
+      Csd = 0.0d0
       do k = 1 , km
          if ( kd==1 ) then
             Csd = Csd - (2*k-2)*fg(k)*dsin((2*k-2)*xr)
@@ -7073,9 +7073,9 @@
          elseif ( kd==4 ) then
             Csd = Csd + 2.0d0*k*fg(k)*dcos(2*k*xr)
          endif
-         if ( k>=ic .and. dabs(fg(k))<dabs(Csd)*eps ) goto 99999
+         if ( k>=ic .and. dabs(fg(k))<dabs(Csd)*eps ) exit
       enddo
-99999 end
+      end
 
 
 
@@ -7126,16 +7126,16 @@
          do k = 1 , 40
             cr = -0.25d0*cr*z2/(k*k)
             cbj0 = cbj0 + cr
-            if ( abs(cr)<abs(cbj0)*1.0d-15 ) goto 50
+            if ( abs(cr)<abs(cbj0)*1.0d-15 ) exit
          enddo
- 50      cbj1 = (1.0d0,0.0d0)
+         cbj1 = (1.0d0,0.0d0)
          cr = (1.0d0,0.0d0)
          do k = 1 , 40
             cr = -0.25d0*cr*z2/(k*(k+1.0d0))
             cbj1 = cbj1 + cr
-            if ( abs(cr)<abs(cbj1)*1.0d-15 ) goto 100
+            if ( abs(cr)<abs(cbj1)*1.0d-15 ) exit
          enddo
- 100     cbj1 = 0.5d0*z1*cbj1
+         cbj1 = 0.5d0*z1*cbj1
          w0 = 0.0d0
          cr = (1.0d0,0.0d0)
          cs = (0.0d0,0.0d0)
@@ -7144,9 +7144,9 @@
             cr = -0.25d0*cr/(k*k)*z2
             cp = cr*w0
             cs = cs + cp
-            if ( abs(cp)<abs(cs)*1.0d-15 ) goto 150
+            if ( abs(cp)<abs(cs)*1.0d-15 ) exit
          enddo
- 150     cby0 = rp2*(log(z1/2.0d0)+el)*cbj0 - rp2*cs
+         cby0 = rp2*(log(z1/2.0d0)+el)*cbj0 - rp2*cs
          w1 = 0.0d0
          cr = (1.0d0,0.0d0)
          cs = (1.0d0,0.0d0)
@@ -7155,9 +7155,9 @@
             cr = -0.25d0*cr/(k*(k+1))*z2
             cp = cr*(2.0d0*w1+1.0d0/(k+1.0d0))
             cs = cs + cp
-            if ( abs(cp)<abs(cs)*1.0d-15 ) goto 200
+            if ( abs(cp)<abs(cs)*1.0d-15 ) exit
          enddo
- 200     cby1 = rp2*((log(z1/2.0d0)+el)*cbj1-1.0d0/z1-.25d0*z1*cs)
+         cby1 = rp2*((log(z1/2.0d0)+el)*cbj1-1.0d0/z1-.25d0*z1*cs)
       else
          data a/ - .703125d-01 , .112152099609375d+00 ,                 &
             & -.5725014209747314d+00 , .6074042001273483d+01 ,          &
@@ -7285,9 +7285,9 @@
                xr = -.5d0*xr*(4.0d0*k-3.0d0)/k/(2.0d0*k-1.0d0)          &
                   & /(4.0d0*k+1.0d0)*x4
                c1 = c1 + xr
-               if ( dabs(xr/c1)<eps ) goto 20
+               if ( dabs(xr/c1)<eps ) exit
             enddo
- 20         s1 = p2p*xa*xa*xa/3.0d0
+            s1 = p2p*xa*xa*xa/3.0d0
             xr = s1
             do k = 1 , 50
                xr = -.5d0*xr*(4.0d0*k-1.0d0)/k/(2.0d0*k+1.0d0)          &
@@ -7462,32 +7462,32 @@
          do k = 1 , 40
             r = r*x/(3.0d0*k)*x/(3.0d0*k-1.0d0)*x
             fx = fx + r
-            if ( dabs(r)<dabs(fx)*eps ) goto 50
+            if ( dabs(r)<dabs(fx)*eps ) exit
          enddo
- 50      gx = x
+         gx = x
          r = x
          do k = 1 , 40
             r = r*x/(3.0d0*k)*x/(3.0d0*k+1.0d0)*x
             gx = gx + r
-            if ( dabs(r)<dabs(gx)*eps ) goto 100
+            if ( dabs(r)<dabs(gx)*eps ) exit
          enddo
- 100     Ai = c1*fx - c2*gx
+         Ai = c1*fx - c2*gx
          Bi = sr3*(c1*fx+c2*gx)
          df = 0.5d0*x*x
          r = df
          do k = 1 , 40
             r = r*x/(3.0d0*k)*x/(3.0d0*k+2.0d0)*x
             df = df + r
-            if ( dabs(r)<dabs(df)*eps ) goto 150
+            if ( dabs(r)<dabs(df)*eps ) exit
          enddo
- 150     dg = 1.0d0
+         dg = 1.0d0
          r = 1.0d0
          do k = 1 , 40
             r = r*x/(3.0d0*k)*x/(3.0d0*k-2.0d0)*x
             dg = dg + r
-            if ( dabs(r)<dabs(dg)*eps ) goto 200
+            if ( dabs(r)<dabs(dg)*eps ) exit
          enddo
- 200     Ad = c1*df - c2*dg
+         Ad = c1*df - c2*dg
          Bd = sr3*(c1*df+c2*dg)
       else
          km = int(24.5-xa)
@@ -7721,10 +7721,10 @@
             d3 = i + m + ip - 0.5d0
             r = r*d2*(d2-1.0d0)*i*(d3+k)/(d1*(d1-1.0d0)*(i-k)*d3)
             sum = sum + r*Df(i+1)
-            if ( dabs(sw-sum)<dabs(sum)*1.0d-14 ) goto 50
+            if ( dabs(sw-sum)<dabs(sum)*1.0d-14 ) exit
             sw = sum
          enddo
- 50      r1 = reg
+         r1 = reg
          do i = 2 , m + k
             r1 = r1*i
          enddo
@@ -7755,9 +7755,9 @@
       do k = 1 , 16
          cr = -0.5d0*cr*(2.0*k-n-1.0)*(2.0*k-n-2.0)/(k*z*z)
          Cdn = Cdn + cr
-         if ( abs(cr)<abs(Cdn)*1.0d-12 ) goto 100
+         if ( abs(cr)<abs(Cdn)*1.0d-12 ) exit
       enddo
- 100  Cdn = cb0*Cdn
+      Cdn = cb0*Cdn
       end
 
 
@@ -7910,9 +7910,9 @@
          do k = 1 , 100
             r = 0.5d0*r*(-v+m+k-1.0d0)*(v+m+k)/(k*(m+k))*(1.0d0-x)
             Pmv = Pmv + r
-            if ( k>12 .and. dabs(r/Pmv)<eps ) goto 50
+            if ( k>12 .and. dabs(r/Pmv)<eps ) exit
          enddo
- 50      Pmv = (-1)**m*c0*Pmv
+         Pmv = (-1)**m*c0*Pmv
       else
 !             DLMF 14.3.5, 15.8.10
          vs = dsin(v*pi)/pi
@@ -7953,9 +7953,9 @@
                 & + dlog(0.5d0*(1.0d0+x))
             r2 = pss*r
             Pmv = Pmv + r2
-            if ( dabs(r2/Pmv)<eps ) goto 100
+            if ( dabs(r2/Pmv)<eps ) exit
          enddo
- 100     Pmv = pv0 + Pmv*vs*c0
+         Pmv = pv0 + Pmv*vs*c0
       endif
       end
 
@@ -8147,18 +8147,18 @@
       do k = 1 , nm
          mk = m + 2*(k-1) + ip
          su1 = su1 + df(k)*pm(mk)
-         if ( dabs(sw-su1)<dabs(su1)*eps ) goto 100
+         if ( dabs(sw-su1)<dabs(su1)*eps ) exit
          sw = su1
       enddo
- 100  S1f = (-1)**m*su1
+      S1f = (-1)**m*su1
       su1 = 0.0d0
       do k = 1 , nm
          mk = m + 2*(k-1) + ip
          su1 = su1 + df(k)*pd(mk)
-         if ( dabs(sw-su1)<dabs(su1)*eps ) goto 200
+         if ( dabs(sw-su1)<dabs(su1)*eps ) exit
          sw = su1
       enddo
- 200  S1d = (-1)**m*su1
+      S1d = (-1)**m*su1
       end
 
 
@@ -8208,10 +8208,10 @@
          hua = dabs(Hu)
          if ( hua>hmax ) hmax = hua
          if ( hua<hmin ) hmin = hua
-         if ( dabs(Hu-h0)<dabs(Hu)*1.0d-15 ) goto 100
+         if ( dabs(Hu-h0)<dabs(Hu)*1.0d-15 ) exit
          h0 = Hu
       enddo
- 100  d1 = log10(hmax)
+      d1 = log10(hmax)
       d2 = 0.0d0
       if ( hmin/=0.0 ) d2 = log10(hmin)
       Id = 15 - abs(d1-d2)
@@ -8240,16 +8240,16 @@
          do k = 1 , 60
             r = -r*x*x*(2.0*k-1.0d0)/(2.0*k+1.0d0)**3
             s = s + r
-            if ( dabs(r)<dabs(s)*1.0d-12 ) goto 50
+            if ( dabs(r)<dabs(s)*1.0d-12 ) exit
          enddo
- 50      Tth = pi/2.0d0 - 2.0d0/pi*x*s
+         Tth = pi/2.0d0 - 2.0d0/pi*x*s
       else
          do k = 1 , 10
             r = -r*(2.0*k-1.0d0)**3/((2.0*k+1.0d0)*x*x)
             s = s + r
-            if ( dabs(r)<dabs(s)*1.0d-12 ) goto 100
+            if ( dabs(r)<dabs(s)*1.0d-12 ) exit
          enddo
- 100     Tth = 2.0d0/(pi*x)*s
+         Tth = 2.0d0/(pi*x)*s
          t = 8.0d0/x
          xt = x + .25d0*pi
          f0 = (((((.18118d-2*t-.91909d-2)*t+.017033d0)*t-.9394d-3)      &
@@ -8374,9 +8374,9 @@
       do k = 1 , 16
          r = -0.5d0*r*(2.0*k-Va-1.0)*(2.0*k-Va-2.0)/(k*x*x)
          Pd = Pd + r
-         if ( dabs(r/Pd)<eps ) goto 100
+         if ( dabs(r/Pd)<eps ) exit
       enddo
- 100  Pd = a0*Pd
+      Pd = a0*Pd
       if ( x<0.0d0 ) then
          x1 = -x
          call vvla(Va,x1,vl)
@@ -8431,16 +8431,16 @@
          do k = 1 , 50
             r = 0.25d0*r*x2/(k*k)
             Bi0 = Bi0 + r
-            if ( dabs(r/Bi0)<1.0d-15 ) goto 50
+            if ( dabs(r/Bi0)<1.0d-15 ) exit
          enddo
- 50      Bi1 = 1.0d0
+         Bi1 = 1.0d0
          r = 1.0d0
          do k = 1 , 50
             r = 0.25d0*r*x2/(k*(k+1))
             Bi1 = Bi1 + r
-            if ( dabs(r/Bi1)<1.0d-15 ) goto 100
+            if ( dabs(r/Bi1)<1.0d-15 ) exit
          enddo
- 100     Bi1 = 0.5d0*x*Bi1
+         Bi1 = 0.5d0*x*Bi1
       else
          data a/0.125d0 , 7.03125d-2 , 7.32421875d-2 ,                  &
             & 1.1215209960938d-1 , 2.2710800170898d-1 ,                 &
@@ -8480,10 +8480,10 @@
             w0 = w0 + 1.0d0/k
             r = 0.25d0*r/(k*k)*x2
             Bk0 = Bk0 + r*(w0+ct)
-            if ( dabs((Bk0-ww)/Bk0)<1.0d-15 ) goto 150
+            if ( dabs((Bk0-ww)/Bk0)<1.0d-15 ) exit
             ww = Bk0
          enddo
- 150     Bk0 = Bk0 + ct
+         Bk0 = Bk0 + ct
       else
          data a1/0.125d0 , 0.2109375d0 , 1.0986328125d0 ,               &
             & 1.1775970458984d01 , 2.1461706161499d02 ,                 &
@@ -9099,17 +9099,17 @@
          r = 0.5d0*r*x*x/(k*(2.0d0*k-1.0d0))
          r1 = h(k)*r
          y1f = y1f + r1
-         if ( dabs(r1)<=eps*dabs(y1f) .and. k>30 ) goto 100
+         if ( dabs(r1)<=eps*dabs(y1f) .and. k>30 ) exit
       enddo
- 100  y1d = a
+      y1d = a
       r = 1.0d0
       do k = 1 , 99
          r = 0.5d0*r*x*x/(k*(2.0d0*k+1.0d0))
          r1 = h(k+1)*r
          y1d = y1d + r1
-         if ( dabs(r1)<=eps*dabs(y1d) .and. k>30 ) goto 200
+         if ( dabs(r1)<=eps*dabs(y1d) .and. k>30 ) exit
       enddo
- 200  y1d = x*y1d
+      y1d = x*y1d
       d1 = 1.0d0
       d2 = a
       d(1) = 1.0d0
@@ -9127,18 +9127,18 @@
          r = 0.5d0*r*x*x/(k*(2.0d0*k+1.0d0))
          r1 = d(k+1)*r
          y2f = y2f + r1
-         if ( dabs(r1)<=eps*dabs(y2f) .and. k>30 ) goto 300
+         if ( dabs(r1)<=eps*dabs(y2f) .and. k>30 ) exit
       enddo
- 300  y2f = x*y2f
+      y2f = x*y2f
       y2d = 1.0d0
       r = 1.0d0
       do k = 1 , 79
          r = 0.5d0*r*x*x/(k*(2.0d0*k-1.0d0))
          r1 = d(k+1)*r
          y2d = y2d + r1
-         if ( dabs(r1)<=eps*dabs(y2f) .and. k>30 ) goto 400
+         if ( dabs(r1)<=eps*dabs(y2f) .and. k>30 ) exit
       enddo
- 400  W1f = p0*(f1*y1f-f2*y2f)
+      W1f = p0*(f1*y1f-f2*y2f)
       W2f = p0*(f1*y1f+f2*y2f)
       W1d = p0*(f1*y1d-f2*y2d)
       W2d = p0*(f1*y1d+f2*y2d)
@@ -9184,19 +9184,19 @@
       do k = 2 , nm
          r = r*(m+k-1.0)*(m+k+ip-1.5d0)/(k-1.0d0)/(k+ip-1.5d0)
          suc = suc + r*Df(k)
-         if ( k>nm1 .and. dabs(suc-sw)<dabs(suc)*eps ) goto 100
+         if ( k>nm1 .and. dabs(suc-sw)<dabs(suc)*eps ) exit
          sw = suc
       enddo
- 100  if ( x==0.0 ) then
+      if ( x==0.0 ) then
          call sckb(m,n,c,Df,ck)
          sum = 0.0d0
          sw1 = 0.0d0
          do j = 1 , nm
             sum = sum + ck(j)
-            if ( dabs(sum-sw1)<dabs(sum)*eps ) goto 150
+            if ( dabs(sum-sw1)<dabs(sum)*eps ) exit
             sw1 = sum
          enddo
- 150     r1 = 1.0d0
+         r1 = 1.0d0
          do j = 1 , (n+m+ip)/2
             r1 = r1*(j+0.5d0*(n+m+ip))
          enddo
@@ -9236,10 +9236,10 @@
          endif
          np = m + 2*k - 2 + ip
          R1f = R1f + lg*r*Df(k)*sj(np)
-         if ( k>nm1 .and. dabs(R1f-sw)<dabs(R1f)*eps ) goto 200
+         if ( k>nm1 .and. dabs(R1f-sw)<dabs(R1f)*eps ) exit
          sw = R1f
       enddo
- 200  R1f = R1f*a0
+      R1f = R1f*a0
       b0 = Kd*m/x**3.0d0/(1.0-Kd/(x*x))*R1f
       sud = 0.0d0
       sw = 0.0d0
@@ -9254,10 +9254,10 @@
          endif
          np = m + 2*k - 2 + ip
          sud = sud + lg*r*Df(k)*dj(np)
-         if ( k>nm1 .and. dabs(sud-sw)<dabs(sud)*eps ) goto 300
+         if ( k>nm1 .and. dabs(sud-sw)<dabs(sud)*eps ) exit
          sw = sud
       enddo
- 300  R1d = b0 + a0*c*sud
+      R1d = b0 + a0*c*sud
       end
 
 
@@ -9306,9 +9306,9 @@
             r = -r*sq2*x/m
             r1 = gm*r
             Pd = Pd + r1
-            if ( dabs(r1)<dabs(Pd)*eps ) goto 50
+            if ( dabs(r1)<dabs(Pd)*eps ) exit
          enddo
- 50      Pd = a0*Pd
+         Pd = a0*Pd
       endif
       end
 
@@ -9344,9 +9344,9 @@
          do k = 1 , 500
             cr = -cr*k*z/(k+1.0d0)**2
             Ce1 = Ce1 + cr
-            if ( abs(cr)<=abs(Ce1)*1.0d-15 ) goto 50
+            if ( abs(cr)<=abs(Ce1)*1.0d-15 ) exit
          enddo
- 50      if ( x<=0.0 .and. dimag(z)==0.0 ) then
+         if ( x<=0.0 .and. dimag(z)==0.0 ) then
 !     Careful on the branch cut -- use the sign of the imaginary part
 !     to get the right sign on the factor if pi.
             Ce1 = -el - log(-z) + z*Ce1 - dsign(pi,dimag(z))            &
@@ -9373,9 +9373,9 @@
             zdc = (z*zd-1)*zdc
             zc = zc + zdc
 
-            if ( abs(zdc)<=abs(zc)*1.0d-15 .and. k>20 ) goto 100
+            if ( abs(zdc)<=abs(zc)*1.0d-15 .and. k>20 ) exit
          enddo
- 100     Ce1 = exp(-z)*zc
+         Ce1 = exp(-z)*zc
          if ( x<=0.0 .and. dimag(z)==0.0 ) Ce1 = Ce1 - pi*(0.0d0,1.0d0)
       endif
       end
@@ -9477,11 +9477,11 @@
          do k = 1 , 25
             r = -r*(a+k-1.0d0)*(a-b+k)/(k*x)
             ra = dabs(r)
-            if ( k>5 .and. ra>=r0 .or. ra<1.0d-15 ) goto 50
+            if ( k>5 .and. ra>=r0 .or. ra<1.0d-15 ) exit
             r0 = ra
             Hu = Hu + r
          enddo
- 50      Id = abs(log10(ra))
+         Id = abs(log10(ra))
          Hu = x**(-a)*Hu
       endif
       end
@@ -9511,10 +9511,10 @@
       gw = 0.0d0
       do k = 1 , nm
          gf0 = gf0 + Bk(k)*x**(2.0*k-2.0)
-         if ( dabs((gf0-gw)/gf0)<eps .and. k>=10 ) goto 100
+         if ( dabs((gf0-gw)/gf0)<eps .and. k>=10 ) exit
          gw = gf0
       enddo
- 100  Gf = xm*gf0*x**(1-ip)
+      Gf = xm*gf0*x**(1-ip)
       gd1 = -m*x/(1.0d0+x*x)*Gf
       gd0 = 0.0d0
       do k = 1 , nm
@@ -9523,10 +9523,10 @@
          else
             gd0 = gd0 + 2.0d0*k*Bk(k+1)*x**(2.0*k-1.0)
          endif
-         if ( dabs((gd0-gw)/gd0)<eps .and. k>=10 ) goto 200
+         if ( dabs((gd0-gw)/gd0)<eps .and. k>=10 ) exit
          gw = gd0
       enddo
- 200  Gd = gd1 + xm*gd0
+      Gd = gd1 + xm*gd0
       end
 
 
@@ -9561,9 +9561,9 @@
          do k = 1 , 60
             r = -.25d0*r*(2*k-1.0d0)/(2*k+1.0d0)/(k*k)*x2
             Tj = Tj + r
-            if ( dabs(r)<dabs(Tj)*eps ) goto 50
+            if ( dabs(r)<dabs(Tj)*eps ) exit
          enddo
- 50      ty1 = (el+dlog(x/2.0d0))*Tj
+         ty1 = (el+dlog(x/2.0d0))*Tj
          rs = 0.0d0
          ty2 = 1.0d0
          r = 1.0d0
@@ -9572,9 +9572,9 @@
             rs = rs + 1.0d0/k
             r2 = r*(rs+1.0d0/(2.0d0*k+1.0d0))
             ty2 = ty2 + r2
-            if ( dabs(r2)<dabs(ty2)*eps ) goto 100
+            if ( dabs(r2)<dabs(ty2)*eps ) exit
          enddo
- 100     Ty = (ty1-x*ty2)*2.0d0/pi
+         Ty = (ty1-x*ty2)*2.0d0/pi
       else
          a0 = 1.0d0
          a1 = 5.0d0/8.0d0
@@ -9639,12 +9639,12 @@
       rf1 = Ry(1)
       do k = 2 , n
          rf2 = (2.0d0*k-1.0d0)*rf1/x - rf0
-         if ( dabs(rf2)>1.0d+300 ) goto 100
+         if ( dabs(rf2)>1.0d+300 ) exit
          Ry(k) = rf2
          rf0 = rf1
          rf1 = rf2
       enddo
- 100  Nm = k - 1
+      Nm = k - 1
       Dy(0) = dsin(x)
       do k = 1 , Nm
          Dy(k) = -k*Ry(k)/x + Ry(k-1)
@@ -9748,57 +9748,57 @@
          do m = 1 , 60
             r = -0.25d0*r/(m*m)/(2.0d0*m-1.0d0)**2*x4
             Ber = Ber + r
-            if ( dabs(r)<dabs(Ber)*eps ) goto 50
+            if ( dabs(r)<dabs(Ber)*eps ) exit
          enddo
- 50      Bei = x2
+         Bei = x2
          r = x2
          do m = 1 , 60
             r = -0.25d0*r/(m*m)/(2.0d0*m+1.0d0)**2*x4
             Bei = Bei + r
-            if ( dabs(r)<dabs(Bei)*eps ) goto 100
+            if ( dabs(r)<dabs(Bei)*eps ) exit
          enddo
- 100     Ger = -(dlog(x/2.0d0)+el)*Ber + 0.25d0*pi*Bei
+         Ger = -(dlog(x/2.0d0)+el)*Ber + 0.25d0*pi*Bei
          r = 1.0d0
          gs = 0.0d0
          do m = 1 , 60
             r = -0.25d0*r/(m*m)/(2.0d0*m-1.0d0)**2*x4
             gs = gs + 1.0d0/(2.0d0*m-1.0d0) + 1.0d0/(2.0d0*m)
             Ger = Ger + r*gs
-            if ( dabs(r*gs)<dabs(Ger)*eps ) goto 150
+            if ( dabs(r*gs)<dabs(Ger)*eps ) exit
          enddo
- 150     Gei = x2 - (dlog(x/2.0d0)+el)*Bei - 0.25d0*pi*Ber
+         Gei = x2 - (dlog(x/2.0d0)+el)*Bei - 0.25d0*pi*Ber
          r = x2
          gs = 1.0d0
          do m = 1 , 60
             r = -0.25d0*r/(m*m)/(2.0d0*m+1.0d0)**2*x4
             gs = gs + 1.0d0/(2.0d0*m) + 1.0d0/(2.0d0*m+1.0d0)
             Gei = Gei + r*gs
-            if ( dabs(r*gs)<dabs(Gei)*eps ) goto 200
+            if ( dabs(r*gs)<dabs(Gei)*eps ) exit
          enddo
- 200     Der = -0.25d0*x*x2
+         Der = -0.25d0*x*x2
          r = Der
          do m = 1 , 60
             r = -0.25d0*r/m/(m+1.0d0)/(2.0d0*m+1.0d0)**2*x4
             Der = Der + r
-            if ( dabs(r)<dabs(Der)*eps ) goto 250
+            if ( dabs(r)<dabs(Der)*eps ) exit
          enddo
- 250     Dei = 0.5d0*x
+         Dei = 0.5d0*x
          r = Dei
          do m = 1 , 60
             r = -0.25d0*r/(m*m)/(2.d0*m-1.d0)/(2.d0*m+1.d0)*x4
             Dei = Dei + r
-            if ( dabs(r)<dabs(Dei)*eps ) goto 300
+            if ( dabs(r)<dabs(Dei)*eps ) exit
          enddo
- 300     r = -0.25d0*x*x2
+         r = -0.25d0*x*x2
          gs = 1.5d0
          Her = 1.5d0*r - Ber/x - (dlog(x/2.d0)+el)*Der + 0.25*pi*Dei
          do m = 1 , 60
             r = -0.25d0*r/m/(m+1.0d0)/(2.0d0*m+1.0d0)**2*x4
             gs = gs + 1.0d0/(2*m+1.0d0) + 1.0d0/(2*m+2.0d0)
             Her = Her + r*gs
-            if ( dabs(r*gs)<dabs(Her)*eps ) goto 350
+            if ( dabs(r*gs)<dabs(Her)*eps ) exit
          enddo
- 350     r = 0.5d0*x
+         r = 0.5d0*x
          gs = 1.0d0
          Hei = 0.5d0*x - Bei/x - (dlog(x/2.d0)+el)*Dei - 0.25*pi*Der
          do m = 1 , 60
@@ -9929,10 +9929,10 @@
          hu1 = dabs(hm1)
          if ( hu1>hmax ) hmax = hu1
          if ( hu1<hmin ) hmin = hu1
-         if ( dabs(hm1-h0)<dabs(hm1)*1.0d-15 ) goto 100
+         if ( dabs(hm1-h0)<dabs(hm1)*1.0d-15 ) exit
          h0 = hm1
       enddo
- 100  da1 = log10(hmax)
+      da1 = log10(hmax)
       da2 = 0.0d0
       if ( hmin/=0.0 ) da2 = log10(hmin)
       Id = 15 - abs(da1-da2)
@@ -9970,10 +9970,10 @@
          hu2 = dabs(hm2)
          if ( hu2>hmax ) hmax = hu2
          if ( hu2<hmin ) hmin = hu2
-         if ( dabs((hm2-h0)/hm2)<1.0d-15 ) goto 200
+         if ( dabs((hm2-h0)/hm2)<1.0d-15 ) exit
          h0 = hm2
       enddo
- 200  db1 = log10(hmax)
+      db1 = log10(hmax)
       db2 = 0.0d0
       if ( hmin/=0.0 ) db2 = log10(hmin)
       id1 = 15 - abs(db1-db2)
@@ -10239,10 +10239,10 @@
          sw = 0.0d0
          do j = 1 , nm
             sum = sum + ck(j)
-            if ( dabs(sum-sw)<dabs(sum)*eps ) goto 50
+            if ( dabs(sum-sw)<dabs(sum)*eps ) exit
             sw = sum
          enddo
- 50      if ( ip==0 ) then
+         if ( ip==0 ) then
             r1f = sum/ck1
             R2f = -0.5d0*pi*qs*r1f
             R2d = qs*r1f + bk(1)
@@ -10283,9 +10283,9 @@
       dimension Bj(101) , Dj(101) , Fj(101)
       do nt = 1 , 900
          mt = int(0.5*log10(6.28*nt)-nt*log10(1.36*dabs(x)/nt))
-         if ( mt>20 ) goto 100
+         if ( mt>20 ) exit
       enddo
- 100  m = nt
+      m = nt
       bs = 0.0d0
       f = 0.0d0
       f0 = 0.0d0
@@ -10474,7 +10474,7 @@
       rt0(8) = 4.93181
       rt = rt0(Kd)
       do m = 1 , Nt
- 50      call klvna(rt,ber,bei,ger,gei,der,dei,her,hei)
+         call klvna(rt,ber,bei,ger,gei,der,dei,her,hei)
          if ( Kd==1 ) then
             rt = rt - ber/der
          elseif ( Kd==2 ) then
@@ -10498,7 +10498,7 @@
          endif
          if ( dabs(rt-rt0(Kd))>5.0d-10 ) then
             rt0(Kd) = rt
-            goto 50
+            cycle
          endif
          Zo(m) = rt
          rt = rt + 4.44d0
@@ -10827,9 +10827,9 @@
          do k = 1 , 30
             r = 0.25d0*r*x2/(k*(k+v0))
             bi0 = bi0 + r
-            if ( dabs(r/bi0)<1.0d-15 ) goto 50
+            if ( dabs(r/bi0)<1.0d-15 ) exit
          enddo
- 50      bi0 = bi0*a1
+         bi0 = bi0*a1
       else
          ca = exp(x)/dsqrt(2.0d0*pi*x)
          sum = 1.0d0
@@ -10883,10 +10883,10 @@
             r = 0.25d0*r/(k*k)*x2
             cs = cs + r*(w0+ct)
             wa = dabs(cs)
-            if ( dabs((wa-ww)/wa)<1.0d-15 ) goto 100
+            if ( dabs((wa-ww)/wa)<1.0d-15 ) exit
             ww = wa
          enddo
- 100     bk0 = ct + cs
+         bk0 = ct + cs
       else
          v0n = 1.0d0 - v0
          call gamma2(v0n,gan)
@@ -10900,10 +10900,10 @@
             r2 = 0.25d0*r2*x2/(k*(k+v0))
             sum = sum + a2*r1 - a1*r2
             wa = dabs(sum)
-            if ( dabs((wa-ww)/wa)<1.0d-15 ) goto 150
+            if ( dabs((wa-ww)/wa)<1.0d-15 ) exit
             ww = wa
          enddo
- 150     bk0 = 0.5d0*pi*sum/dsin(piv)
+         bk0 = 0.5d0*pi*sum/dsin(piv)
       endif
       bk1 = (1.0d0/x-Bi(1)*bk0)/Bi(0)
       Bk(0) = bk0
@@ -11020,10 +11020,10 @@
                enddo
                fs = f
             endif
-            goto 100
+            exit
          endif
       enddo
- 100  su1 = 0.0d0
+      su1 = 0.0d0
       r1 = 1.0d0
       do j = m + ip + 1 , 2*(m+ip)
          r1 = r1*j
@@ -11038,10 +11038,10 @@
       do k = kb + 1 , nm
          if ( k/=1 ) r1 = -r1*(k+m+ip-1.5d0)/(k-1.0d0)
          su2 = su2 + r1*Df(k)
-         if ( dabs(sw-su2)<dabs(su2)*1.0d-14 ) goto 200
+         if ( dabs(sw-su2)<dabs(su2)*1.0d-14 ) exit
          sw = su2
       enddo
- 200  r3 = 1.0d0
+      r3 = 1.0d0
       do j = 1 , (m+n+ip)/2
          r3 = r3*(j+0.5d0*(n+m+ip))
       enddo
@@ -11120,9 +11120,9 @@
             do k = 1 , 40
                r = -0.25d0*r*x2/(k*(k+vl))
                vjl = vjl + r
-               if ( dabs(r)<1.0d-15 ) goto 20
+               if ( dabs(r)<1.0d-15 ) exit
             enddo
- 20         a0 = (0.5d0*x)**vl
+            a0 = (0.5d0*x)**vl
             if ( l==1 ) Vj1 = a0/gp1*vjl
             if ( l==2 ) Vj2 = a0/gp2*vjl
          enddo
@@ -11167,9 +11167,9 @@
             do k = 1 , 40
                r = -0.25d0*r*x2/(k*(k-vl))
                vjl = vjl + r
-               if ( dabs(r)<1.0d-15 ) goto 40
+               if ( dabs(r)<1.0d-15 ) exit
             enddo
- 40         b0 = (2.0d0/x)**vl
+            b0 = (2.0d0/x)**vl
             if ( l==1 ) uj1 = b0*vjl/gn1
             if ( l==2 ) uj2 = b0*vjl/gn2
          enddo
@@ -11186,9 +11186,9 @@
             do k = 1 , 40
                r = 0.25d0*r*x2/(k*(k+vl))
                vil = vil + r
-               if ( dabs(r)<1.0d-15 ) goto 60
+               if ( dabs(r)<1.0d-15 ) exit
             enddo
- 60         a0 = (0.5d0*x)**vl
+            a0 = (0.5d0*x)**vl
             if ( l==1 ) Vi1 = a0/gp1*vil
             if ( l==2 ) Vi2 = a0/gp2*vil
          enddo
@@ -11218,9 +11218,9 @@
             do k = 1 , 60
                r = 0.25d0*r*x2/(k*(k-vl))
                sum = sum + r
-               if ( dabs(r)<1.0d-15 ) goto 80
+               if ( dabs(r)<1.0d-15 ) exit
             enddo
- 80         if ( l==1 ) Vk1 = 0.5d0*uu0*pi*(sum*a0-Vi1)
+            if ( l==1 ) Vk1 = 0.5d0*uu0*pi*(sum*a0-Vi1)
             if ( l==2 ) Vk2 = 0.5d0*uu0*pi*(sum*a0-Vi2)
          enddo
       else
@@ -11313,9 +11313,9 @@
          do k = 1 , 50
             cr = 0.25d0*cr*z2/(k*(k+v0))
             ci0 = ci0 + cr
-            if ( abs(cr/ci0)<1.0d-15 ) goto 50
+            if ( abs(cr/ci0)<1.0d-15 ) exit
          enddo
- 50      cbi0 = ci0*ca1
+         cbi0 = ci0*ca1
       else
          ca = exp(z1)/sqrt(2.0d0*pi*z1)
          cs = (1.0d0,0.0d0)
@@ -11363,9 +11363,9 @@
             cr = 0.25d0*cr/(k*k)*z2
             cp = cr*(w0+ct)
             cs = cs + cp
-            if ( k>=10 .and. abs(cp/cs)<1.0d-15 ) goto 100
+            if ( k>=10 .and. abs(cp/cs)<1.0d-15 ) exit
          enddo
- 100     cbk0 = ct + cs
+         cbk0 = ct + cs
       else
          v0n = 1.0d0 - v0
          call gamma2(v0n,gan)
@@ -11379,9 +11379,9 @@
             cr2 = 0.25d0*cr2*z2/(k*(k+v0))
             cp = ca2*cr1 - ca1*cr2
             csu = csu + cp
-            if ( k>=10 .and. abs(cp/csu)<1.0d-15 ) goto 150
+            if ( k>=10 .and. abs(cp/csu)<1.0d-15 ) exit
          enddo
- 150     cbk0 = 0.5d0*pi*csu/dsin(piv)
+         cbk0 = 0.5d0*pi*csu/dsin(piv)
       endif
       Cbk(0) = cbk0
       if ( dble(z)<0.0 ) then
@@ -11483,9 +11483,9 @@
          do k = 1 , 50
             cr = 0.25d0*cr*z2/(k*(k+v0))
             ci0 = ci0 + cr
-            if ( abs(cr)<abs(ci0)*1.0d-15 ) goto 50
+            if ( abs(cr)<abs(ci0)*1.0d-15 ) exit
          enddo
- 50      cbi0 = ci0*ca1
+         cbi0 = ci0*ca1
       else
          ca = exp(z1)/sqrt(2.0d0*pi*z1)
          cs = (1.0d0,0.0d0)
@@ -11533,9 +11533,9 @@
             cr = 0.25d0*cr/(k*k)*z2
             cp = cr*(w0+ct)
             cs = cs + cp
-            if ( k>=10 .and. abs(cp/cs)<1.0d-15 ) goto 100
+            if ( k>=10 .and. abs(cp/cs)<1.0d-15 ) exit
          enddo
- 100     cbk0 = ct + cs
+         cbk0 = ct + cs
       else
          v0n = 1.0d0 - v0
          call gamma2(v0n,gan)
@@ -11550,10 +11550,10 @@
             cr2 = 0.25d0*cr2*z2/(k*(k+v0))
             csu = csu + ca2*cr1 - ca1*cr2
             ws = abs(csu)
-            if ( k>=10 .and. dabs(ws-ws0)/ws<1.0d-15 ) goto 150
+            if ( k>=10 .and. dabs(ws-ws0)/ws<1.0d-15 ) exit
             ws0 = ws
          enddo
- 150     cbk0 = 0.5d0*pi*csu/dsin(piv)
+         cbk0 = 0.5d0*pi*csu/dsin(piv)
       endif
       cbk1 = (1.0d0/z1-Cbi(1)*cbk0)/Cbi(0)
       Cbk(0) = cbk0
@@ -11703,9 +11703,9 @@
             r = -.5d0*r*(4.0d0*k-3.0d0)/k/(2.0d0*k-1.0d0)               &
               & /(4.0d0*k+1.0d0)*t2
             c = c + r
-            if ( dabs(r)<dabs(c)*eps ) goto 50
+            if ( dabs(r)<dabs(c)*eps ) exit
          enddo
- 50      s = xa*t/3.0d0
+         s = xa*t/3.0d0
          r = s
          do k = 1 , 50
             r = -.5d0*r*(4.0d0*k-1.0d0)/k/(2.0d0*k+1.0d0)               &
@@ -12017,11 +12017,11 @@
                      r = -r*x/j
                   enddo
                   s = s + r/(m-l+1.0d0)
-                  if ( dabs(s-s0)<dabs(s)*1.0d-15 ) goto 20
+                  if ( dabs(s-s0)<dabs(s)*1.0d-15 ) exit
                   s0 = s
                endif
             enddo
- 20         En(l) = ens - s
+            En(l) = ens - s
          enddo
       else
          En(0) = exp(-x)/x
@@ -12071,11 +12071,11 @@
       do k = 2 , n
          f = (2.0d0*k-1.0d0)*f1/x + f0
          Sk(k) = f
-         if ( dabs(f)>1.0d+300 ) goto 100
+         if ( dabs(f)>1.0d+300 ) exit
          f0 = f1
          f1 = f
       enddo
- 100  Nm = k - 1
+      Nm = k - 1
       Dk(0) = -Sk(1)
       do k = 1 , Nm
          Dk(k) = -Sk(k-1) - (k+1.0d0)/x*Sk(k)
@@ -12449,10 +12449,10 @@
             do k1 = k , icm
                if ( b(k1)<b(k) ) then
                   b(k) = b(k1)
-                  goto 20
+                  exit
                endif
             enddo
- 20         if ( k/=1 ) then
+            if ( k/=1 ) then
                if ( h(k)<h(k-1) ) h(k) = h(k-1)
             endif
  40         x1 = (b(k)+h(k))/2.0d0
@@ -12770,10 +12770,10 @@
                F1r = F1r + (-1)**(ic+k)*fg(k)                           &
                    & *(bj1(k-1)*bj2(k+1)-bj1(k+1)*bj2(k-1))
             endif
-            if ( k>=5 .and. dabs(F1r-w1)<dabs(F1r)*eps ) goto 50
+            if ( k>=5 .and. dabs(F1r-w1)<dabs(F1r)*eps ) exit
             w1 = F1r
          enddo
- 50      F1r = F1r/fg(1)
+         F1r = F1r/fg(1)
          D1r = 0.0d0
          do k = 1 , km
             if ( kd==1 ) then
@@ -12788,10 +12788,10 @@
                    & *(c2*(bj1(k-1)*dj2(k+1)-bj1(k+1)*dj2(k-1))         &
                    & -c1*(dj1(k-1)*bj2(k+1)-dj1(k+1)*bj2(k-1)))
             endif
-            if ( k>=5 .and. dabs(D1r-w2)<dabs(D1r)*eps ) goto 100
+            if ( k>=5 .and. dabs(D1r-w2)<dabs(D1r)*eps ) exit
             w2 = D1r
          enddo
- 100     D1r = D1r*dsqrt(q)/fg(1)
+         D1r = D1r*dsqrt(q)/fg(1)
          if ( Kc==1 ) return
       endif
       F2r = 0.0d0
@@ -12805,10 +12805,10 @@
             F2r = F2r + (-1)**(ic+k)*fg(k)                              &
                 & *(bj1(k-1)*by2(k+1)-bj1(k+1)*by2(k-1))
          endif
-         if ( k>=5 .and. dabs(F2r-w1)<dabs(F2r)*eps ) goto 200
+         if ( k>=5 .and. dabs(F2r-w1)<dabs(F2r)*eps ) exit
          w1 = F2r
       enddo
- 200  F2r = F2r/fg(1)
+      F2r = F2r/fg(1)
       D2r = 0.0d0
       do k = 1 , km
          if ( kd==1 ) then
@@ -12823,10 +12823,10 @@
                 & *(c2*(bj1(k-1)*dy2(k+1)-bj1(k+1)*dy2(k-1))            &
                 & -c1*(dj1(k-1)*by2(k+1)-dj1(k+1)*by2(k-1)))
          endif
-         if ( k>=5 .and. dabs(D2r-w2)<dabs(D2r)*eps ) goto 300
+         if ( k>=5 .and. dabs(D2r-w2)<dabs(D2r)*eps ) exit
          w2 = D2r
       enddo
- 300  D2r = D2r*dsqrt(q)/fg(1)
+      D2r = D2r*dsqrt(q)/fg(1)
       end
 
 
@@ -12880,16 +12880,16 @@
          do k = 1 , 50
             cr = 0.25d0*cr*z2/(k*k)
             Cbi0 = Cbi0 + cr
-            if ( abs(cr/Cbi0)<1.0d-15 ) goto 50
+            if ( abs(cr/Cbi0)<1.0d-15 ) exit
          enddo
- 50      Cbi1 = (1.0d0,0.0d0)
+         Cbi1 = (1.0d0,0.0d0)
          cr = (1.0d0,0.0d0)
          do k = 1 , 50
             cr = 0.25d0*cr*z2/(k*(k+1))
             Cbi1 = Cbi1 + cr
-            if ( abs(cr/Cbi1)<1.0d-15 ) goto 100
+            if ( abs(cr/Cbi1)<1.0d-15 ) exit
          enddo
- 100     Cbi1 = 0.5d0*z1*Cbi1
+         Cbi1 = 0.5d0*z1*Cbi1
       else
          data a/0.125d0 , 7.03125d-2 , 7.32421875d-2 ,                  &
             & 1.1215209960938d-1 , 2.2710800170898d-1 ,                 &
@@ -12928,10 +12928,10 @@
             w0 = w0 + 1.0d0/k
             cr = 0.25d0*cr/(k*k)*z2
             cs = cs + cr*(w0+ct)
-            if ( abs((cs-cw)/cs)<1.0d-15 ) goto 150
+            if ( abs((cs-cw)/cs)<1.0d-15 ) exit
             cw = cs
          enddo
- 150     Cbk0 = ct + cs
+         Cbk0 = ct + cs
       else
          data a1/0.125d0 , 0.2109375d0 , 1.0986328125d0 ,               &
             & 1.1775970458984d01 , 2.1461706161499d02 ,                 &
@@ -13067,11 +13067,11 @@
       do k = 2 , n
          f = (2.0d0*k-1.0d0)*f1/x - f0
          Sy(k) = f
-         if ( dabs(f)>=1.0d+300 ) goto 100
+         if ( dabs(f)>=1.0d+300 ) exit
          f0 = f1
          f1 = f
       enddo
- 100  Nm = k - 1
+      Nm = k - 1
       do k = 1 , Nm
          Dy(k) = Sy(k-1) - (k+1.0d0)*Sy(k)/x
       enddo
@@ -13105,11 +13105,11 @@
          b = dsqrt(a0*b0)
          c = (a0-b0)/2.0d0
          r(n) = c/a
-         if ( c<1.0d-7 ) goto 100
+         if ( c<1.0d-7 ) exit
          a0 = a
          b0 = b
       enddo
- 100  dn = 2.0d0**n*a*u
+      dn = 2.0d0**n*a*u
       d = 0.0d0
       do j = n , 1 , -1
          t = r(j)*dsin(dn)
