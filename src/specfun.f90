@@ -1,26 +1,26 @@
-!       COMPUTATION OF SPECIAL FUNCTIONS
+!  COMPUTATION OF SPECIAL FUNCTIONS
 !
-!          Shanjie Zhang and Jianming Jin
+!     Shanjie Zhang and Jianming Jin
 !
-!       Copyrighted but permission granted to use code in programs.
-!       Buy their book "Computation of Special Functions", 1996, John Wiley & Sons, Inc.
+!  Copyrighted but permission granted to use code in programs.
+!  Buy their book "Computation of Special Functions", 1996, John Wiley & Sons, Inc.
 !
-!       Scipy changes:
-!       - Compiled into a single source file and changed REAL To DBLE throughout.
-!       - Changed according to ERRATA.
-!       - Changed GAMMA to GAMMA2 and PSI to PSI_SPEC to avoid potential conflicts.
-!       - Made functions return sf_error codes in ISFER variables instead
-!         of printing warnings. The codes are
-!         - SF_ERROR_OK        = 0: no error
-!         - SF_ERROR_SINGULAR  = 1: singularity encountered
-!         - SF_ERROR_UNDERFLOW = 2: floating point underflow
-!         - SF_ERROR_OVERFLOW  = 3: floating point overflow
-!         - SF_ERROR_SLOW      = 4: too many iterations required
-!         - SF_ERROR_LOSS      = 5: loss of precision
-!         - SF_ERROR_NO_RESULT = 6: no result obtained
-!         - SF_ERROR_DOMAIN    = 7: out of domain
-!         - SF_ERROR_ARG       = 8: invalid input parameter
-!         - SF_ERROR_OTHER     = 9: unclassified error
+!  Scipy changes:
+!  - Compiled into a single source file and changed REAL To DBLE throughout.
+!  - Changed according to ERRATA.
+!  - Changed GAMMA to GAMMA2 and PSI to PSI_SPEC to avoid potential conflicts.
+!  - Made functions return sf_error codes in ISFER variables instead
+!    of printing warnings. The codes are
+!    - SF_ERROR_OK        = 0: no error
+!    - SF_ERROR_SINGULAR  = 1: singularity encountered
+!    - SF_ERROR_UNDERFLOW = 2: floating point underflow
+!    - SF_ERROR_OVERFLOW  = 3: floating point overflow
+!    - SF_ERROR_SLOW      = 4: too many iterations required
+!    - SF_ERROR_LOSS      = 5: loss of precision
+!    - SF_ERROR_NO_RESULT = 6: no result obtained
+!    - SF_ERROR_DOMAIN    = 7: out of domain
+!    - SF_ERROR_ARG       = 8: invalid input parameter
+!    - SF_ERROR_OTHER     = 9: unclassified error
 
     module specfun_module
 
@@ -30,61 +30,59 @@
 
       contains
 
+      ! JW: should probably remove these two...
       function dnan()
       implicit none
       real(wp) dnan
-      dnan = 0.0d0
-      dnan = 0.0d0/dnan
-      end
+      dnan = 0.0_wp
+      dnan = 0.0_wp/dnan
+      end function dnan
 
       function dinf()
       implicit none
       real(wp) dinf
-      dinf = 1.0d300
+      dinf = 1.0e300_wp
       dinf = dinf*dinf
-      end
+      end function dinf
 
       subroutine cpdsa(n,z,Cdn)
-!
-!       ===========================================================
-!       Purpose: Compute complex parabolic cylinder function Dn(z)
-!                for small argument
-!       Input:   z   --- complex argument of D(z)
-!                n   --- Order of D(z) (n = 0,-1,-2,...)
-!       Output:  CDN --- Dn(z)
-!       Routine called: GAIH for computing Г(x), x=n/2 (n=1,2,...)
-!       ===========================================================
-!
-      implicit none
-      complex(wp) ca0 , cb0 , Cdn , cdw , cr , z
-      real(wp) eps , g0 , g1 , ga0 , gm , pd , pi , sq2 , va0 , &
-                     & vm , vt , xn
-      integer m , n
-      eps = 1.0d-15
-      pi = 3.141592653589793d0
-      sq2 = sqrt(2.0d0)
-      ca0 = exp(-.25d0*z*z)
-      va0 = 0.5d0*(1.0d0-n)
-      if ( n==0.0 ) then
+
+      !! Compute complex parabolic cylinder function `Dn(z)` for small argument
+
+      integer,intent(in) :: n !! Order of D(z) (n = 0,-1,-2,...)
+      complex(wp),intent(in) :: z !! complex argument of D(z)
+      complex(wp),intent(out) :: Cdn !! Dn(z)
+
+      complex(wp) :: ca0 , cb0 , cdw , cr
+      real(wp) :: g0 , g1 , ga0 , gm , pd , va0 , vm , vt , xn
+      integer :: m
+
+      real(wp),parameter :: pi = acos(-1.0_wp)
+      real(wp),parameter :: eps = 1.0e-15_wp
+      real(wp),parameter :: sq2 = sqrt(2.0_wp)
+
+      ca0 = exp(-.25_wp*z*z)
+      va0 = 0.5_wp*(1.0_wp-n)
+      if ( n==0 ) then
          Cdn = ca0
-      elseif ( abs(z)==0.0 ) then
-         if ( va0<=0.0 .and. va0==int(va0) ) then
-            Cdn = 0.0d0
+      elseif ( abs(z)==0.0_wp ) then
+         if ( va0<=0.0_wp .and. va0==int(va0) ) then
+            Cdn = 0.0_wp
          else
             call gaih(va0,ga0)
-            pd = sqrt(pi)/(2.0d0**(-.5d0*n)*ga0)
-            Cdn = dcmplx(pd,0.0d0)
+            pd = sqrt(pi)/(2.0_wp**(-0.5_wp*n)*ga0)
+            Cdn = cmplx(pd,0.0_wp,wp)
          endif
       else
          xn = -n
          call gaih(xn,g1)
-         cb0 = 2.0d0**(-0.5d0*n-1.0d0)*ca0/g1
-         vt = -.5d0*n
+         cb0 = 2.0_wp**(-0.5_wp*n-1.0_wp)*ca0/g1
+         vt = -0.5_wp*n
          call gaih(vt,g0)
-         Cdn = dcmplx(g0,0.0d0)
-         cr = (1.0d0,0.0d0)
+         Cdn = cmplx(g0,0.0_wp,wp)
+         cr = (1.0_wp,0.0_wp)
          do m = 1 , 250
-            vm = .5d0*(m-n)
+            vm = 0.5_wp*(m-n)
             call gaih(vm,gm)
             cr = -cr*sq2*z/m
             cdw = gm*cr
@@ -93,13 +91,9 @@
          enddo
          Cdn = cb0*Cdn
       endif
-      end
+   end subroutine cpdsa
 
-
-
-!       **********************************
-
-      subroutine cfs(z,Zf,Zd)
+   subroutine cfs(z,Zf,Zd)
 !
 !       =========================================================
 !       Purpose: Compute complex Fresnel Integral S(z) and S'(z)
