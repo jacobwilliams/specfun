@@ -14,7 +14,7 @@ display: public
          private
 source: true
 graph: true
-search: false
+search: true
 preprocessor: gfortran -E
 extra_mods: iso_fortran_env:https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html
 

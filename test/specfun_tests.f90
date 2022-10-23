@@ -126,6 +126,6 @@
                 end if
             end do
 
-            end subroutine check_real_matrix
+        end subroutine check_real_matrix
 
     end program specfun_tests
