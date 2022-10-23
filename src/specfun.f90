@@ -24,20 +24,22 @@
 
     module specfun_module
 
+      use iso_fortran_env, only: wp => real64
+
       implicit none
 
       contains
 
       function dnan()
       implicit none
-      double precision dnan
+      real(wp) dnan
       dnan = 0.0d0
       dnan = 0.0d0/dnan
       end
 
       function dinf()
       implicit none
-      double precision dinf
+      real(wp) dinf
       dinf = 1.0d300
       dinf = dinf*dinf
       end
@@ -54,8 +56,8 @@
 !       ===========================================================
 !
       implicit none
-      complex*16 ca0 , cb0 , Cdn , cdw , cr , z
-      double precision eps , g0 , g1 , ga0 , gm , pd , pi , sq2 , va0 , &
+      complex(wp) ca0 , cb0 , Cdn , cdw , cr , z
+      real(wp) eps , g0 , g1 , ga0 , gm , pd , pi , sq2 , va0 , &
                      & vm , vt , xn
       integer m , n
       eps = 1.0d-15
@@ -107,9 +109,9 @@
 !       =========================================================
 !
       implicit none
-      complex*16 cf , cf0 , cf1 , cg , cr , d , s , z , z0 , Zd , Zf ,  &
+      complex(wp) cf , cf0 , cf1 , cg , cr , d , s , z , z0 , Zd , Zf ,  &
                & zp , zp2
-      double precision eps , pi , w0 , wb , wb0
+      real(wp) eps , pi , w0 , wb , wb0
       integer k , m
       eps = 1.0d-14
       pi = 3.141592653589793d0
@@ -199,7 +201,7 @@
 !
       implicit none
       integer i , j , k , km , ls , m , Mm , n
-      double precision q0 , q1 , q10 , Qd , qf , qf0 , qf1 , qf2 , Qm , &
+      real(wp) q0 , q1 , q10 , Qd , qf , qf0 , qf1 , qf2 , Qm , &
                      & x , xq , xs
       dimension Qm(0:Mm,0:n) , Qd(0:Mm,0:n)
       if ( abs(x)==1.0d0 ) then
@@ -304,8 +306,8 @@
 !       =========================================================
 !
       implicit none
-      complex*16 Cpd , Cpm , z , zq , zs
-      double precision  x , y
+      complex(wp) Cpd , Cpm , z , zq , zs
+      real(wp)  x , y
       integer i , j , ls , m , Mm , n , Ntype
       dimension Cpm(0:Mm,0:n) , Cpd(0:Mm,0:n)
       z = dcmplx(x,y)
@@ -389,10 +391,10 @@
 !       ===================================================
 !
       implicit none
-      double precision a0 , ep , eps , fac , g1 , ga0 , gm , gw , pi ,  &
+      real(wp) a0 , ep , eps , fac , g1 , ga0 , gm , gw , pi ,  &
                      & Pv , r , r1 , sq2 , sv , sv0 , v1 , Va , va0 ,   &
                      & vb0 , vm
-      double precision x
+      real(wp) x
       integer m
       eps = 1.0d-15
       pi = 3.141592653589793d0
@@ -457,7 +459,7 @@
 !       =============================================================
 !
       implicit none
-      double precision bj , dj , fj , x , x0 , x1 , x2 , xm , Zo , zoc
+      real(wp) bj , dj , fj , x , x0 , x1 , x2 , xm , Zo , zoc
       integer i , j , k , l , l0 , l1 , l2 , m , m1 , mm , n , n1 , nm ,&
             & Nt
       integer p(1400) , p1(70)
@@ -564,7 +566,7 @@
 !       =====================================================
 !
       implicit none
-      double precision Bk , c , Ck , Cv , eps , Qt , r1 , s1 , sw , t , &
+      real(wp) Bk , c , Ck , Cv , eps , Qt , r1 , s1 , sw , t , &
                      & u , v , w
       integer i , i1 , ip , j , k , m , n , n2 , nm
       dimension Bk(200) , Ck(200) , u(200) , v(200) , w(200)
@@ -652,10 +654,10 @@
 !       ======================================================
 !
       implicit none
-      double precision c , ck1 , ck2 , Cv , Df , dn , eps , ga , gb ,   &
+      real(wp) c , ck1 , ck2 , Cv , Df , dn , eps , ga , gb ,   &
                      & gc , pd , pm , qd , qm , r1 , r2 , R2d , R2f ,   &
                      & r3 , r4
-      double precision sd , sd0 , sd1 , sd2 , sdm , sf , spd1 , spd2 ,  &
+      real(wp) sd , sd0 , sd1 , sd2 , sdm , sf , spd1 , spd2 ,  &
                      & spl , su0 , su1 , su2 , sum , sw , x
       integer ip , j , j1 , j2 , k , Kd , ki , l1 , m , n , nm , nm1 ,  &
             & nm2 , nm3
@@ -768,7 +770,7 @@
 !       ======================================
 !
       implicit none
-      double precision Bn , r1 , r2 , s , tpi
+      real(wp) Bn , r1 , r2 , s , tpi
       integer k , m , n
       dimension Bn(0:n)
       tpi = 6.283185307179586d0
@@ -799,7 +801,7 @@
 !       ======================================
 !
       implicit none
-      double precision Bn , r , s
+      real(wp) Bn , r , s
       integer j , k , m , n
       dimension Bn(0:n)
       Bn(0) = 1.0d0
@@ -830,7 +832,7 @@
 !       =========================================================
 !
       implicit none
-      double precision ap , c , Ck , Ck1 , Qs , qs0 , Qt , r , s , sk
+      real(wp) ap , c , Ck , Ck1 , Qs , qs0 , Qt , r , s , sk
       integer i , ip , k , l , m , n
       dimension ap(200) , Ck(200)
       ip = 1
@@ -881,7 +883,7 @@
 !       ====================================================
 !
       implicit none
-      double precision a0 , q , q2
+      real(wp) a0 , q , q2
       integer Kd , m
       q2 = q*q
       if ( m==0 ) then
@@ -1030,7 +1032,7 @@
 !       =====================================================
 !
       implicit none
-      double precision a0 , hm1 , hm3 , hm5 , q
+      real(wp) a0 , hm1 , hm3 , hm5 , q
       integer m
       hm1 = .5*q/(m*m-1.0)
       hm3 = .25*hm1**3/(m*m-4.0)
@@ -1051,7 +1053,7 @@
 !       ========================================================
 !
       implicit none
-      double precision a0 , c1 , cv1 , cv2 , d1 , d2 , d3 , d4 , p1 ,   &
+      real(wp) a0 , c1 , cv1 , cv2 , d1 , d2 , d3 , d4 , p1 ,   &
                      & p2 , q , w , w2 , w3 , w4 , w6
       integer Kd , m
       w = 0.0d0
@@ -1088,7 +1090,7 @@
 !       ===================================================
 !
       implicit none
-      double precision a0 , f , f0 , f1 , x
+      real(wp) a0 , f , f0 , f1 , x
       integer it , Mp , n0 , n1 , nn
       a0 = abs(x)
       n0 = int(1.1d0*a0) + 1
@@ -1121,7 +1123,7 @@
 !       ===================================================
 !
       implicit none
-      double precision a0 , ejn , f , f0 , f1 , hmp , obj , x
+      real(wp) a0 , ejn , f , f0 , f1 , hmp , obj , x
       integer it , Mp , n , n0 , n1 , nn
       a0 = abs(x)
       hmp = 0.5d0*Mp
@@ -1148,10 +1150,10 @@
       msta2 = nn + 10
       end
 
-      real*8 function envj(n,x)
+      real(wp) function envj(n,x)
       implicit none
       integer n
-      double precision x
+      real(wp) x
       envj = 0.5d0*log10(6.28d0*n) - n*log10(1.36d0*x/n)
       end
 
@@ -1168,7 +1170,7 @@
 !       ==========================================================
 !
       implicit none
-      double precision e0 , el , f0 , g0 , pi , t , t1 , Ttj , Tty , x ,&
+      real(wp) e0 , el , f0 , g0 , pi , t , t1 , Ttj , Tty , x ,&
                      & x1 , xt
       pi = 3.141592653589793d0
       el = .5772156649015329d0
@@ -1223,10 +1225,10 @@
 !       =========================================================
 !
       implicit none
-      double precision a0 , b1 , bj0 , bj1 , by0 , by1 , e0 , el , g0 , &
+      real(wp) a0 , b1 , bj0 , bj1 , by0 , by1 , e0 , el , g0 , &
                      & g1 , pi , px , qx , r , r0 , r1 , r2 , rs , t ,  &
                      & Ttj
-      double precision Tty , vt , x , xk
+      real(wp) Tty , vt , x , xk
       integer k , l
       pi = 3.141592653589793d0
       el = .5772156649015329d0
@@ -1324,8 +1326,8 @@
 !       ===================================================
 !
       implicit none
-      double precision a , pi , v , v0 , vr
-      complex*16 Cbjv , Cbyv , Cdjv , Cdyv , ceta , cf , cfj , cfy ,    &
+      real(wp) a , pi , v , v0 , vr
+      complex(wp) Cbjv , Cbyv , Cdjv , Cdyv , ceta , cf , cfj , cfy ,    &
                & csj , csy , ct , ct2 , cws , z
       integer i , k , km , l , l0 , lf
       dimension cf(12) , a(91)
@@ -1381,7 +1383,7 @@
 !       ========================================================
 !
       implicit none
-      double precision a0 , b0 , c , cx , Df , dy , eps , eps1 , eps2 , &
+      real(wp) a0 , b0 , c , cx , Df , dy , eps , eps1 , eps2 , &
                      & r , r0 , R2d , R2f , reg , suc , sud , sw , sy , &
                      & x
       integer Id , id1 , id2 , ip , j , k , Kd , l , lg , m , n , nm ,  &
@@ -1471,7 +1473,7 @@
 !       ======================================
 !
       implicit none
-      double precision a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , el , pi ,&
+      real(wp) a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , el , pi ,&
                      & Ps , s , x , x2 , xa
       integer k , n
       xa = abs(x)
@@ -1545,7 +1547,7 @@
 !       ======================================================
 !
       implicit none
-      double precision a , a1 , a2 , delta , q , q1 , q2 , qq
+      real(wp) a , a1 , a2 , delta , q , q1 , q2 , qq
       integer i , iflag , Kd , m , ndiv , nn
       if ( m<=12 .or. q<=3.0*m .or. q>m*m ) then
          call cv0(Kd,m,q,a)
@@ -1624,7 +1626,7 @@
 !
       implicit none
       integer k , m , n
-      double precision Pd , Pm , pm0 , pm1 , pm2 , pmk , x , x0
+      real(wp) Pd , Pm , pm0 , pm1 , pm2 , pmk , x , x0
       dimension Pm(0:n) , Pd(0:n)
       do k = 0 , n
          Pm(k) = 0.0d0
@@ -1687,11 +1689,11 @@
 !                CDER --- erf'(z)
 !       ==========================================================
       implicit none
-      double precision c0 , cs , ei1 , ei2 , eps , er , er0 , er1 ,     &
+      real(wp) c0 , cs , ei1 , ei2 , eps , er , er0 , er1 ,     &
                      & er2 , eri , err , pi , r , ss , w , w1 , w2 , x ,&
                      & x2 , y
       integer k , n
-      complex*16 z , Cer , Cder
+      complex(wp) z , Cer , Cder
       eps = 1.0d-12
       pi = 3.141592653589793d0
       x = dble(z)
@@ -1784,7 +1786,7 @@
 !       ==============================================================
 !
       implicit none
-      double precision c , Cv , df , R1d , R1f , R2d , R2f , x
+      real(wp) c , Cv , df , R1d , R1f , R2d , R2f , x
       integer id , kd , Kf , m , n
       dimension df(200)
       kd = 1
@@ -1818,7 +1820,7 @@
 !       ===========================================================
 !
       implicit none
-      double precision bj , Bjn , by , Byn , Djn , Dyn , Fjn , Fyn , x
+      real(wp) bj , Bjn , by , Byn , Djn , Dyn , Fjn , Fyn , x
       integer n , nm
       dimension bj(2) , by(2)
       call jynbh(n+1,n,x,nm,bj,by)
@@ -1843,7 +1845,7 @@
 !       ================================================
 !
       implicit none
-      double precision g , Ga , gr , x
+      real(wp) g , Ga , gr , x
       integer k
       dimension g(25)
       data g/1.0d0 , 0.5772156649015329d0 , -0.6558780715202538d0 ,     &
@@ -1876,7 +1878,7 @@
 !       =============================================
 !
       implicit none
-      double precision Ci , fx , gx , Si , x , x2
+      real(wp) Ci , fx , gx , Si , x , x2
       x2 = x*x
       if ( x==0.0 ) then
          Ci = -1.0d+300
@@ -1911,7 +1913,7 @@
 !       ======================================
 !
       implicit none
-      double precision En , r , s
+      real(wp) En , r , s
       integer j , k , m , n
       dimension En(0:n)
       En(0) = 1.0d0
@@ -1944,7 +1946,7 @@
 !       ========================================================
 !
       implicit none
-      double precision a , ca , delta , eps , f , f0 , f1 , q , x , x0 ,&
+      real(wp) a , ca , delta , eps , f , f0 , f1 , q , x , x0 ,&
                      & x1
       integer it , Kd , m , mj
       eps = 1.0d-14
@@ -1983,7 +1985,7 @@
 !       =============================================
 !
       implicit none
-      double precision bj , Ci , el , eps , p2 , Si , x , x2 , xa ,     &
+      real(wp) bj , Ci , el , eps , p2 , Si , x , x2 , xa ,     &
                      & xa0 , xa1 , xcs , xf , xg , xg1 , xg2 , xr , xs ,&
                      & xss
       integer k , m
@@ -2075,7 +2077,7 @@
 !       ===========================================================
 !
       implicit none
-      double precision a , a0 , a1 , af , el , pi , r , rd , s , s0 ,   &
+      real(wp) a , a0 , a1 , af , el , pi , r , rd , s , s0 ,   &
                      & ti , Tl0 , x
       integer k
       dimension a(18)
@@ -2136,9 +2138,9 @@
 !       ==================================================
 !
       implicit none
-      complex*16 cq0 , cq1 , Cqd , cqf0 , cqf1 , cqf2 , Cqn , z
+      complex(wp) cq0 , cq1 , Cqd , cqf0 , cqf1 , cqf2 , Cqn , z
       integer k , km , ls , n
-      double precision x , y
+      real(wp) x , y
       dimension Cqn(0:n) , Cqd(0:n)
       z = dcmplx(x,y)
       if ( z==1.0d0 ) then
@@ -2214,7 +2216,7 @@
 !       =======================================================
 !
       implicit none
-      double precision ad , ai , bd , bi , err , pi , rt , rt0 , u ,    &
+      real(wp) ad , ai , bd , bi , err , pi , rt , rt0 , u ,    &
                      & u1 , x , Xa , Xb , Xc , Xd
       integer i , Kf , Nt
       dimension Xa(Nt) , Xb(Nt) , Xc(Nt) , Xd(Nt)
@@ -2305,7 +2307,7 @@
 !       =========================================
 !
       implicit none
-      double precision c0 , eps , er , Err , pi , r , x , x2
+      real(wp) c0 , eps , er , Err , pi , r , x , x2
       integer k
       eps = 1.0d-15
       pi = 3.141592653589793d0
@@ -2345,9 +2347,9 @@
 !       ====================================================
 !
       implicit none
-      complex*16 c0 , Cer , cl , cr , cs , z , z1
+      complex(wp) c0 , Cer , cl , cr , cs , z , z1
       integer k
-      double precision a0 , pi
+      real(wp) a0 , pi
       a0 = abs(z)
       c0 = exp(-z*z)
       pi = 3.141592653589793d0
@@ -2407,7 +2409,7 @@
 !       ======================================
 !
       implicit none
-      double precision En , hpi , r1 , r2 , s
+      real(wp) En , hpi , r1 , r2 , s
       integer isgn , k , m , n
       dimension En(0:n)
       hpi = 2.0d0/3.141592653589793d0
@@ -2454,7 +2456,7 @@
 !       ============================================================
 !
       implicit none
-      double precision Cv , d , e , eps , f , g , h , q , s , t , t1 ,  &
+      real(wp) Cv , d , e , eps , f , g , h , q , s , t , t1 ,  &
                      & x1 , xa , xb
       integer i , ic , icm , j , k , k1 , Kd , m , nm , nm1
       dimension g(200) , h(200) , d(500) , e(500) , f(500) , Cv(200)
@@ -2566,7 +2568,7 @@
 !       =========================================================
 !
       implicit none
-      double precision e0 , el , pi , t , t1 , Tti , Ttk , x , x1
+      real(wp) e0 , el , pi , t , t1 , Tti , Ttk , x , x1
       pi = 3.141592653589793d0
       el = .5772156649015329d0
       if ( x==0.0d0 ) then
@@ -2620,7 +2622,7 @@
 !       ====================================================
 !
       implicit none
-      double precision eps , q0 , q1 , qc1 , qc2 , Qd , qf , qf0 , qf1 ,&
+      real(wp) eps , q0 , q1 , qc1 , qc2 , Qd , qf , qf0 , qf1 ,&
                      & qf2 , Qn , qr , x , x2
       integer j , k , l , n , nl
       dimension Qn(0:n) , Qd(0:n)
@@ -2699,7 +2701,7 @@
 !       ========================================================
 !
       implicit none
-      double precision a , f , f0 , g , g0
+      real(wp) a , f , f0 , g , g0
       integer j , k , Km , l1 , l2 , l3 , l4
       dimension a(*)
       a(1) = 1.0d0
@@ -2739,7 +2741,7 @@
 !       =========================================================
 !
       implicit none
-      double precision b1 , c , e0 , el , pi , r , r2 , rc , rs , Tti , &
+      real(wp) b1 , c , e0 , el , pi , r , r2 , rc , rs , Tti , &
                      & Ttk , x
       integer k
       dimension c(8)
@@ -2817,10 +2819,10 @@
 !       =========================================================
 !
       implicit none
-      double precision a0 , bjv0 , bjv1 , bk , ck , cs , Dl , f , f0 ,  &
+      real(wp) a0 , bjv0 , bjv1 , bk , ck , cs , Dl , f , f0 ,  &
                      & f1 , f2 , fac , ga , pi , px , qx , r , r0 , rc ,&
                      & rp
-      double precision rp2 , rq , sk , uk , v , v0 , vk , Vl , Vm , vv ,&
+      real(wp) rp2 , rq , sk , uk , v , v0 , vk , Vl , Vm , vv ,&
                      & x , x2 , xk
       integer i , j , k , k0 , m , n
       dimension Vl(0:*) , Dl(0:*)
@@ -2965,9 +2967,9 @@
 !       ======================================================
 !
       implicit none
-      double precision a , a1 , b , b1 , c , d , f1 , f2 , g , ga , Hu ,&
+      real(wp) a , a1 , b , b1 , c , d , f1 , f2 , g , ga , Hu ,&
                      & hu0 , hu1 , hu2 , s , t , t1 , t2 , t3 , t4
-      double precision w , x
+      real(wp) w , x
       integer Id , j , k , m
       dimension t(30) , w(30)
       data t/.259597723012478d-01 , .778093339495366d-01 ,              &
@@ -3068,10 +3070,10 @@
 !       ===================================================
 !
       implicit none
-      double precision c , Ck1 , Ck2 , cs , Cv , Df , Dn , dnp , g0 ,   &
+      real(wp) c , Ck1 , Ck2 , cs , Cv , Df , Dn , dnp , g0 ,   &
                      & gk0 , gk1 , gk2 , gk3 , r , r1 , r2 , r3 , r4 ,  &
                      & r5 , rk
-      double precision sa0 , sb0 , su0 , sw , t , tp , u , v , w
+      real(wp) sa0 , sb0 , su0 , sw , t , tp , u , v , w
       integer i , ip , j , k , Kd , l , m , n , nm , nm1 , nn
       dimension u(200) , v(200) , w(200) , Df(200) , Dn(200) , tp(200) ,&
               & rk(200)
@@ -3176,7 +3178,7 @@
 !       =========================================================
 !
       implicit none
-      double precision f0 , f1 , fd , gd , hn , p , pd , pf , q , w ,   &
+      real(wp) f0 , f1 , fd , gd , hn , p , pd , pf , q , w ,   &
                      & wp , x , z , z0
       integer i , it , j , k , n , nr
       dimension x(n) , w(n)
@@ -3234,7 +3236,7 @@
 !       ===================================================
 !
       implicit none
-      double precision a0 , dsl , eps , gl , pdl , pi , Pv , qe , r ,   &
+      real(wp) a0 , dsl , eps , gl , pdl , pi , Pv , qe , r ,   &
                      & Va , x , x1
       integer k
       pi = 3.141592653589793d0
@@ -3282,16 +3284,16 @@
 !       ===========================================================
 !
       implicit none
-      double precision a0 , ga , gb , pi , pv0 , pv1 , rp2 , v , v0 ,   &
+      real(wp) a0 , ga , gb , pi , pv0 , pv1 , rp2 , v , v0 ,   &
                      & vg , vl , Vm , vv , w0 , w1 , wa , ya0 , ya1 ,   &
                      & yak
-      complex*16 ca , ca0 , cb , Cbj , Cby , cck , Cdj , Cdy , cec ,    &
+      complex(wp) ca , ca0 , cb , Cbj , Cby , cck , Cdj , Cdy , cec ,    &
                & cf , cf0 , cf1 , cf2 , cfac0 , cfac1 , cg0 , cg1 ,     &
                & ch0 , ch1 , ch2
-      complex*16 ci , cju0 , cju1 , cjv0 , cjv1 , cjvl , cp11 , cp12 ,  &
+      complex(wp) ci , cju0 , cju1 , cjv0 , cjv1 , cjvl , cp11 , cp12 ,  &
                & cp21 , cp22 , cpz , cqz , cr , cr0 , cr1 , crp , crq , &
                & cs , cs0 , cs1
-      complex*16 csk , cyk , cyl1 , cyl2 , cylk , cyv0 , cyv1 , z , z1 ,&
+      complex(wp) csk , cyk , cyl1 , cyl2 , cylk , cyv0 , cyv1 , z , z1 ,&
                & z2 , zk
       integer j , k , k0 , l , lb , lb0 , m , n
       dimension Cbj(0:*) , Cdj(0:*) , Cby(0:*) , Cdy(0:*)
@@ -3565,12 +3567,12 @@
 !       ===========================================================
 !
       implicit none
-      double precision a0 , ga , gb , pi , pv0 , rp2 , v , v0 , vg ,    &
+      real(wp) a0 , ga , gb , pi , pv0 , rp2 , v , v0 , vg ,    &
                      & Vm , vv , w0
-      complex*16 ca , ca0 , cb , Cbj , Cby , cck , Cdj , Cdy , cec ,    &
+      complex(wp) ca , ca0 , cb , Cbj , Cby , cck , Cdj , Cdy , cec ,    &
                & cf , cf1 , cf2 , cfac0 , ci , cju0 , cjv0 , cjvn ,     &
                & cpz , cqz , cr
-      complex*16 cr0 , crp , crq , cs , cs0 , csk , cyv0 , cyy , z ,    &
+      complex(wp) cr0 , crp , crq , cs , cs0 , csk , cyv0 , cyy , z ,    &
                & z1 , z2 , zk
       integer k , k0 , m , n
       dimension Cbj(0:*) , Cdj(0:*) , Cby(0:*) , Cdy(0:*)
@@ -3738,10 +3740,10 @@
 !       =======================================================
 !
       implicit none
-      double precision a , a1 , b , b1 , Bj0 , Bj1 , By0 , By1 , cs0 ,  &
+      real(wp) a , a1 , b , b1 , Bj0 , Bj1 , By0 , By1 , cs0 ,  &
                      & cs1 , cu , Dj0 , Dj1 , Dy0 , Dy1 , ec , p0 , p1 ,&
                      & pi , q0
-      double precision q1 , r , r0 , r1 , rp2 , t1 , t2 , w0 , w1 , x , &
+      real(wp) q1 , r , r0 , r1 , rp2 , t1 , t2 , w0 , w1 , x , &
                      & x2
       integer k , k0
       dimension a(12) , b(12) , a1(12) , b1(12)
@@ -3870,7 +3872,7 @@
 !       ===================================================
 !
       implicit none
-      double precision a , ga , Gim , Gin , Gip , r , s , t0 , x , xam
+      real(wp) a , ga , Gim , Gin , Gip , r , s , t0 , x , xam
       integer Isfer , k
       Isfer = 0
       xam = -x + a*log(x)
@@ -3922,7 +3924,7 @@
 !       =======================================================
 !
       implicit none
-      double precision pi , t , t1 , Ti , Tk , x
+      real(wp) pi , t , t1 , Ti , Tk , x
       pi = 3.141592653589793d0
       if ( x==0.0d0 ) then
          Ti = 0.0d0
@@ -3982,7 +3984,7 @@
 !       =======================================================
 !
       implicit none
-      double precision a , b1 , b2 , e0 , el , pi , r , rc1 , rc2 , rs ,&
+      real(wp) a , b1 , b2 , e0 , el , pi , r , rc1 , rc2 , rs ,&
                      & Ti , Tk , tw , x , x2
       integer k
       dimension a(10)
@@ -4067,13 +4069,13 @@
 !       =======================================================
 !
       implicit none
-      double precision a , a0 , b , Bj , bju0 , bju1 , bjv0 , bjv1 ,    &
+      real(wp) a , a0 , b , Bj , bju0 , bju1 , bjv0 , bjv1 ,    &
                      & bjvl , By , byv0 , byv1 , byvk , ck , cs , cs0 , &
                      & cs1 , Dj , Dy , ec
-      double precision el , f , f0 , f1 , f2 , ga , gb , pi , pv0 ,     &
+      real(wp) el , f , f0 , f1 , f2 , ga , gb , pi , pv0 ,     &
                      & pv1 , px , qx , r , r0 , r1 , rp , rp2 , rq ,    &
                      & sk , v
-      double precision v0 , vg , vl , Vm , vv , w0 , w1 , x , x2 , xk
+      real(wp) v0 , vg , vl , Vm , vv , w0 , w1 , x , x2 , xk
       integer j , k , k0 , l , m , n
       dimension Bj(0:*) , Dj(0:*) , By(0:*) , Dy(0:*)
       el = .5772156649015329d0
@@ -4274,7 +4276,7 @@
 !       =====================================================
 !
       implicit none
-      double precision Bj , By , Dj , Dy , x
+      real(wp) Bj , By , Dj , Dy , x
       integer k , n , Nm
       dimension Bj(0:n) , Dj(0:n) , By(0:n) , Dy(0:n)
       call jynbh(n,0,x,Nm,Bj,By)
@@ -4316,10 +4318,10 @@
 !       =====================================================
 !
       implicit none
-      double precision a , a1 , b , b1 , Bj , bj0 , bj1 , bjk , bs ,    &
+      real(wp) a , a1 , b , b1 , Bj , bj0 , bj1 , bjk , bs ,    &
                      & By , by0 , by1 , byk , cu , ec , f , f1 , f2 ,   &
                      & p0 , p1
-      double precision pi , q0 , q1 , r2p , s0 , su , sv , t1 , t2 , x
+      real(wp) pi , q0 , q1 , r2p , s0 , su , sv , t1 , t2 , x
       integer k , ky , m , n , Nm , Nmin
       dimension Bj(0:n-Nmin) , By(0:n-Nmin) , a(4) , b(4) , a1(4) ,     &
               & b1(4)
@@ -4439,7 +4441,7 @@
 !       =========================================================
 !
       implicit none
-      double precision f0 , f1 , fd , gd , p , pd , pf , q , w , wp ,   &
+      real(wp) f0 , f1 , fd , gd , p , pd , pf , q , w , wp ,   &
                      & x , z , z0
       integer i , j , k , n , n0 , nr
       dimension x(n) , w(n)
@@ -4505,7 +4507,7 @@
 !       ===========================================================
 !
       implicit none
-      double precision a0 , c , ck , Cv , d0 , d1 , df , eps , r , S1d ,&
+      real(wp) a0 , c , ck , Cv , d0 , d1 , df , eps , r , S1d ,&
                      & S1f , su1 , su2 , x , x0 , x1
       integer ip , k , Kd , m , n , nm , nm2
       dimension ck(200) , df(200)
@@ -4575,7 +4577,7 @@
 !       =========================================================
 !
       implicit none
-      double precision Bj , bj0 , bj1 , bjk , By , by0 , by1 , cs , Dj ,&
+      real(wp) Bj , bj0 , bj1 , bjk , By , by0 , by1 , cs , Dj ,&
                      & dj0 , dj1 , Dy , dy0 , dy1 , f , f0 , f1 , f2 , x
       integer k , m , n , Nm
       dimension Bj(0:n) , By(0:n) , Dj(0:n) , Dy(0:n)
@@ -4672,7 +4674,7 @@
 !       ====================================================
 !
       implicit none
-      double precision Dp , Dv , ep , f , f0 , f1 , pd , pd0 , pd1 ,    &
+      real(wp) Dp , Dv , ep , f , f0 , f1 , pd , pd0 , pd1 ,    &
                      & Pdd , Pdf , s0 , v , v0 , v1 , v2 , vh , x , xa
       integer ja , k , l , m , na , nk , nv
       dimension Dv(0:*) , Dp(0:*)
@@ -4784,7 +4786,7 @@
 !       ===================================================
 !
       implicit none
-      double precision a , a0 , a1 , af , bf , bg , el , pi , r , rd ,  &
+      real(wp) a , a0 , a1 , af , bf , bg , el , pi , r , rd ,  &
                      & s , s0 , Th0 , ty , x , xp
       integer k
       dimension a(25)
@@ -4851,8 +4853,8 @@
 !
       implicit none
       integer i , it , j , nr , Nt
-      double precision pi , pu , pv , px , py , w , w0
-      complex*16 z , zd , zf , zfd , zgd , Zo , zp , zq , zw
+      real(wp) pi , pu , pv , px , py , w , w0
+      complex(wp) z , zd , zf , zfd , zgd , Zo , zp , zq , zw
       dimension Zo(Nt)
       pi = 3.141592653589793d0
       w = 0.0d0
@@ -4901,7 +4903,7 @@
 !       ==================================================
 !
       implicit none
-      double precision g , Ga , gr , pi , r , x , z
+      real(wp) g , Ga , gr , pi , r , x , z
       integer k , m , m1
       dimension g(26)
       pi = 3.141592653589793d0
@@ -4967,7 +4969,7 @@
 !       =======================================================
 !
       implicit none
-      double precision a , a00 , aa , b , b00 , Hu , hu1 , x
+      real(wp) a , a00 , aa , b , b00 , Hu , hu1 , x
       integer id , id1 , Isfer , Md
       logical il1 , il2 , il3 , bl1 , bl2 , bl3 , bn
       aa = a - b + 1.0d0
@@ -5041,7 +5043,7 @@
 !       =========================================================
 !
       implicit none
-      double precision bg , bk , Bl , bs , Dl , f , f0 , f1 , r , r0 ,  &
+      real(wp) bg , bk , Bl , bs , Dl , f , f0 , f1 , r , r0 ,  &
                      & uk , x , x2
       integer i , k , m , n , Nm
       dimension Bl(0:n) , Dl(0:n)
@@ -5126,7 +5128,7 @@
 !       ==================================================
 !
       implicit none
-      double precision ae , ak , be , bk , Ce , Ck , Hk , pk
+      real(wp) ae , ak , be , bk , Ce , Ck , Hk , pk
       pk = 1.0d0 - Hk*Hk
       if ( Hk==1.0 ) then
          Ck = 1.0d+300
@@ -5159,7 +5161,7 @@
 !       ========================================================
 !
       implicit none
-      double precision a , b , Bix , bt , dk , fk , s0 , t1 , t2 , ta , &
+      real(wp) a , b , Bix , bt , dk , fk , s0 , t1 , t2 , ta , &
                      & tb , x
       integer k
       dimension dk(51) , fk(51)
@@ -5211,7 +5213,7 @@
 !       ======================================================
 !
       implicit none
-      double precision a , b , f , q , t0 , t1 , t2
+      real(wp) a , b , f , q , t0 , t1 , t2
       integer ic , j , j0 , jf , Kd , l , l0 , m , Mj
       b = a
       ic = int(m/2)
@@ -5265,9 +5267,9 @@
 !       ==================================================
 !
       implicit none
-      complex*16 cp0 , cp1 , Cpd , cpf , Cpn , z
+      complex(wp) cp0 , cp1 , Cpd , cpf , Cpn , z
       integer k , n
-      double precision x , y
+      real(wp) x , y
       dimension Cpn(0:n) , Cpd(0:n)
       z = dcmplx(x,y)
       Cpn(0) = (1.0d0,0.0d0)
@@ -5305,10 +5307,10 @@
 !
       implicit none
       integer k , km , l , ls , m , n
-      double precision q0 , q00 , q01 , q0l , q10 , q11 , q1l , Qd ,    &
+      real(wp) q0 , q00 , q01 , q0l , q10 , q11 , q1l , Qd ,    &
                      & qf0 , qf1 , qf2 , qg0 , qg1 , qh0 , qh1 , qh2 ,  &
                      & Qm , qm0 , qm1 , qmk
-      double precision x , xq
+      real(wp) x , xq
       dimension Qm(0:n) , Qd(0:n)
       do k = 0 , n
          Qm(k) = 0.0d0
@@ -5443,8 +5445,8 @@
 !       ====================================================
 !
       implicit none
-      double precision a , pi , v , v0 , vr
-      complex*16 Cbiv , Cbkv , Cdiv , Cdkv , ceta , cf , cfi , cfk ,    &
+      real(wp) a , pi , v , v0 , vr
+      complex(wp) Cbiv , Cbkv , Cdiv , Cdkv , ceta , cf , cfi , cfk ,    &
                & csi , csk , ct , ct2 , cws , z
       integer i , k , km , l , l0 , lf
       dimension cf(12) , a(91)
@@ -5500,7 +5502,7 @@
 !       ==================================================
 !
       implicit none
-      double precision a , a0 , b , b0 , c , ce , ck , d , d0 , Ee ,    &
+      real(wp) a , a0 , b , b0 , c , ce , ck , d , d0 , Ee ,    &
                      & fac , Fe , g , Hk , Phi , pi , r
       integer n
       g = 0.0d0
@@ -5560,7 +5562,7 @@
 !       =========================================================
 !
       implicit none
-      double precision c , c0 , c1 , c2 , El3 , f1 , f2 , Hk , Phi , t ,&
+      real(wp) c , c0 , c1 , c2 , El3 , f1 , f2 , Hk , Phi , t ,&
                      & t1 , t2 , w
       integer i
       dimension t(10) , w(10)
@@ -5608,7 +5610,7 @@
 !       ============================================
 !
       implicit none
-      double precision Ei , ga , r , x
+      real(wp) Ei , ga , r , x
       integer k
       if ( x==0.0 ) then
          Ei = -1.0d+300
@@ -5649,8 +5651,8 @@
 !       ============================================
 !
       implicit none
-      double complex z , Cei
-      double precision pi
+      complex(wp) z , Cei
+      real(wp) pi
       pi = 3.141592653589793d0
       call e1z(-z,Cei)
       Cei = -Cei
@@ -5674,7 +5676,7 @@
 !       ============================================
 !
       implicit none
-      double precision e1 , ga , r , t , t0 , x
+      real(wp) e1 , ga , r , t , t0 , x
       integer k , m
       if ( x==0.0 ) then
          e1 = 1.0d+300
@@ -5714,11 +5716,11 @@
 !       ===================================================
 !
       implicit none
-      double precision a , a0 , a1 , b , Hg , hg1 , hg2 , pi , r1 , r2 ,&
+      real(wp) a , a0 , a1 , b , Hg , hg1 , hg2 , pi , r1 , r2 ,&
                      & rg , sum1 , sum2 , tai , tar , tbai , tbar ,     &
                      & tbi , tbr , x
-      double precision x0 , xg , y , y0 , y1
-      complex*16 cta , ctb , ctba
+      real(wp) x0 , xg , y , y0 , y1
+      complex(wp) cta , ctb , ctba
       integer i , j , la , n , nl
       pi = 3.141592653589793d0
       a0 = a
@@ -5821,13 +5823,13 @@
 !       ====================================================
 !
       implicit none
-      double precision a , a0 , aa , b , bb , c , c0 , c1 , el , eps ,  &
+      real(wp) a , a0 , aa , b , bb , c , c0 , c1 , el , eps ,  &
                      & f0 , f1 , g0 , g1 , g2 , g3 , ga , gabc , gam ,  &
                      & gb
-      double precision gbm , gc , gca , gcab , gcb , gm , Hf , hw , pa ,&
+      real(wp) gbm , gc , gca , gcab , gcb , gm , Hf , hw , pa ,&
                      & pb , pi , r , r0 , r1 , rm , rp , sm , sp , sp0 ,&
                      & x
-      double precision x1
+      real(wp) x1
       integer Isfer , j , k , m , nm
       logical l0 , l1 , l2 , l3 , l4 , l5
       pi = 3.141592653589793d0
@@ -6040,9 +6042,9 @@
 !       ===================================================
 !
       implicit none
-      double precision a , a0 , a1 , b , ba , g1i , g1r , g2i , g2r ,   &
+      real(wp) a , a0 , a1 , b , ba , g1i , g1r , g2i , g2r ,   &
                      & g3i , g3r , phi , pi , x , x0 , y
-      complex*16 cfac , cg1 , cg2 , cg3 , Chg , chg1 , chg2 , chw , ci ,&
+      complex(wp) cfac , cg1 , cg2 , cg3 , Chg , chg1 , chg2 , chw , ci ,&
                & cr , cr1 , cr2 , crg , cs1 , cs2 , cy0 , cy1 , z , z0
       integer i , j , k , la , m , n , nl , ns
       pi = 3.141592653589793d0
@@ -6172,15 +6174,15 @@
 !       ======================================================
 !
       implicit none
-      double precision a , a0 , aa , b , bb , c , ca , cb , el , eps ,  &
+      real(wp) a , a0 , aa , b , bb , c , ca , cb , el , eps ,  &
                      & g0 , g1 , g2 , g3 , ga , gab , gabc , gam , gb , &
                      & gba
-      double precision gbm , gc , gca , gcab , gcb , gcbk , gm , pa ,   &
+      real(wp) gbm , gc , gca , gcab , gcb , gcbk , gm , pa ,   &
                      & pac , pb , pca , pi , rk1 , rk2 , rm , sj1 ,     &
                      & sj2 , sm , sp , sp0
-      double precision sq , t0 , w0 , ws , x , y
+      real(wp) sq , t0 , w0 , ws , x , y
       integer Isfer , j , k , m , mab , mcab , nca , ncb , nm
-      complex*16 z , z00 , z1 , zc0 , zc1 , zf0 , zf1 , Zhf , zp , zp0 ,&
+      complex(wp) z , z00 , z1 , zc0 , zc1 , zf0 , zf1 , Zhf , zp , zp0 ,&
                & zr , zr0 , zr1 , zw
       logical l0 , l1 , l2 , l3 , l4 , l5 , l6
       x = dble(z)
@@ -6489,10 +6491,10 @@
 !       ======================================================
 !
       implicit none
-      double precision a , Ant , Apt , Bnt , Bpt , c1 , c2 , eps , fx , &
+      real(wp) a , Ant , Apt , Bnt , Bpt , c1 , c2 , eps , fx , &
                      & gx , pi , q0 , q1 , q2 , r , sr3 , su1 , su2 ,   &
                      & su3 , su4
-      double precision su5 , su6 , x , xe , xp6 , xr1 , xr2
+      real(wp) su5 , su6 , x , xe , xp6 , xr1 , xr2
       integer k , l
       dimension a(16)
       eps = 1.0d-15
@@ -6605,10 +6607,10 @@
 !       ========================================================
 !
       implicit none
-      double precision Bi , bi0 , bi1 , Bk , bk0 , bk1 , Di , di0 ,     &
+      real(wp) Bi , bi0 , bi1 , Bk , bk0 , bk1 , Di , di0 ,     &
                      & di1 , Dk , dk0 , dk1 , f , f0 , f1 , g , g0 ,    &
                      & g1 , h , h0
-      double precision h1 , s0 , x
+      real(wp) h1 , s0 , x
       integer k , m , n , Nm
       dimension Bi(0:n) , Di(0:n) , Bk(0:n) , Dk(0:n)
       Nm = n
@@ -6699,11 +6701,11 @@
 !       =======================================================
 !
       implicit none
-      double precision a , a0 , a1 , b , b1 , el , pi , r2p , y0
-      complex*16 Cbj , cbj0 , cbj1 , cbjk , cbs , Cby , cby0 , cby1 ,   &
+      real(wp) a , a0 , a1 , b , b1 , el , pi , r2p , y0
+      complex(wp) Cbj , cbj0 , cbj1 , cbjk , cbs , Cby , cby0 , cby1 ,   &
                & Cdj , Cdy , ce , cf , cf1 , cf2 , cp0 , cp1 , cq0 ,    &
                & cq1 , cs0 , csu
-      complex*16 csv , ct1 , ct2 , cu , cyy , z
+      complex(wp) csv , ct1 , ct2 , cu , cyy , z
       integer k , m , n , Nm
       dimension Cbj(0:n) , Cdj(0:n) , Cby(0:n) , Cdy(0:n) , a(4) ,      &
               & b(4) , a1(4) , b1(4)
@@ -6849,7 +6851,7 @@
 !       ===========================================================
 !
       implicit none
-      double precision a0 , Bi , Bk , bkl , bs , Di , Dk , el , f , f0 ,&
+      real(wp) a0 , Bi , Bk , bkl , bs , Di , Dk , el , f , f0 ,&
                      & f1 , g , g0 , g1 , pi , r , s0 , sk0 , vt , x
       integer k , k0 , l , m , n , Nm
       dimension Bi(0:n) , Di(0:n) , Bk(0:n) , Dk(0:n)
@@ -6946,7 +6948,7 @@
 !       =====================================================
 !
       implicit none
-      double precision Pd , Pm , x , xq , xs
+      real(wp) Pd , Pm , x , xq , xs
       integer i , j , ls , m , Mm , n
       dimension Pm(0:Mm,0:n) , Pd(0:Mm,0:n)
       intrinsic min
@@ -7024,7 +7026,7 @@
 !       ===============================================================
 !
       implicit none
-      double precision a , Csd , Csf , eps , fg , q , qm , rd ,  &
+      real(wp) a , Csd , Csf , eps , fg , q , qm , rd ,  &
                      & x , xr
       integer ic , k , kd , Kf , km , m
       dimension fg(251)
@@ -7096,11 +7098,11 @@
 !       ===========================================================
 !
       implicit none
-      double precision a , a0 , a1 , b , b1 , el , pi , rp2 , w0 , w1
-      complex*16 cbj0 , cbj1 , cby0 , cby1 , cdy0 , cdy1 , ci , cp ,    &
+      real(wp) a , a0 , a1 , b , b1 , el , pi , rp2 , w0 , w1
+      complex(wp) cbj0 , cbj1 , cby0 , cby1 , cdy0 , cdy1 , ci , cp ,    &
                & cp0 , cp1 , cq0 , cq1 , cr , cs , ct1 , ct2 , cu , z , &
                & z1 , z2
-      complex*16 Zd , Zf
+      complex(wp) Zd , Zf
       integer k , k0 , Kf
       dimension a(12) , b(12) , a1(12) , b1(12)
       pi = 3.141592653589793d0
@@ -7254,10 +7256,10 @@
 !       ======================================================
 !
       implicit none
-      double precision c1 , cs , eps , Fa , Fi , fi0 , Fm , Fr , Ga ,   &
+      real(wp) c1 , cs , eps , Fa , Fi , fi0 , Fm , Fr , Ga ,   &
                      & Gi , Gm , Gr , p2p , pi , pp2 , s1 , srd , ss ,  &
                      & x , x2
-      double precision x4 , xa , xc , xf , xf0 , xf1 , xg , xp , xq ,   &
+      real(wp) x4 , xa , xc , xf , xf0 , xf1 , xg , xp , xq ,   &
                      & xq2 , xr , xs , xsu , xw
       integer k , Ks , m
       srd = 57.29577951308233d0
@@ -7388,7 +7390,7 @@
 !       ======================================================
 !
       implicit none
-      double precision Ad , Ai , Bd , Bi , c1 , c2 , pir , sr3 , vi1 ,  &
+      real(wp) Ad , Ai , Bd , Bi , c1 , c2 , pir , sr3 , vi1 ,  &
                      & vi2 , vj1 , vj2 , vk1 , vk2 , vy1 , vy2 , x ,    &
                      & xa , xq , z
       xa = abs(x)
@@ -7433,10 +7435,10 @@
 !       =======================================================
 !
       implicit none
-      double precision Ad , Ai , Bd , Bi , c1 , c2 , ck , df , dg , dk ,&
+      real(wp) Ad , Ai , Bd , Bi , c1 , c2 , ck , df , dg , dk ,&
                      & eps , fx , gx , pi , r , rp , sad , sai , sbd ,  &
                      & sbi
-      double precision sda , sdb , sr3 , ssa , ssb , x , xa , xar ,     &
+      real(wp) sda , sdb , sr3 , ssa , ssb , x , xa , xar ,     &
                      & xcs , xe , xf , xm , xp1 , xq , xr1 , xr2 , xss
       integer k , km , km2 , kmax
       dimension ck(51) , dk(51)
@@ -7588,7 +7590,7 @@
 !       ======================================================
 !
       implicit none
-      double precision c , Ck , cs , Cv , f , f0 , f1 , f2 , fl , fs ,  &
+      real(wp) c , Ck , cs , Cv , f , f0 , f1 , f2 , fl , fs ,  &
                      & r1 , r2 , s0 , su1 , su2
       integer ip , j , k , k1 , kb , Kd , m , n , nm
       dimension Ck(200)
@@ -7691,7 +7693,7 @@
 !       ======================================================
 !
       implicit none
-      double precision c , Ck , d1 , d2 , d3 , Df , fac , r , r1 , reg ,&
+      real(wp) c , Ck , d1 , d2 , d3 , Df , fac , r , r1 , reg ,&
                      & sum , sw
       integer i , i1 , i2 , ip , k , m , n , nm
       dimension Df(200) , Ck(200)
@@ -7747,7 +7749,7 @@
 !       ===========================================================
 !
       implicit none
-      complex*16 cb0 , Cdn , cr , z
+      complex(wp) cb0 , Cdn , cr , z
       integer k , n
       cb0 = z**n*exp(-.25d0*z*z)
       cr = (1.0d0,0.0d0)
@@ -7780,8 +7782,8 @@
 !
       implicit none
       integer i , it , j , Kf , nr , Nt
-      double precision pi , psq , px , py , w , w0
-      complex*16 z , zd , zf , zfd , zgd , Zo , zp , zq , zw
+      real(wp) pi , psq , px , py , w , w0
+      complex(wp) z , zd , zf , zfd , zgd , Zo , zp , zq , zw
       dimension Zo(Nt)
       pi = 3.141592653589793d0
       psq = 0.0d0
@@ -7836,7 +7838,7 @@
 !       ============================================
 !
       implicit none
-      double precision e1 , es1 , es2 , x
+      real(wp) e1 , es1 , es2 , x
       if ( x==0.0 ) then
          e1 = 1.0d+300
       elseif ( x<=1.0 ) then
@@ -7867,9 +7869,9 @@
 !       =======================================================
 !
       implicit none
-      double precision c0 , el , eps , pa , pi , Pmv , pss , psv , pv0 ,&
+      real(wp) c0 , el , eps , pa , pi , Pmv , pss , psv , pv0 ,&
                      & qr , r , r0 , r1 , r2 , rg , s , s0 , s1 , s2 , v
-      double precision v0 , vs , x , xq
+      real(wp) v0 , vs , x , xq
       integer j , k , m , nv
       pi = 3.141592653589793d0
       el = .5772156649015329d0
@@ -7975,7 +7977,7 @@
 !       =======================================================
 !
       implicit none
-      double precision g1 , g2 , p0 , p1 , Pmv , v , v0 , &
+      real(wp) g1 , g2 , p0 , p1 , Pmv , v , v0 , &
                      & vx , x
       integer j , m , mx , neg_m , nv
       if ( x==-1.0d0 .and. v/=int(v) ) then
@@ -8039,7 +8041,7 @@
 !       ========================================================
 !
       implicit none
-      double precision a , g0 , Gi , gi1 , Gr , gr1 , pi , si , sr , t ,&
+      real(wp) a , g0 , Gi , gi1 , Gr , gr1 , pi , si , sr , t ,&
                      & th , th1 , th2 , x , x0 , x1 , y , y1 , z1 , z2
       integer j , k , Kf , na
       dimension a(10)
@@ -8131,7 +8133,7 @@
 !       ===========================================================
 !
       implicit none
-      double precision c , Cv , df , eps , pd , pm , S1d , S1f , su1 ,  &
+      real(wp) c , Cv , df , eps , pd , pm , S1d , S1f , su1 ,  &
                      & sw , x
       integer ip , k , Kd , m , mk , n , nm , nm2
       dimension df(200) , pm(0:251) , pd(0:251)
@@ -8182,7 +8184,7 @@
 !       DLMF 5.5.3, M(a, b, x) with DLMF 13.2.2
 !
       implicit none
-      double precision a , b , d1 , d2 , ga , gab , gb , gb2 , h0 ,     &
+      real(wp) a , b , d1 , d2 , ga , gab , gb , gb2 , h0 ,     &
                      & hmax , hmin , Hu , hu0 , hua , pi , r1 , r2 , x ,&
                      & xg1 , xg2
       integer Id , j
@@ -8231,7 +8233,7 @@
 !       ===========================================================
 !
       implicit none
-      double precision f0 , g0 , pi , r , s , t , Tth , tty , x , xt
+      real(wp) f0 , g0 , pi , r , s , t , Tth , tty , x , xt
       integer k
       pi = 3.141592653589793d0
       s = 1.0d0
@@ -8274,7 +8276,7 @@
 !       ==================================================
 !
       implicit none
-      double precision a , Gl , gl0 , x , x0 , x2 , xp
+      real(wp) a , Gl , gl0 , x , x0 , x2 , xp
       integer k , Kf , n
       dimension a(10)
       data a/8.333333333333333d-02 , -2.777777777777778d-03 ,           &
@@ -8322,7 +8324,7 @@
 !
       implicit none
       integer k , n
-      double precision q0 , q1 , Qd , qf , Qn , x
+      real(wp) q0 , q1 , Qd , qf , Qn , x
       dimension Qn(0:n) , Qd(0:n)
       if ( abs(x)==1.0d0 ) then
          do k = 0 , n
@@ -8362,7 +8364,7 @@
 !       ====================================================
 !
       implicit none
-      double precision a0 , ep , eps , gl , Pd , pi , r , Va , vl , x , &
+      real(wp) a0 , ep , eps , gl , Pd , pi , r , Va , vl , x , &
                      & x1
       integer k
       pi = 3.141592653589793d0
@@ -8406,10 +8408,10 @@
 !       =========================================================
 !
       implicit none
-      double precision a , a1 , b , Bi0 , Bi1 , Bk0 , Bk1 , ca , cb ,   &
+      real(wp) a , a1 , b , Bi0 , Bi1 , Bk0 , Bk1 , ca , cb ,   &
                      & ct , Di0 , Di1 , Dk0 , Dk1 , el , pi , r , w0 ,  &
                      & ww , x
-      double precision x2 , xr , xr2
+      real(wp) x2 , xr , xr2
       integer k , k0
       dimension a(12) , b(12) , a1(8)
       pi = 3.141592653589793d0
@@ -8521,8 +8523,8 @@
 !       ==================================================
 !
       implicit none
-      double precision a0 , pi , x
-      complex*16 c0 , ca0 , cf , cf0 , cf1 , cfa , cfb , Cpb , Cpd ,    &
+      real(wp) a0 , pi , x
+      complex(wp) c0 , ca0 , cf , cf0 , cf1 , cfa , cfb , Cpb , Cpd ,    &
                & cs0 , z , z1
       integer k , m , n , n0 , n1 , nm1
       dimension Cpb(0:*) , Cpd(0:*)
@@ -8624,7 +8626,7 @@
 !       =========================================================
 !
       implicit none
-      double precision Bi0 , Bi1 , Bk0 , Bk1 , Di0 , Di1 , Dk0 , Dk1 ,  &
+      real(wp) Bi0 , Bi1 , Bk0 , Bk1 , Di0 , Di1 , Dk0 , Dk1 ,  &
                      & t , t2 , x
       if ( x==0.0d0 ) then
          Bi0 = 1.0d0
@@ -8690,7 +8692,7 @@
 !       ==========================================
 !
       implicit none
-      double precision Bt , gp , gpq , gq , p , ppq , q
+      real(wp) Bt , gp , gpq , gq , p , ppq , q
       call gamma2(p,gp)
       call gamma2(q,gq)
       ppq = p + q
@@ -8715,7 +8717,7 @@
 !
       implicit none
       integer k , n
-      double precision p0 , p1 , Pd , pf , Pn , x
+      real(wp) p0 , p1 , Pd , pf , Pn , x
       dimension Pn(0:n) , Pd(0:n)
       Pn(0) = 1.0d0
       Pn(1) = x
@@ -8762,7 +8764,7 @@
 !       =====================================================
 !
       implicit none
-      double precision a , f , f1 , f2 , f3 , Fc , fnan , q ,    &
+      real(wp) a , f , f1 , f2 , f3 , Fc , fnan , q ,    &
                      & qm , s , s0 , sp , ss , u , v
       integer i , j , jm , k , kb , Kd , km , m
       dimension Fc(251)
@@ -8998,7 +9000,7 @@
 !       ========================================================
 !
       implicit none
-      double precision cs , Di , f , f0 , f1 , Si , si0 , x
+      real(wp) cs , Di , f , f0 , f1 , Si , si0 , x
       integer k , m , n , Nm
       dimension Si(0:n) , Di(0:n)
       Nm = n
@@ -9061,9 +9063,9 @@
 !       ======================================================
 !
       implicit none
-      double precision a , d , d1 , d2 , dl , eps , f1 , f2 , g1 , g2 , &
+      real(wp) a , d , d1 , d2 , dl , eps , f1 , f2 , g1 , g2 , &
                      & h , h0 , h1 , hl , p0 , r , r1 , ugi , ugr , vgi
-      double precision vgr , W1d , W1f , W2d , W2f , x , x1 , x2 , y1 , &
+      real(wp) vgr , W1d , W1f , W2d , W2f , x , x1 , x2 , y1 , &
                      & y1d , y1f , y2d , y2f
       integer k , l1 , l2 , m
       dimension h(100) , d(80)
@@ -9161,10 +9163,10 @@
 !       =======================================================
 !
       implicit none
-      double precision a0 , b0 , c , ck , cx , Df , dj , eps , r , r0 , &
+      real(wp) a0 , b0 , c , ck , cx , Df , dj , eps , r , r0 , &
                      & r1 , R1d , R1f , r2 , r3 , reg , sa0 , sj , suc ,&
                      & sud
-      double precision sum , sw , sw1 , x
+      real(wp) sum , sw , sw1 , x
       integer ip , j , k , Kd , l , lg , m , n , nm , nm1 , nm2 , np
       dimension ck(200) , Df(200) , sj(0:251) , dj(0:251)
       eps = 1.0d-14
@@ -9276,7 +9278,7 @@
 !       ===================================================
 !
       implicit none
-      double precision a0 , ep , eps , g0 , g1 , ga0 , gm , Pd , pi ,   &
+      real(wp) a0 , ep , eps , g0 , g1 , ga0 , gm , Pd , pi ,   &
                      & r , r1 , sq2 , Va , va0 , vm , vt , x
       integer m
       eps = 1.0d-15
@@ -9325,8 +9327,8 @@
 !       ====================================================
 !
       implicit none
-      double precision a0 , el , pi , x , xt
-      complex*16 Ce1 , cr , z , zc , zd , zdc
+      real(wp) a0 , el , pi , x , xt
+      complex(wp) Ce1 , cr , z , zc , zd , zdc
       integer k
       pi = 3.141592653589793d0
       el = 0.5772156649015328d0
@@ -9393,7 +9395,7 @@
 !       =======================================================
 !
       implicit none
-      double precision f0 , g0 , pi , t , Tj , Ty , x , x1 , xt
+      real(wp) f0 , g0 , pi , t , Tj , Ty , x , x1 , xt
       pi = 3.141592653589793d0
       if ( x==0.0d0 ) then
          Tj = 0.0d0
@@ -9449,7 +9451,7 @@
 !       =======================================================
 !
       implicit none
-      double precision a , aa , b , Hu , r , r0 , ra , x
+      real(wp) a , aa , b , Hu , r , r0 , ra , x
       integer Id , k , nm
       logical il1 , il2
       Id = -100
@@ -9498,7 +9500,7 @@
 !       ===========================================================
 !
       implicit none
-      double precision Bk , c , eps , Gd , gd0 , gd1 , Gf , gf0 , gw ,  &
+      real(wp) Bk , c , eps , Gd , gd0 , gd1 , Gf , gf0 , gw ,  &
                      & x , xm
       integer ip , k , m , n , nm
       dimension Bk(200)
@@ -9544,7 +9546,7 @@
 !       =======================================================
 !
       implicit none
-      double precision a , a0 , a1 , af , bf , bg , el , eps , pi , r , &
+      real(wp) a , a0 , a1 , af , bf , bg , el , eps , pi , r , &
                      & r2 , rc , rs , Tj , Ty , ty1 , ty2 , x , x2 , xp
       integer k
       dimension a(18)
@@ -9620,7 +9622,7 @@
 !       ========================================================
 !
       implicit none
-      double precision Dy , rf0 , rf1 , rf2 , Ry , x
+      real(wp) Dy , rf0 , rf1 , rf2 , Ry , x
       integer k , n , Nm
       dimension Ry(0:n) , Dy(0:n)
       Nm = n
@@ -9667,7 +9669,7 @@
 !
       implicit none
       integer j , k , n , n1
-      double precision p0 , p1 , Pd , pf , Pl , Pn , r , x
+      real(wp) p0 , p1 , Pd , pf , Pl , Pn , r , x
       dimension Pn(0:n) , Pd(0:n) , Pl(0:n)
       Pn(0) = 1.0d0
       Pn(1) = x
@@ -9718,13 +9720,13 @@
 !       ================================================
 !
       implicit none
-      double precision Bei , Ber , cn0 , cp0 , cs , Dei , Der , el ,    &
+      real(wp) Bei , Ber , cn0 , cp0 , cs , Dei , Der , el ,    &
                      & eps , fac , Gei , Ger , gs , Hei , Her , pi ,    &
                      & pn0 , pn1 , pp0 , pp1
-      double precision qn0 , qn1 , qp0 , qp1 , r , r0 , r1 , rc , rs ,  &
+      real(wp) qn0 , qn1 , qp0 , qp1 , r , r0 , r1 , rc , rs ,  &
                      & sn0 , sp0 , ss , x , x2 , x4 , xc1 , xc2 , xd ,  &
                      & xe1 , xe2
-      double precision xt
+      real(wp) xt
       integer k , km , m
       pi = 3.141592653589793d0
       el = .5772156649015329d0
@@ -9886,10 +9888,10 @@
 !       ======================================================
 !
       implicit none
-      double precision a , a0 , a1 , a2 , b , da1 , da2 , db1 , db2 ,   &
+      real(wp) a , a0 , a1 , a2 , b , da1 , da2 , db1 , db2 ,   &
                      & el , ga , ga1 , h0 , hm1 , hm2 , hm3 , hmax ,    &
                      & hmin , Hu , hu1
-      double precision hu2 , hw , ps , r , rn , rn1 , s0 , s1 , s2 ,    &
+      real(wp) hu2 , hw , ps , r , rn , rn1 , s0 , s1 , s2 ,    &
                      & sa , sb , ua , ub , x
       integer Id , id1 , id2 , j , k , m , n
       Id = -100
@@ -10019,9 +10021,9 @@
 !                       their derivatives
 !       ===========================================================
       implicit none
-      double precision h , w , w0 , x , y
+      real(wp) h , w , w0 , x , y
       integer i , it , j , Kc , Kf , nr , Nt
-      complex*16 z , zd , zero , zf , zfd , zgd , Zo , zp , zq , Zv , zw
+      complex(wp) z , zd , zf , zfd , zgd , Zo , zp , zq , Zv , zw
       dimension Zo(Nt) , Zv(Nt)
       x = 0.0d0
       y = 0.0d0
@@ -10037,8 +10039,7 @@
       endif
       if ( Kf==1 ) x = -0.503
       if ( Kf==2 ) x = 0.577
-      zero = dcmplx(x,y)
-      z = zero
+      z = dcmplx(x,y)
       w = 0.0d0
       do nr = 1 , Nt
          if ( nr/=1 ) z = Zo(nr-1) - h
@@ -10098,10 +10099,10 @@
 !       ================================================
 !
       implicit none
-      double precision Bei , Ber , csn , csp , Dei , Der , fxi , fxr ,  &
+      real(wp) Bei , Ber , csn , csp , Dei , Der , fxi , fxr ,  &
                      & Gei , Ger , Hei , Her , pi , pni , pnr , ppi ,   &
                      & ppr , ssn , ssp , t
-      double precision t2 , tni , tnr , tpi , tpr , u , v , x , yc1 ,   &
+      real(wp) t2 , tni , tnr , tpi , tpr , u , v , x , yc1 ,   &
                      & yc2 , yd , ye1 , ye2
       integer l
       pi = 3.141592653589793d0
@@ -10214,10 +10215,10 @@
 !       =============================================================
 !
       implicit none
-      double precision bk , c , ck , ck1 , ck2 , Cv , Df , dn , eps ,   &
+      real(wp) bk , c , ck , ck1 , ck2 , Cv , Df , dn , eps ,   &
                      & gd , gf , h0 , pi , qs , qt , r1d , r1f , R2d ,  &
                      & R2f , sum
-      double precision sw , x
+      real(wp) sw , x
       integer ip , j , Kd , m , n , nm
       dimension bk(200) , ck(200) , Df(200) , dn(200)
       if ( abs(Df(1))<=1.0d-280 ) then
@@ -10278,7 +10279,7 @@
 !       =====================================================
 !
       implicit none
-      double precision Bj , bs , Dj , f , f0 , f1 , Fj , x
+      real(wp) Bj , bs , Dj , f , f0 , f1 , Fj , x
       integer k , m , mt , n , nt
       dimension Bj(101) , Dj(101) , Fj(101)
       do nt = 1 , 900
@@ -10328,7 +10329,7 @@
 !       =======================================================
 !
       implicit none
-      double precision cs , Dj , f , f0 , f1 , sa , sb , Sj , x
+      real(wp) cs , Dj , f , f0 , f1 , sa , sb , Sj , x
       integer k , m , n , Nm
       dimension Sj(0:n) , Dj(0:n)
       Nm = n
@@ -10396,7 +10397,7 @@
 !       =========================================================
 !
       implicit none
-      double precision a , b , c , Dpl , dy0 , dy1 , dyn , Pl , x , y0 ,&
+      real(wp) a , b , c , Dpl , dy0 , dy1 , dyn , Pl , x , y0 ,&
                      & y1 , yn
       integer k , Kf , n
       dimension Pl(0:n) , Dpl(0:n)
@@ -10460,7 +10461,7 @@
 !       ====================================================
 !
       implicit none
-      double precision bei , ber , ddi , ddr , dei , der , gdi , gdr ,  &
+      real(wp) bei , ber , ddi , ddr , dei , der , gdi , gdr ,  &
                      & gei , ger , hei , her , rt , rt0 , Zo
       integer Kd , m , Nt
       dimension Zo(Nt) , rt0(8)
@@ -10540,7 +10541,7 @@
 !       ==========================================================
 !
       implicit none
-      double precision c , Cv , df , R1d , R1f , R2d , R2f , x
+      real(wp) c , Cv , df , R1d , R1f , R2d , R2f , x
       integer id , kd , Kf , m , n
       dimension df(200)
       kd = -1
@@ -10576,10 +10577,10 @@
 !       ====================================================
 !
       implicit none
-      complex*16 cbi , cbj , cbk , cby , cdi , cdj , cdk , cdy , cf1 ,  &
+      complex(wp) cbi , cbj , cbk , cby , cdi , cdj , cdk , cdy , cf1 ,  &
                & cfac , Chd1 , Chd2 , Chf1 , Chf2 , ci , z , zi
       integer k , n , Nm
-      double precision pi
+      real(wp) pi
       dimension cbj(0:250) , cdj(0:250) , cby(0:250) , cdy(0:250) ,     &
               & cbi(0:250) , cdi(0:250) , cbk(0:250) , cdk(0:250)
       dimension Chf1(0:n) , Chd1(0:n) , Chf2(0:n) , Chd2(0:n)
@@ -10645,7 +10646,7 @@
 !       ======================================================
 !
       implicit none
-      double precision bjn , byn , djn , dyn , fjn , fyn , pi , Rj0 ,   &
+      real(wp) bjn , byn , djn , dyn , fjn , fyn , pi , Rj0 ,   &
                      & Rj1 , Ry0 , Ry1 , x , x0 , xguess
       integer l , n , Nt
       dimension Rj0(Nt) , Rj1(Nt) , Ry0(Nt) , Ry1(Nt)
@@ -10783,10 +10784,10 @@
 !       =======================================================
 !
       implicit none
-      double precision a1 , a2 , Bi , bi0 , Bk , bk0 , bk1 , bk2 , ca , &
+      real(wp) a1 , a2 , Bi , bi0 , Bk , bk0 , bk1 , bk2 , ca , &
                      & cb , cs , ct , Di , Dk , f , f1 , f2 , gan ,     &
                      & gap , pi
-      double precision piv , r , r1 , r2 , sum , v , v0 , v0n , v0p ,   &
+      real(wp) piv , r , r1 , r2 , sum , v , v0 , v0n , v0p ,   &
                      & Vm , vt , w0 , wa , ww , x , x2
       integer k , k0 , m , n
       dimension Bi(0:*) , Di(0:*) , Bk(0:*) , Dk(0:*)
@@ -10943,10 +10944,10 @@
 !       =====================================================
 !
       implicit none
-      double precision a , c , cs , Cv , d , d2k , Df , dk0 , dk1 ,     &
+      real(wp) a , c , cs , Cv , d , d2k , Df , dk0 , dk1 ,     &
                      & dk2 , f , f0 , f1 , f2 , fl , fs , g , r1 , r3 , &
                      & r4
-      double precision s0 , su1 , su2 , sw
+      real(wp) s0 , su1 , su2 , sw
       integer i , ip , j , k , k1 , kb , Kd , m , n , nm
       dimension a(200) , d(200) , g(200) , Df(200)
       nm = 25 + int(0.5*(n-m)+c)
@@ -11082,10 +11083,10 @@
 !       =======================================================
 !
       implicit none
-      double precision a0 , b0 , c0 , ck , gn , gn1 , gn2 , gp1 , gp2 , &
+      real(wp) a0 , b0 , c0 , ck , gn , gn1 , gn2 , gp1 , gp2 , &
                      & pi , pv1 , pv2 , px , qx , r , rp , rp2 , rq ,   &
                      & sk , sum
-      double precision uj1 , uj2 , uu0 , Vi1 , Vi2 , vil , Vj1 , Vj2 ,  &
+      real(wp) uj1 , uj2 , uu0 , Vi1 , Vi2 , vil , Vj1 , Vj2 ,  &
                      & vjl , Vk1 , Vk2 , vl , vsl , vv , vv0 , Vy1 ,    &
                      & Vy2 , x , x2 , xk
       integer k , k0 , l
@@ -11264,12 +11265,12 @@
 !       ===========================================================
 !
       implicit none
-      double precision a0 , gan , gap , pi , piv , v , v0 , v0n , v0p , &
+      real(wp) a0 , gan , gap , pi , piv , v , v0 , v0n , v0p , &
                      & Vm , vt , w0
-      complex*16 ca , ca1 , ca2 , cb , Cbi , cbi0 , Cbk , cbk0 , Cdi ,  &
+      complex(wp) ca , ca1 , ca2 , cb , Cbi , cbi0 , Cbk , cbk0 , Cdi ,  &
                & Cdk , cf , cf1 , cf2 , ci , ci0 , ckk , cp , cr , cr1 ,&
                & cr2
-      complex*16 cs , csu , ct , cvk , z , z1 , z2
+      complex(wp) cs , csu , ct , cvk , z , z1 , z2
       integer k , k0 , m , n
       dimension Cbi(0:*) , Cdi(0:*) , Cbk(0:*) , Cdk(0:*)
       z1 = z
@@ -11434,12 +11435,12 @@
 !       ============================================================
 !
       implicit none
-      double precision a0 , gan , gap , pi , piv , v , v0 , v0n , v0p , &
+      real(wp) a0 , gan , gap , pi , piv , v , v0 , v0n , v0p , &
                      & Vm , vt , w0 , ws , ws0
-      complex*16 ca , ca1 , ca2 , cb , Cbi , cbi0 , Cbk , cbk0 , cbk1 , &
+      complex(wp) ca , ca1 , ca2 , cb , Cbi , cbi0 , Cbk , cbk0 , cbk1 , &
                & Cdi , Cdk , cf , cf1 , cf2 , cg0 , cg1 , cgk , ci ,    &
                & ci0 , cp
-      complex*16 cr , cr1 , cr2 , cs , csu , ct , cvk , z , z1 , z2
+      complex(wp) cr , cr1 , cr2 , cs , csu , ct , cvk , z , z1 , z2
       integer k , k0 , m , n
       dimension Cbi(0:*) , Cdi(0:*) , Cbk(0:*) , Cdk(0:*)
       pi = 3.141592653589793d0
@@ -11601,9 +11602,9 @@
 !       =========================================================
 !
       implicit none
-      complex*16 c , cf , cf0 , cf1 , cg , cr , d , z , z0 , Zd , Zf ,  &
+      complex(wp) c , cf , cf0 , cf1 , cg , cr , d , z , z0 , Zd , Zf ,  &
                & zp , zp2
-      double precision eps , pi , w0 , wa , wa0
+      real(wp) eps , pi , w0 , wa , wa0
       integer k , m
       eps = 1.0d-14
       pi = 3.141592653589793d0
@@ -11684,7 +11685,7 @@
 !       =================================================
 !
       implicit none
-      double precision c , eps , f , f0 , f1 , g , pi , px , q , r , s ,&
+      real(wp) c , eps , f , f0 , f1 , g , pi , px , q , r , s ,&
                      & su , t , t0 , t2 , x , xa
       integer k , m
       eps = 1.0d-15
@@ -11775,7 +11776,7 @@
 !       ========================================================
 !
       implicit none
-      double precision cs , Dj , f , f0 , f1 , Rj , rj0 , rj1 , x
+      real(wp) cs , Dj , f , f0 , f1 , Rj , rj0 , rj1 , x
       integer k , m , n , Nm
       dimension Rj(0:n) , Dj(0:n)
       Nm = n
@@ -11837,7 +11838,7 @@
 !       ========================================================
 !
       implicit none
-      double precision f0 , f1 , fd , gd , hd , hf , hn , p , q , r ,   &
+      real(wp) f0 , f1 , fd , gd , hd , hf , hn , p , q , r ,   &
                      & r1 , r2 , w , wp , x , z , z0 , zl
       integer i , it , j , k , n , nr
       dimension x(n) , w(n)
@@ -11916,7 +11917,7 @@
 !       =======================================================
 !
       implicit none
-      double precision a0 , Bj0 , Bj1 , By0 , By1 , Dj0 , Dj1 , Dy0 ,   &
+      real(wp) a0 , Bj0 , Bj1 , By0 , By1 , Dj0 , Dj1 , Dy0 ,   &
                      & Dy1 , p0 , p1 , pi , q0 , q1 , t , t2 , ta0 ,    &
                      & ta1 , x
       pi = 3.141592653589793d0
@@ -11986,7 +11987,7 @@
 !       ===============================================
 !
       implicit none
-      double precision En , ens , ps , r , rp , s , s0 , t , t0 , x
+      real(wp) En , ens , ps , r , rp , s , s0 , t , t0 , x
       integer j , k , l , m , n
       dimension En(0:n)
       if ( x==0.0 ) then
@@ -12052,7 +12053,7 @@
 !       =====================================================
 !
       implicit none
-      double precision Dk , f , f0 , f1 , pi , Sk , x
+      real(wp) Dk , f , f0 , f1 , pi , Sk , x
       integer k , n , Nm
       dimension Sk(0:n) , Dk(0:n)
       pi = 3.141592653589793d0
@@ -12095,7 +12096,7 @@
 !       ============================================
 !
       implicit none
-      double precision e1 , ek , En , x
+      real(wp) e1 , ek , En , x
       integer k , n
       dimension En(0:n)
       En(0) = exp(-x)/x
@@ -12121,7 +12122,7 @@
 !       =====================================================
 !
       implicit none
-      double precision Ga , pi , x
+      real(wp) Ga , pi , x
       integer k , m , m1
       pi = 3.141592653589793d0
       if ( x==int(x) .and. x>0.0 ) then
@@ -12160,7 +12161,7 @@
 !       ===================================================
 !
       implicit none
-      double precision f , f0 , f1 , pi , pv0 , Pvd , Pvf , q2p , qe ,  &
+      real(wp) f , f0 , f1 , pi , pv0 , Pvd , Pvf , q2p , qe ,  &
                      & s0 , v , v0 , v1 , v2 , vh , Vp , Vv , x , xa
       integer ja , k , kv , l , m , na , nv
       dimension Vv(0:*) , Vp(0:*)
@@ -12286,10 +12287,10 @@
 !       =======================================================
 !
       implicit none
-      complex*16 cq0 , cq1 , cq10 , Cqd , cqf , cqf0 , cqf1 , cqf2 ,    &
+      complex(wp) cq0 , cq1 , cq10 , Cqd , cqf , cqf0 , cqf1 , cqf2 ,    &
                & Cqm , z , zq , zs
       integer i , j , k , km , ls , m , Mm , n
-      double precision x , xc , y
+      real(wp) x , xc , y
       dimension Cqm(0:Mm,0:n) , Cqd(0:Mm,0:n)
       z = dcmplx(x,y)
       if ( abs(x)==1.0d0 .and. y==0.0d0 ) then
@@ -12396,9 +12397,9 @@
 !       =========================================================
 !
       implicit none
-      double precision a , b , c , cs , Cv , cv0 , d , d2k , dk0 , dk1 ,&
+      real(wp) a , b , c , cs , Cv , cv0 , d , d2k , dk0 , dk1 ,&
                      & dk2 , e , Eg , f , g , h , s , t , t1 , x1
-      double precision xa , xb
+      real(wp) xa , xb
       integer i , icm , j , k , k1 , Kd , l , m , n , nm , nm1
       dimension b(100) , h(100) , d(300) , e(300) , f(300) , cv0(100) , &
               & a(300) , g(300) , Eg(200)
@@ -12509,8 +12510,8 @@
 !       ===========================================================
 !
       implicit none
-      double precision a0 , el , fac , pi , vt
-      complex*16 ca0 , Cbi , Cbk , cbkl , cbs , Cdi , Cdk , cf , cf0 ,  &
+      real(wp) a0 , el , fac , pi , vt
+      complex(wp) ca0 , Cbi , Cbk , cbkl , cbs , Cdi , Cdk , cf , cf0 ,  &
                & cf1 , cg , cg0 , cg1 , ci , cr , cs0 , csk0 , z , z1
       integer k , k0 , l , m , n , Nm
       dimension Cbi(0:n) , Cdi(0:n) , Cbk(0:n) , Cdk(0:n)
@@ -12625,8 +12626,8 @@
 !       ========================================================
 !
       implicit none
-      double precision a0
-      complex*16 Cbi , cbi0 , cbi1 , Cbk , cbk0 , cbk1 , Cdi , cdi0 ,   &
+      real(wp) a0
+      complex(wp) Cbi , cbi0 , cbi1 , Cbk , cbk0 , cbk1 , Cdi , cdi0 ,   &
                & cdi1 , Cdk , cdk0 , cdk1 , cf , cf1 , cf2 , ckk , cs , &
                & z
       integer k , m , n , Nm
@@ -12720,10 +12721,10 @@
 !       ==============================================================
 !
       implicit none
-      double precision a , bj1 , bj2 , by1 , by2 , c1 , c2 , D1r , D2r ,&
+      real(wp) a , bj1 , bj2 , by1 , by2 , c1 , c2 , D1r , D2r ,&
                      & dj1 , dj2 , dy1 , dy2 , eps , F1r , F2r , &
                      & fg , q , qm
-      double precision u1 , u2 , w1 , w2 , x
+      real(wp) u1 , u2 , w1 , w2 , x
       integer ic , k , Kc , kd , Kf , km , m , nm
       dimension fg(251) , bj1(0:251) , dj1(0:251) , bj2(0:251) ,        &
               & dj2(0:251) , by1(0:251) , dy1(0:251) , by2(0:251) ,     &
@@ -12851,8 +12852,8 @@
 !       ==========================================================
 !
       implicit none
-      double precision a , a0 , a1 , b , pi , w0
-      complex*16 ca , cb , Cbi0 , Cbi1 , Cbk0 , Cbk1 , Cdi0 , Cdi1 ,    &
+      real(wp) a , a0 , a1 , b , pi , w0
+      complex(wp) ca , cb , Cbi0 , Cbi1 , Cbk0 , Cbk1 , Cdi0 , Cdi1 ,    &
                & Cdk0 , Cdk1 , ci , cr , cs , ct , cw , z , z1 , z2 ,   &
                & zr , zr2
       integer k , k0
@@ -12974,7 +12975,7 @@
 !       =============================================
 !
       implicit none
-      double precision a , ct2 , pi , Psi , Psr , ri , rr , th , tm ,   &
+      real(wp) a , ct2 , pi , Psi , Psr , ri , rr , th , tm ,   &
                      & tn , x , x0 , x1 , y , y1 , z0 , z2
       integer k , n
       dimension a(8)
@@ -13047,7 +13048,7 @@
 !       ======================================================
 !
       implicit none
-      double precision Dy , f , f0 , f1 , Sy , x
+      real(wp) Dy , f , f0 , f1 , Sy , x
       integer k , n , Nm
       dimension Sy(0:n) , Dy(0:n)
       Nm = n
@@ -13093,7 +13094,7 @@
 !       ========================================================
 !
       implicit none
-      double precision a , a0 , b , b0 , c , d , dn , Ecn , Edn , Eph , &
+      real(wp) a , a0 , b , b0 , c , d , dn , Ecn , Edn , Eph , &
                      & Esn , Hk , pi , r , sa , t , u
       integer j , n
       dimension r(40)
