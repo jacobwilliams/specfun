@@ -145,7 +145,7 @@
          ! asymptotic expansion in the right quadrant |arg(z)| <= pi/4, not pi/2
          ! as sometimes suggested. Use the symmetry S(z) = -iS(-iz).
          ! Interestingly, most of the expansion code is the same across
-         ! the quadrants. (The forth power in Z is the equalizer here.)
+         ! the quadrants. (The fourth power in Z is the equalizer here.)
          ! Only one constant has to be adapted.
          if ( aimag(z)>-real(z,wp) .and. aimag(z)<=real(z,wp) ) then
             ! right quadrant
