@@ -84,7 +84,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.6% of total for procedures.">61 statements</a>
+    title=" 0.7% of total for procedures.">67 statements</a>
      </li> 
     <li><i class="fa fa-code"></i><a href="../src/specfun.f90"> Source File</a></li>
   </ul>
@@ -109,14 +109,19 @@
     <div id="sidebar">
   <h3>Contents</h3>
  
-<em>None</em>
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/clpmn.html#src">clpmn</a>
+  </div>
+</div>
 
 </div>
 
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>public subroutine clpmn(Mm, m, n, x, y, Ntype, Cpm, Cpd)</h2>
+    <h2>public subroutine clpmn(mm, m, n, x, y, ntype, Cpm, Cpd)</h2>
     
 
     <p>Compute the associated Legendre functions Pmn(z)
@@ -128,52 +133,52 @@ argument</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" id="variable-mm"></span>integer</td>
-<td></td>
+  <td><span class="anchor" id="variable-mm~2"></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Mm</strong></td><td></td>
+  <td><strong>mm</strong></td><td><p>Physical dimension of CPM and CPD</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-m~2"></span>integer</td>
-<td></td>
+  <td><span class="anchor" id="variable-m~2"></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>m</strong></td><td></td>
+  <td><strong>m</strong></td><td><p>Order of Pmn(z),  m = 0,1,2,...,n</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-n~5"></span>integer</td>
-<td></td>
+  <td><span class="anchor" id="variable-n~5"></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>n</strong></td><td></td>
+  <td><strong>n</strong></td><td><p>Degree of Pmn(z), n = 0,1,2,...,N</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-x~5"></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" id="variable-x~5"></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>x</strong></td><td></td>
+  <td><strong>x</strong></td><td><p>Real part of z</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-y"></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" id="variable-y"></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>y</strong></td><td></td>
+  <td><strong>y</strong></td><td><p>Imaginary part of z</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-ntype"></span>integer</td>
-<td></td>
+  <td><span class="anchor" id="variable-ntype"></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Ntype</strong></td><td></td>
+  <td><strong>ntype</strong></td><td><p>type of cut, either 2 or 3</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-cpm"></span>complex(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" id="variable-cpm"></span>complex(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Cpm</strong></td><td></td>
+  <td><strong>Cpm</strong>(0:Mm,0:n)</td><td><p>Pmn(z)</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-cpd"></span>complex(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" id="variable-cpd"></span>complex(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Cpd</strong></td><td></td>
+  <td><strong>Cpd</strong>(0:Mm,0:n)</td><td><p>Pmn'(z)</p></td>
 </tr>
 </tbody>
 </table>
@@ -284,7 +289,12 @@ argument</p>
     <section class="visible-xs visible-sm hidden-md">
       <h3>Contents</h3>
  
-<em>None</em>
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/clpmn.html#src">clpmn</a>
+  </div>
+</div>
 
     </section>
     <br class="visible-xs visible-sm hidden-md">
@@ -298,6 +308,92 @@ argument</p>
 
 
     
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span><span class="w">   </span><span class="k">subroutine </span><span class="n">clpmn</span><span class="p">(</span><span class="n">Mm</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">Ntype</span><span class="p">,</span><span class="n">Cpm</span><span class="p">,</span><span class="n">Cpd</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mm</span><span class="w"> </span><span class="c">!! Physical dimension of CPM and CPD</span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="c">!! Order of Pmn(z),  m = 0,1,2,...,n</span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="c">!! Degree of Pmn(z), n = 0,1,2,...,N</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="c">!! Real part of z</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="c">!! Imaginary part of z</span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ntype</span><span class="w"> </span><span class="c">!! type of cut, either 2 or 3</span>
+<span class="w">      </span><span class="kt">complex</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Cpm</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="n">Mm</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">n</span><span class="p">)</span><span class="w">  </span><span class="c">!! Pmn(z)</span>
+<span class="w">      </span><span class="kt">complex</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Cpd</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="n">Mm</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">n</span><span class="p">)</span><span class="w">  </span><span class="c">!! Pmn&#39;(z)</span>
+
+<span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">ls</span><span class="w"></span>
+<span class="w">      </span><span class="kt">complex</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">zq</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">zs</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">cmplx</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">wp</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
+<span class="w">         </span><span class="k">do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="w"></span>
+<span class="w">            </span><span class="n">Cpm</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0_wp</span><span class="p">,</span><span class="mf">0.0_wp</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">Cpd</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0_wp</span><span class="p">,</span><span class="mf">0.0_wp</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">      enddo</span>
+<span class="k">      </span><span class="n">Cpm</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0_wp</span><span class="p">,</span><span class="mf">0.0_wp</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">n</span><span class="o">==</span><span class="mi">0</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">return</span>
+<span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">==</span><span class="mf">1.0_wp</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="n">y</span><span class="o">==</span><span class="mf">0.0_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
+<span class="w">            </span><span class="n">Cpm</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">**</span><span class="n">i</span><span class="w"></span>
+<span class="w">            </span><span class="n">Cpd</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5_wp</span><span class="o">*</span><span class="n">i</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">         do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
+<span class="w">            </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="w"></span>
+<span class="w">               </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">i</span><span class="o">==</span><span class="mi">1</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                  </span><span class="n">Cpd</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dinf</span><span class="p">()</span><span class="w"></span>
+<span class="w">               </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">i</span><span class="o">==</span><span class="mi">2</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                  </span><span class="n">Cpd</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">0.25_wp</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">j</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">               </span><span class="k">endif</span>
+<span class="k">            enddo</span>
+<span class="k">         enddo</span>
+<span class="k">         return</span>
+<span class="k">      endif</span>
+<span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">Ntype</span><span class="o">==</span><span class="mi">2</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"></span>
+<span class="w">         </span><span class="c">! sqrt(1 - z^2) with branch cut on |x|&gt;1</span>
+<span class="w">         </span><span class="n">zs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0_wp</span><span class="o">-</span><span class="n">z</span><span class="o">*</span><span class="n">z</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="n">zq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">zs</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="n">ls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"></span>
+<span class="w">      </span><span class="k">else</span><span class="w"></span>
+<span class="w">         </span><span class="c">! sqrt(z^2 - 1) with branch cut between [-1, 1]</span>
+<span class="w">         </span><span class="n">zs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">z</span><span class="o">*</span><span class="n">z</span><span class="o">-</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="n">zq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">sqrt</span><span class="p">(</span><span class="n">zs</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="o">&lt;</span><span class="mf">0.0_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="n">zq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">zq</span><span class="w"></span>
+<span class="w">         </span><span class="n">ls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">      </span><span class="k">endif</span>
+<span class="k">      do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="w"></span>
+<span class="w">         </span><span class="c">! DLMF 14.7.15</span>
+<span class="w">         </span><span class="n">Cpm</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">i</span><span class="o">-</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">*</span><span class="n">zq</span><span class="o">*</span><span class="n">Cpm</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">enddo</span>
+<span class="k">      do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="nb">min</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="c">! DLMF 14.10.7</span>
+<span class="w">         </span><span class="n">Cpm</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="o">*</span><span class="n">Cpm</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">enddo</span>
+<span class="k">      do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="w"></span>
+<span class="w">         </span><span class="k">do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
+<span class="w">            </span><span class="c">! DLMF 14.10.3</span>
+<span class="w">            </span><span class="n">Cpm</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">j</span><span class="o">-</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="o">*</span><span class="n">Cpm</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="o">-</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">                       </span><span class="o">*</span><span class="n">Cpm</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">      enddo</span>
+<span class="k">      </span><span class="n">Cpd</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0_wp</span><span class="p">,</span><span class="mf">0.0_wp</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
+<span class="w">         </span><span class="c">! DLMF 14.10.5</span>
+<span class="w">         </span><span class="n">Cpd</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ls</span><span class="o">*</span><span class="n">j</span><span class="o">*</span><span class="p">(</span><span class="n">z</span><span class="o">*</span><span class="n">Cpm</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="o">-</span><span class="n">Cpm</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">zs</span><span class="w"></span>
+<span class="w">      </span><span class="k">enddo</span>
+<span class="k">      do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="w"></span>
+<span class="w">         </span><span class="k">do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
+<span class="w">            </span><span class="c">! derivative of DLMF 14.7.11 &amp; DLMF 14.10.6 for type 3</span>
+<span class="w">            </span><span class="c">! derivative of DLMF 14.7.8 &amp; DLMF 14.10.1 for type 2</span>
+<span class="w">            </span><span class="n">Cpd</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ls</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="n">i</span><span class="o">*</span><span class="n">z</span><span class="o">*</span><span class="n">Cpm</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="o">/</span><span class="n">zs</span><span class="o">+</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="n">i</span><span class="o">+</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">                       </span><span class="o">/</span><span class="n">zq</span><span class="o">*</span><span class="n">Cpm</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">))</span><span class="w"></span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">      enddo</span>
+<span class="k">   end subroutine </span><span class="n">clpmn</span><span class="w"></span>
+</pre></div>
+
+    </section>
+    <br>
     
     </div>
   </div>

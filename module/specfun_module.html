@@ -84,7 +84,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title="100.0% of total for modules and submodules.">9639 statements</a>
+    title="100.0% of total for modules and submodules.">9646 statements</a>
      </li> 
     <li><i class="fa fa-code"></i><a href="../src/specfun.f90"> Source File</a></li>
   </ul>
@@ -115,6 +115,8 @@
       <a class="list-group-item" href="../module/specfun_module.html#variable-pi">pi</a>
       <a class="list-group-item" href="../module/specfun_module.html#variable-sqrtpi">sqrtpi</a>
       <a class="list-group-item" href="../module/specfun_module.html#variable-halfpi">halfpi</a>
+      <a class="list-group-item" href="../module/specfun_module.html#variable-twopi">twopi</a>
+      <a class="list-group-item" href="../module/specfun_module.html#variable-sq2">sq2</a>
     </div>
   </div>
 </div>
@@ -298,26 +300,32 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <p>COMPUTATION OF SPECIAL FUNCTIONS</p>
+    <p>Computation of special functions</p>
 <p>Shanjie Zhang and Jianming Jin</p>
 <p>Copyrighted but permission granted to use code in programs.
-Buy their book "Computation of Special Functions", 1996, John Wiley &amp; Sons, Inc.</p>
-<p>Scipy changes:
-- Compiled into a single source file and changed REAL To DBLE throughout.
-- Changed according to ERRATA.
-- Changed GAMMA to GAMMA2 and PSI to PSI_SPEC to avoid potential conflicts.
-- Made functions return sf_error codes in ISFER variables instead
-  of printing warnings. The codes are
-  - SF_ERROR_OK        = 0: no error
-  - SF_ERROR_SINGULAR  = 1: singularity encountered
-  - SF_ERROR_UNDERFLOW = 2: floating point underflow
-  - SF_ERROR_OVERFLOW  = 3: floating point overflow
-  - SF_ERROR_SLOW      = 4: too many iterations required
-  - SF_ERROR_LOSS      = 5: loss of precision
-  - SF_ERROR_NO_RESULT = 6: no result obtained
-  - SF_ERROR_DOMAIN    = 7: out of domain
-  - SF_ERROR_ARG       = 8: invalid input parameter
-  - SF_ERROR_OTHER     = 9: unclassified error</p>
+  Buy their book "Computation of Special Functions", 1996, John Wiley &amp; Sons, Inc.</p>
+<h3>Scipy changes:</h3>
+<ul>
+<li>Compiled into a single source file and changed REAL To DBLE throughout.</li>
+<li>Changed according to ERRATA.</li>
+<li>Changed GAMMA to GAMMA2 and PSI to PSI_SPEC to avoid potential conflicts.</li>
+<li>
+<p>Made functions return sf_error codes in ISFER variables instead
+    of printing warnings. The codes are:</p>
+<ul>
+<li><code>SF_ERROR_OK</code>        = <code>0</code> : no error</li>
+<li><code>SF_ERROR_SINGULAR</code>  = <code>1</code> : singularity encountered</li>
+<li><code>SF_ERROR_UNDERFLOW</code> = <code>2</code> : floating point underflow</li>
+<li><code>SF_ERROR_OVERFLOW</code>  = <code>3</code> : floating point overflow</li>
+<li><code>SF_ERROR_SLOW</code>      = <code>4</code> : too many iterations required</li>
+<li><code>SF_ERROR_LOSS</code>      = <code>5</code> : loss of precision</li>
+<li><code>SF_ERROR_NO_RESULT</code> = <code>6</code> : no result obtained</li>
+<li><code>SF_ERROR_DOMAIN</code>    = <code>7</code> : out of domain</li>
+<li><code>SF_ERROR_ARG</code>       = <code>8</code> : invalid input parameter</li>
+<li><code>SF_ERROR_OTHER</code>     = <code>9</code> : unclassified error</li>
+</ul>
+</li>
+</ul>
 <br>        <div class="panel panel-default">
       <div class="panel-heading">
   <h3 class="panel-title">Uses</h3>
@@ -438,6 +446,8 @@ Buy their book "Computation of Special Functions", 1996, John Wiley &amp; Sons, 
       <a class="list-group-item" href="../module/specfun_module.html#variable-pi">pi</a>
       <a class="list-group-item" href="../module/specfun_module.html#variable-sqrtpi">sqrtpi</a>
       <a class="list-group-item" href="../module/specfun_module.html#variable-halfpi">halfpi</a>
+      <a class="list-group-item" href="../module/specfun_module.html#variable-twopi">twopi</a>
+      <a class="list-group-item" href="../module/specfun_module.html#variable-sq2">sq2</a>
     </div>
   </div>
 </div>
@@ -639,6 +649,16 @@ Buy their book "Computation of Special Functions", 1996, John Wiley &amp; Sons, 
   <td><span class="anchor" id="variable-halfpi"></span>real(kind=wp),</td>
 <td>private,</td>  <td>parameter</td><td>::</td>
   <td><strong>halfpi</strong></td><td> =</td><td>0.5_wp*pi</td><td></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-twopi"></span>real(kind=wp),</td>
+<td>private,</td>  <td>parameter</td><td>::</td>
+  <td><strong>twopi</strong></td><td> =</td><td>2.0_wp*pi</td><td></td>
+</tr>
+<tr>
+  <td><span class="anchor" id="variable-sq2"></span>real(kind=wp),</td>
+<td>private,</td>  <td>parameter</td><td>::</td>
+  <td><strong>sq2</strong></td><td> =</td><td>sqrt(2.0_wp)</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -894,7 +914,7 @@ significant digits</p>
   </div>
 
       <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-clpmn"></span><h3>public subroutine <a href='../proc/clpmn.html'>clpmn</a>(Mm, m, n, x, y, Ntype, Cpm, Cpd)</h3></div>
+  <div class="panel-heading codesum"><span class="anchor" id="proc-clpmn"></span><h3>public subroutine <a href='../proc/clpmn.html'>clpmn</a>(mm, m, n, x, y, ntype, Cpm, Cpd)</h3></div>
   <div class="panel-body">
        
 <p>Compute the associated Legendre functions Pmn(z)
@@ -905,52 +925,52 @@ argument</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Mm</strong></td><td></td>
+  <td><strong>mm</strong></td><td><p>Physical dimension of CPM and CPD</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>m</strong></td><td></td>
+  <td><strong>m</strong></td><td><p>Order of Pmn(z),  m = 0,1,2,...,n</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>n</strong></td><td></td>
+  <td><strong>n</strong></td><td><p>Degree of Pmn(z), n = 0,1,2,...,N</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>x</strong></td><td></td>
+  <td><strong>x</strong></td><td><p>Real part of z</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>y</strong></td><td></td>
+  <td><strong>y</strong></td><td><p>Imaginary part of z</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Ntype</strong></td><td></td>
+  <td><strong>ntype</strong></td><td><p>type of cut, either 2 or 3</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>complex(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>complex(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Cpm</strong></td><td></td>
+  <td><strong>Cpm</strong>(0:Mm,0:n)</td><td><p>Pmn(z)</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>complex(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>complex(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Cpd</strong></td><td></td>
+  <td><strong>Cpd</strong>(0:Mm,0:n)</td><td><p>Pmn'(z)</p></td>
 </tr>
 </tbody>
 </table>
@@ -970,22 +990,22 @@ for small argument</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Va</strong></td><td></td>
+  <td><strong>Va</strong></td><td><p>Order</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>x</strong></td><td></td>
+  <td><strong>x</strong></td><td><p>Argument</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Pv</strong></td><td></td>
+  <td><strong>Pv</strong></td><td><p>Vv(x)</p></td>
 </tr>
 </tbody>
 </table>
