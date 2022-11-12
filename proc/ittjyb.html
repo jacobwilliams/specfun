@@ -84,7 +84,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.3% of total for procedures.">31 statements</a>
+    title=" 0.3% of total for procedures.">33 statements</a>
      </li> 
     <li><i class="fa fa-code"></i><a href="../src/specfun.f90"> Source File</a></li>
   </ul>
@@ -109,7 +109,12 @@
     <div id="sidebar">
   <h3>Contents</h3>
  
-<em>None</em>
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/ittjyb.html#src">ittjyb</a>
+  </div>
+</div>
 
 </div>
 
@@ -127,22 +132,22 @@ to x, and Y0(t)/t with respect to t from x to ∞</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" id="variable-x~8"></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" id="variable-x~8"></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>x</strong></td><td></td>
+  <td><strong>x</strong></td><td><p>Variable in the limits  ( x ≥ 0 )</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-ttj"></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" id="variable-ttj"></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Ttj</strong></td><td></td>
+  <td><strong>Ttj</strong></td><td><p>Integration of [1-J0(t)]/t from 0 to x</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-tty"></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" id="variable-tty"></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Tty</strong></td><td></td>
+  <td><strong>Tty</strong></td><td><p>Integration of Y0(t)/t from x to ∞</p></td>
 </tr>
 </tbody>
 </table>
@@ -152,7 +157,12 @@ to x, and Y0(t)/t with respect to t from x to ∞</p>
     <section class="visible-xs visible-sm hidden-md">
       <h3>Contents</h3>
  
-<em>None</em>
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/ittjyb.html#src">ittjyb</a>
+  </div>
+</div>
 
     </section>
     <br class="visible-xs visible-sm hidden-md">
@@ -166,6 +176,58 @@ to x, and Y0(t)/t with respect to t from x to ∞</p>
 
 
     
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span><span class="w">   </span><span class="k">subroutine </span><span class="n">ittjyb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">Ttj</span><span class="p">,</span><span class="n">Tty</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="c">!! Variable in the limits  ( x ≥ 0 )</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Ttj</span><span class="w"> </span><span class="c">!! Integration of [1-J0(t)]/t from 0 to x</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Tty</span><span class="w"> </span><span class="c">!! Integration of Y0(t)/t from x to ∞</span>
+
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">e0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">f0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">g0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">x1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">xt</span><span class="w"></span>
+
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="o">==</span><span class="mf">0.0_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         </span><span class="n">Ttj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0_wp</span><span class="w"></span>
+<span class="w">         </span><span class="n">Tty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0e+300_wp</span><span class="w"></span>
+<span class="w">      </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="o">&lt;=</span><span class="mf">4.0_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         </span><span class="n">x1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">/</span><span class="mf">4.0_wp</span><span class="w"></span>
+<span class="w">         </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x1</span><span class="o">*</span><span class="n">x1</span><span class="w"></span>
+<span class="w">         </span><span class="n">Ttj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((((((.</span><span class="mi">3581</span><span class="mf">7e-4_wp</span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="p">.</span><span class="mi">63976</span><span class="mf">5e-3_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="p">.</span><span class="mi">709253</span><span class="mf">5e-2_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">               </span><span class="p">.</span><span class="mi">055544803_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="p">.</span><span class="mi">296292677_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="p">.</span><span class="mi">999999326_wp</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">               </span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="mf">1.999999936_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="w"></span>
+<span class="w">         </span><span class="n">Tty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(((((((</span><span class="o">-</span><span class="p">.</span><span class="mi">354</span><span class="mf">6e-5_wp</span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="p">.</span><span class="mi">7621</span><span class="mf">7e-4_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="p">.</span><span class="mi">105949</span><span class="mf">9e-2_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">               </span><span class="p">.</span><span class="mi">010787555_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="p">.</span><span class="mi">07810271_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="p">.</span><span class="mi">377255736_wp</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">               </span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="mf">1.114084491_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="mf">1.909859297_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="w"></span>
+<span class="w">         </span><span class="n">e0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">gamma</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">log</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0_wp</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="n">Tty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pi</span><span class="o">/</span><span class="mf">6.0_wp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e0</span><span class="o">/</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">Ttj</span><span class="o">-</span><span class="n">e0</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Tty</span><span class="w"></span>
+<span class="w">      </span><span class="n">elseif</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="o">&lt;=</span><span class="mf">8.0_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         </span><span class="n">xt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">.</span><span class="mi">25_wp</span><span class="o">*</span><span class="n">pi</span><span class="w"></span>
+<span class="w">         </span><span class="n">t1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">4.0_wp</span><span class="o">/</span><span class="n">x</span><span class="w"></span>
+<span class="w">         </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t1</span><span class="o">*</span><span class="n">t1</span><span class="w"></span>
+<span class="w">         </span><span class="n">f0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(((((.</span><span class="mi">0145369_wp</span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="p">.</span><span class="mi">0666297_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="p">.</span><span class="mi">1341551_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="p">.</span><span class="mi">1647797_wp</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">              </span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="p">.</span><span class="mi">1608874_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="p">.</span><span class="mi">2021547_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">.</span><span class="mi">7977506_wp</span><span class="w"></span>
+<span class="w">         </span><span class="n">g0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((((((.</span><span class="mi">0160672_wp</span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="p">.</span><span class="mi">0759339_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="p">.</span><span class="mi">1576116_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="p">.</span><span class="mi">1960154_wp</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">              </span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="p">.</span><span class="mi">1797457_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="p">.</span><span class="mi">1702778_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="p">.</span><span class="mi">3235819_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t1</span><span class="w"></span>
+<span class="w">         </span><span class="n">Ttj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">f0</span><span class="o">*</span><span class="nb">cos</span><span class="p">(</span><span class="n">xt</span><span class="p">)</span><span class="o">+</span><span class="n">g0</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="n">xt</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="n">Ttj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ttj</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">gamma</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">log</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0_wp</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="n">Tty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">f0</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="n">xt</span><span class="p">)</span><span class="o">-</span><span class="n">g0</span><span class="o">*</span><span class="nb">cos</span><span class="p">(</span><span class="n">xt</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">else</span>
+<span class="k">         </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">8.0_wp</span><span class="o">/</span><span class="n">x</span><span class="w"></span>
+<span class="w">         </span><span class="n">xt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">.</span><span class="mi">25_wp</span><span class="o">*</span><span class="n">pi</span><span class="w"></span>
+<span class="w">         </span><span class="n">f0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(((((.</span><span class="mi">1811</span><span class="mf">8e-2_wp</span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="p">.</span><span class="mi">9190</span><span class="mf">9e-2_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="p">.</span><span class="mi">017033_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="p">.</span><span class="mi">939</span><span class="mf">4e-3_wp</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">              </span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="p">.</span><span class="mi">051445_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="p">.</span><span class="mi">1</span><span class="mf">1e-5_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">.</span><span class="mi">7978846_wp</span><span class="w"></span>
+<span class="w">         </span><span class="n">g0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(((((</span><span class="o">-</span><span class="p">.</span><span class="mi">2373</span><span class="mf">1e-2_wp</span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="p">.</span><span class="mi">5984</span><span class="mf">2e-2_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="p">.</span><span class="mi">2443</span><span class="mf">7e-2_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">-</span><span class="p">.</span><span class="mi">0233178_wp</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">              </span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="p">.</span><span class="mi">59</span><span class="mf">5e-4_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="p">.</span><span class="mi">1620695_wp</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="w"></span>
+<span class="w">         </span><span class="n">Ttj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">f0</span><span class="o">*</span><span class="nb">cos</span><span class="p">(</span><span class="n">xt</span><span class="p">)</span><span class="o">+</span><span class="n">g0</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="n">xt</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">               </span><span class="o">+</span><span class="w"> </span><span class="nb">gamma</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">log</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0_wp</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="n">Tty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">f0</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="n">xt</span><span class="p">)</span><span class="o">-</span><span class="n">g0</span><span class="o">*</span><span class="nb">cos</span><span class="p">(</span><span class="n">xt</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">endif</span>
+
+<span class="k">   end subroutine </span><span class="n">ittjyb</span><span class="w"></span>
+</pre></div>
+
+    </section>
+    <br>
     
     </div>
   </div>

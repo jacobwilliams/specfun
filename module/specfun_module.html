@@ -84,7 +84,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title="100.0% of total for modules and submodules.">9689 statements</a>
+    title="100.0% of total for modules and submodules.">9686 statements</a>
      </li> 
     <li><i class="fa fa-code"></i><a href="../src/specfun.f90"> Source File</a></li>
   </ul>
@@ -117,6 +117,7 @@
       <a class="list-group-item" href="../module/specfun_module.html#variable-halfpi">halfpi</a>
       <a class="list-group-item" href="../module/specfun_module.html#variable-twopi">twopi</a>
       <a class="list-group-item" href="../module/specfun_module.html#variable-sq2">sq2</a>
+      <a class="list-group-item" href="../module/specfun_module.html#variable-gamma">gamma</a>
     </div>
   </div>
 </div>
@@ -448,6 +449,7 @@
       <a class="list-group-item" href="../module/specfun_module.html#variable-halfpi">halfpi</a>
       <a class="list-group-item" href="../module/specfun_module.html#variable-twopi">twopi</a>
       <a class="list-group-item" href="../module/specfun_module.html#variable-sq2">sq2</a>
+      <a class="list-group-item" href="../module/specfun_module.html#variable-gamma">gamma</a>
     </div>
   </div>
 </div>
@@ -660,6 +662,12 @@
 <td>private,</td>  <td>parameter</td><td>::</td>
   <td><strong>sq2</strong></td><td> =</td><td>sqrt(2.0_wp)</td><td></td>
 </tr>
+<tr>
+  <td><span class="anchor" id="variable-gamma"></span>real(kind=wp),</td>
+<td>public,</td>  <td>parameter</td><td>::</td>
+  <td><strong>gamma</strong></td><td> =</td><td>0.57721566490153286060651209008240243104215933593992_wp</td><td><p>Euler's constant to 50 decimal places.
+<code>.5772156649015329D0</code> in the original code</p></td>
+</tr>
 </tbody>
 </table>
 
@@ -694,7 +702,7 @@
   </div>
 
       <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-msta1"></span><h3>public function <a href='../proc/msta1.html'>msta1</a>(x, Mp)</h3></div>
+  <div class="panel-heading codesum"><span class="anchor" id="proc-msta1"></span><h3>public function <a href='../proc/msta1.html'>msta1</a>(x, Mp) result(nn)</h3></div>
   <div class="panel-body">
        
 <p>Determine the starting point for backward
@@ -705,27 +713,27 @@ Jn(x) at that point is about 10^(-MP)</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>x</strong></td><td></td>
+  <td><strong>x</strong></td><td><p>Argument of Jn(x)</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Mp</strong></td><td></td>
+  <td><strong>Mp</strong></td><td><p>Value of magnitude</p></td>
 </tr>
 </tbody>
 </table>
 
-<h4>Return Value <small>integer</small></h4>  
+<h4>Return Value <small>integer</small></h4>  <p>Starting point</p>
 
   </div>
   </div>
 
       <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-msta2"></span><h3>public function <a href='../proc/msta2.html'>msta2</a>(x, n, Mp)</h3></div>
+  <div class="panel-heading codesum"><span class="anchor" id="proc-msta2"></span><h3>public function <a href='../proc/msta2.html'>msta2</a>(x, n, Mp) result(nn)</h3></div>
   <div class="panel-body">
        
 <p>Determine the starting point for backward
@@ -736,27 +744,27 @@ significant digits</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>x</strong></td><td></td>
+  <td><strong>x</strong></td><td><p>Argument of Jn(x)</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>n</strong></td><td></td>
+  <td><strong>n</strong></td><td><p>Order of Jn(x)</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Mp</strong></td><td></td>
+  <td><strong>Mp</strong></td><td><p>Significant digit</p></td>
 </tr>
 </tbody>
 </table>
 
-<h4>Return Value <small>integer</small></h4>  
+<h4>Return Value <small>integer</small></h4>  <p>Starting point</p>
 
   </div>
   </div>
@@ -769,14 +777,14 @@ significant digits</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>n</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>x</strong></td><td></td>
 </tr>
@@ -1398,34 +1406,34 @@ functions for q ≤ m*m</p>
   <div class="panel-body">
        
 <p>Compute the characteristic value of Mathieu
-functions  for q ≥ 3m</p>
+functions for q ≥ 3m</p>
     
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>Kd</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>m</strong></td><td></td>
+  <td><strong>m</strong></td><td><p>Order of Mathieu functions</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>q</strong></td><td></td>
+  <td><strong>q</strong></td><td><p>Parameter of Mathieu functions</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>a0</strong></td><td></td>
+  <td><strong>a0</strong></td><td><p>Initial characteristic value</p></td>
 </tr>
 </tbody>
 </table>
@@ -1445,22 +1453,22 @@ to x, and Y0(t)/t with respect to t from x to ∞</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>x</strong></td><td></td>
+  <td><strong>x</strong></td><td><p>Variable in the limits  ( x ≥ 0 )</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Ttj</strong></td><td></td>
+  <td><strong>Ttj</strong></td><td><p>Integration of [1-J0(t)]/t from 0 to x</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Tty</strong></td><td></td>
+  <td><strong>Tty</strong></td><td><p>Integration of Y0(t)/t from x to ∞</p></td>
 </tr>
 </tbody>
 </table>
@@ -1480,22 +1488,22 @@ to x, and Y0(t)/t with respect to t from x to ∞</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>x</strong></td><td></td>
+  <td><strong>x</strong></td><td><p>Variable in the limits  ( x ≥ 0 )</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Ttj</strong></td><td></td>
+  <td><strong>Ttj</strong></td><td><p>Integration of [1-J0(t)]/t from 0 to x</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Tty</strong></td><td></td>
+  <td><strong>Tty</strong></td><td><p>Integration of Y0(t)/t from x to ∞</p></td>
 </tr>
 </tbody>
 </table>
