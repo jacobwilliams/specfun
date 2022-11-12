@@ -84,7 +84,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.3% of total for procedures.">30 statements</a>
+    title=" 0.4% of total for procedures.">36 statements</a>
      </li> 
     <li><i class="fa fa-code"></i><a href="../src/specfun.f90"> Source File</a></li>
   </ul>
@@ -109,7 +109,12 @@
     <div id="sidebar">
   <h3>Contents</h3>
  
-<em>None</em>
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/qstar.html#src">qstar</a>
+  </div>
+</div>
 
 </div>
 
@@ -127,44 +132,44 @@ with a small argument</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" id="variable-m~6"></span>integer</td>
-<td></td>
+  <td><span class="anchor" id="variable-m~6"></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>m</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-n~11"></span>integer</td>
-<td></td>
+  <td><span class="anchor" id="variable-n~11"></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>n</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-c~3"></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" id="variable-c~3"></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>c</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-ck~2"></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" id="variable-ck~2"></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Ck</strong></td><td></td>
+  <td><strong>Ck</strong>(200)</td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-ck1"></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" id="variable-ck1"></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>Ck1</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-qs"></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" id="variable-qs"></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>Qs</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" id="variable-qt~2"></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" id="variable-qt~2"></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>Qt</strong></td><td></td>
 </tr>
@@ -292,7 +297,12 @@ with a small argument</p>
     <section class="visible-xs visible-sm hidden-md">
       <h3>Contents</h3>
  
-<em>None</em>
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/qstar.html#src">qstar</a>
+  </div>
+</div>
 
     </section>
     <br class="visible-xs visible-sm hidden-md">
@@ -306,6 +316,52 @@ with a small argument</p>
 
 
     
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span><span class="w">   </span><span class="k">subroutine </span><span class="n">qstar</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">Ck</span><span class="p">,</span><span class="n">Ck1</span><span class="p">,</span><span class="n">Qs</span><span class="p">,</span><span class="n">Qt</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">m</span><span class="w"></span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">c</span><span class="w"></span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Ck</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Ck1</span><span class="w"></span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Qs</span><span class="w"></span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Qt</span><span class="w"></span>
+
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ap</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">qs0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">sk</span><span class="w"></span>
+<span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">ip</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">n</span><span class="o">-</span><span class="n">m</span><span class="o">==</span><span class="mi">2</span><span class="o">*</span><span class="nb">int</span><span class="p">((</span><span class="n">n</span><span class="o">-</span><span class="n">m</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="n">ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">      </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span><span class="o">/</span><span class="n">Ck</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="w"></span>
+<span class="w">      </span><span class="n">ap</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="w"></span>
+<span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="w"></span>
+<span class="w">         </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0_wp</span><span class="w"></span>
+<span class="w">         </span><span class="k">do </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="w">            </span><span class="n">sk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0_wp</span><span class="w"></span>
+<span class="w">            </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="w"></span>
+<span class="w">               </span><span class="n">sk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sk</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Ck</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Ck</span><span class="p">(</span><span class="n">l</span><span class="o">-</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">enddo</span>
+<span class="k">            </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sk</span><span class="o">*</span><span class="n">ap</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">         </span><span class="n">ap</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="o">*</span><span class="n">s</span><span class="w"></span>
+<span class="w">      </span><span class="k">enddo</span>
+<span class="k">      </span><span class="n">qs0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ap</span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">do </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="w"></span>
+<span class="w">         </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span><span class="w"></span>
+<span class="w">         </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="w"></span>
+<span class="w">            </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">k</span><span class="o">+</span><span class="n">ip</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">k</span><span class="o">-</span><span class="mf">1.0_wp</span><span class="o">+</span><span class="n">ip</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">k</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="w"></span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">         </span><span class="n">qs0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qs0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ap</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">r</span><span class="w"></span>
+<span class="w">      </span><span class="k">enddo</span>
+<span class="k">      </span><span class="n">Qs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">ip</span><span class="o">*</span><span class="n">Ck1</span><span class="o">*</span><span class="p">(</span><span class="n">Ck1</span><span class="o">*</span><span class="n">qs0</span><span class="p">)</span><span class="o">/</span><span class="n">c</span><span class="w"></span>
+<span class="w">      </span><span class="n">Qt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">2.0_wp</span><span class="o">/</span><span class="n">Ck1</span><span class="o">*</span><span class="n">Qs</span><span class="w"></span>
+
+<span class="w">   </span><span class="k">end subroutine </span><span class="n">qstar</span><span class="w"></span>
+</pre></div>
+
+    </section>
+    <br>
     
     </div>
   </div>

@@ -378,8 +378,8 @@
 
    subroutine vvsa(Va,x,Pv)
 
-      real(wp),intent(in) :: x !! Argument
       real(wp),intent(in) :: Va !! Order
+      real(wp),intent(in) :: x !! Argument
       real(wp),intent(out) :: Pv !! Vv(x)
 
       real(wp) :: a0 , ep , fac , g1 , ga0 , gm , gw ,  &
@@ -425,149 +425,161 @@
 !  Compute the zeros of Bessel functions Jn(x) and
 !  Jn'(x), and arrange them in the order of their
 !  magnitudes
+!
+!@note: SciPy: Changed `P` from a character array to an integer array.
 
-      subroutine jdzo(Nt,n,m,p,Zo)
+   subroutine jdzo(Nt,n,m,p,Zo)
 
-!       SciPy: Changed P from a character array to an integer array.
-!       Input :  NT    --- Number of total zeros ( NT ≤ 1200 )
-!       Output:  ZO(L) --- Value of the L-th zero of Jn(x)
-!                          and Jn'(x)
-!                N(L)  --- n, order of Jn(x) or Jn'(x) associated
-!                          with the L-th zero
-!                M(L)  --- m, serial number of the zeros of Jn(x)
-!                          or Jn'(x) associated with the L-th zero
-!                          ( L is the serial number of all the
-!                            zeros of Jn(x) and Jn'(x) )
-!                P(L)  --- 0 (TM) or 1 (TE), a code for designating the
-!                          zeros of Jn(x)  or Jn'(x).
-!                          In the waveguide applications, the zeros
-!                          of Jn(x) correspond to TM modes and
-!                          those of Jn'(x) correspond to TE modes
-!       Routine called:    BJNDD for computing Jn(x), Jn'(x) and
-!                          Jn''(x)
 
-      real(wp) bj , dj , fj , x , x0 , x1 , x2 , xm , Zo , zoc
-      integer i , j , k , l , l0 , l1 , l2 , m , m1 , mm , n , n1 , nm ,&
-            & Nt
-      integer p(1400) , p1(70)
-      dimension n(1400) , m(1400) , Zo(0:1400) , n1(70) , m1(70) ,      &
-              & zoc(0:70) , bj(101) , dj(101) , fj(101)
+      integer,intent(in) :: Nt !! Number of total zeros ( NT ≤ 1200 )
+      integer,intent(out) :: n(1400) !! n, order of Jn(x) or Jn'(x) associated
+                                     !! with the L-th zero
+      integer,intent(out) :: m(1400) !! m, serial number of the zeros of Jn(x)
+                                     !! or Jn'(x) associated with the L-th zero
+                                     !! ( L is the serial number of all the
+                                     !! zeros of Jn(x) and Jn'(x) )
+      integer,intent(out) :: p(1400) !! 0 (TM) or 1 (TE), a code for designating the
+                                     !! zeros of Jn(x) or Jn'(x).
+                                     !! In the waveguide applications, the zeros
+                                     !! of Jn(x) correspond to TM modes and
+                                     !! those of Jn'(x) correspond to TE modes
+      real(wp),intent(out) :: Zo(0:1400) !! Value of the L-th zero of Jn(x)
+                                         !! and Jn'(x)
+
+      real(wp) :: x , x0 , x1 , x2 , xm
+      integer :: i , j , k , l , l0 , l1 , l2 , mm , nm
+      integer,dimension(70) :: n1, m1, p1
+      real(wp),dimension(0:70) :: zoc
+      real(wp),dimension(101) :: bj , dj , fj
+
+      real(wp),parameter :: tol = 1.0e-10_wp
 
       x = 0
       zoc(0) = 0
       if ( Nt<600 ) then
-         xm = -1.0 + 2.248485*Nt**0.5 - .0159382*Nt +                   &
-            & 3.208775e-4*Nt**1.5
-         nm = int(14.5+.05875*Nt)
-         mm = int(.02*Nt) + 6
+         xm = -1.0_wp + 2.248485_wp*Nt**0.5_wp - .0159382_wp*Nt + 3.208775e-4_wp*Nt**1.5_wp
+         nm = int(14.5_wp+.05875_wp*Nt)
+         mm = int(.02_wp*Nt) + 6
       else
-         xm = 5.0 + 1.445389*Nt**.5 + .01889876*Nt - 2.147763e-4*Nt**1.5
-         nm = int(27.8+.0327*Nt)
-         mm = int(.01088*Nt) + 10
+         xm = 5.0_wp + 1.445389_wp*Nt**.5_wp + .01889876_wp*Nt - 2.147763e-4_wp*Nt**1.5_wp
+         nm = int(27.8_wp+.0327_wp*Nt)
+         mm = int(.01088_wp*Nt) + 10
       endif
       l0 = 0
       do i = 1 , nm
-         x1 = .407658 + .4795504*(i-1)**.5 + .983618*(i-1)
-         x2 = 1.99535 + .8333883*(i-1)**.5 + .984584*(i-1)
+         x1 = .407658_wp + .4795504_wp*(i-1)**.5_wp + .983618_wp*(i-1)
+         x2 = 1.99535_wp + .8333883_wp*(i-1)**.5_wp + .984584_wp*(i-1)
          l1 = 0
          do j = 1 , mm
-            if ( i/=1 .or. j/=1 ) then
-               x = x1
- 10            call bjndd(i,x,bj,dj,fj)
-               x0 = x
-               x = x - dj(i)/fj(i)
-               if ( x1>xm ) goto 20
-               if ( abs(x-x0)>1.0d-10 ) goto 10
-            endif
-            l1 = l1 + 1
-            n1(l1) = i - 1
-            m1(l1) = j
-            if ( i==1 ) m1(l1) = j - 1
-            p1(l1) = 1
-            zoc(l1) = x
-            if ( i<=15 ) then
-               x1 = x + 3.057 + .0122*(i-1) + (1.555+.41575*(i-1))/(j+1)&
-                  & **2
-            else
-               x1 = x + 2.918 + .01924*(i-1) + (6.26+.13205*(i-1))/(j+1)&
-                  & **2
-            endif
- 20         x = x2
- 40         call bjndd(i,x,bj,dj,fj)
-            x0 = x
-            x = x - bj(i)/dj(i)
-            if ( x<=xm ) then
-               if ( abs(x-x0)>1.0d-10 ) goto 40
+            main : block
+               if ( i/=1 .or. j/=1 ) then
+                  x = x1
+                  do
+                     call bjndd(i,x,bj,dj,fj)
+                     x0 = x
+                     x = x - dj(i)/fj(i)
+                     if ( x1>xm ) exit main
+                     if ( abs(x-x0)<=tol) exit
+                  end do
+               endif
                l1 = l1 + 1
                n1(l1) = i - 1
                m1(l1) = j
-               p1(l1) = 0
+               if ( i==1 ) m1(l1) = j - 1
+               p1(l1) = 1
                zoc(l1) = x
                if ( i<=15 ) then
-                  x2 = x + 3.11 + .0138*(i-1) + (.04832+.2804*(i-1))    &
-                     & /(j+1)**2
+                  x1 = x + 3.057_wp + .0122_wp*(i-1) + (1.555_wp+.41575_wp*(i-1))/(j+1)**2
                else
-                  x2 = x + 3.001 + .0105*(i-1) + (11.52+.48525*(i-1))   &
-                     & /(j+3)**2
+                  x1 = x + 2.918_wp + .01924_wp*(i-1) + (6.26_wp+.13205_wp*(i-1))/(j+1)**2
                endif
-            endif
+            end block main
+            x = x2
+            do
+               call bjndd(i,x,bj,dj,fj)
+               x0 = x
+               x = x - bj(i)/dj(i)
+               if ( x<=xm ) exit
+               if ( abs(x-x0)<=tol ) then
+                  l1 = l1 + 1
+                  n1(l1) = i - 1
+                  m1(l1) = j
+                  p1(l1) = 0
+                  zoc(l1) = x
+                  if ( i<=15 ) then
+                     x2 = x + 3.11_wp + .0138_wp*(i-1) + (.04832_wp+.2804_wp*(i-1))/(j+1)**2
+                  else
+                     x2 = x + 3.001_wp + .0105_wp*(i-1) + (11.52_wp+.48525_wp*(i-1))/(j+3)**2
+                  endif
+                  exit
+               end if
+            end do
          enddo
          l = l0 + l1
          l2 = l
- 50      if ( l0==0 ) then
-            do k = 1 , l
-               Zo(k) = zoc(k)
-               n(k) = n1(k)
-               m(k) = m1(k)
-               p(k) = p1(k)
-            enddo
-            l1 = 0
-         elseif ( l0/=0 ) then
-            if ( Zo(l0)>=zoc(l1) ) then
-               Zo(l0+l1) = Zo(l0)
-               n(l0+l1) = n(l0)
-               m(l0+l1) = m(l0)
-               p(l0+l1) = p(l0)
-               l0 = l0 - 1
-            else
-               Zo(l0+l1) = zoc(l1)
-               n(l0+l1) = n1(l1)
-               m(l0+l1) = m1(l1)
-               p(l0+l1) = p1(l1)
-               l1 = l1 - 1
+         do
+            if ( l0==0 ) then
+               do k = 1 , l
+                  Zo(k) = zoc(k)
+                  n(k) = n1(k)
+                  m(k) = m1(k)
+                  p(k) = p1(k)
+               enddo
+               l1 = 0
+            elseif ( l0/=0 ) then
+               if ( Zo(l0)>=zoc(l1) ) then
+                  Zo(l0+l1) = Zo(l0)
+                  n(l0+l1) = n(l0)
+                  m(l0+l1) = m(l0)
+                  p(l0+l1) = p(l0)
+                  l0 = l0 - 1
+               else
+                  Zo(l0+l1) = zoc(l1)
+                  n(l0+l1) = n1(l1)
+                  m(l0+l1) = m1(l1)
+                  p(l0+l1) = p1(l1)
+                  l1 = l1 - 1
+               endif
             endif
-         endif
-         if ( l1/=0 ) goto 50
+            if ( l1==0 ) exit
+         end do
          l0 = l2
       enddo
-      end
+   end subroutine jdzo
 
 !*****************************************************************************************
 !>
 !  Compute coefficient Bk's for oblate radial
 !  functions with a small argument
 
-      subroutine cbk(m,n,c,Cv,Qt,Ck,Bk)
+   subroutine cbk(m,n,c,Cv,Qt,Ck,Bk)
 
-      real(wp) Bk , c , Ck , Cv , eps , Qt , r1 , s1 , sw , t , &
-                     & u , v , w
-      integer i , i1 , ip , j , k , m , n , n2 , nm
-      dimension Bk(200) , Ck(200) , u(200) , v(200) , w(200)
+      integer,intent(in) :: m
+      integer,intent(in) :: n
+      real(wp),intent(in) :: c
+      real(wp),intent(in) :: Cv
+      real(wp),intent(in) :: Qt
+      real(wp),intent(in) :: Ck(200)
+      real(wp),intent(out) :: Bk(200)
 
-      eps = 1.0d-14
+      real(wp) :: r1 , s1 , sw , t , u(200) , v(200) , w(200)
+      integer :: i , i1 , ip , j , k , n2 , nm
+
+      real(wp),parameter :: eps = 1.0e-14_wp
+
       ip = 1
       if ( n-m==2*int((n-m)/2) ) ip = 0
-      nm = 25 + int(0.5*(n-m)+c)
+      nm = 25 + int(0.5_wp*(n-m)+c)
       u(1) = 0.0_wp
       n2 = nm - 2
       do j = 2 , n2
          u(j) = c*c
       enddo
       do j = 1 , n2
-         v(j) = (2.0*j-1.0-ip)*(2.0*(j-m)-ip) + m*(m-1.0) - Cv
+         v(j) = (2.0_wp*j-1.0_wp-ip)*(2.0_wp*(j-m)-ip) + m*(m-1.0_wp) - Cv
       enddo
       do j = 1 , nm - 1
-         w(j) = (2.0*j-ip)*(2.0*j+1.0-ip)
+         w(j) = (2.0_wp*j-ip)*(2.0_wp*j+1.0_wp-ip)
       enddo
       if ( ip==0 ) then
          sw = 0.0_wp
@@ -580,7 +592,7 @@
                   do j = 1 , k
                      r1 = r1*(i+m-j)/j
                   enddo
-                  s1 = s1 + Ck(i+1)*(2.0*i+m)*r1
+                  s1 = s1 + Ck(i+1)*(2.0_wp*i+m)*r1
                   if ( abs(s1-sw)<abs(s1)*eps ) exit
                   sw = s1
                endif
@@ -598,8 +610,8 @@
                   do j = 1 , k
                      r1 = r1*(i+m-j)/j
                   enddo
-                  if ( i>0 ) s1 = s1 + Ck(i)*(2.0*i+m-1)*r1
-                  s1 = s1 - Ck(i+1)*(2.0*i+m)*r1
+                  if ( i>0 ) s1 = s1 + Ck(i)*(2.0_wp*i+m-1)*r1
+                  s1 = s1 - Ck(i+1)*(2.0_wp*i+m)*r1
                   if ( abs(s1-sw)<abs(s1)*eps ) exit
                   sw = s1
                endif
@@ -617,30 +629,42 @@
       do k = n2 - 1 , 1 , -1
          Bk(k) = Bk(k) - w(k)*Bk(k+1)
       enddo
-      end
+
+   end subroutine cbk
 
 !*****************************************************************************************
 !>
 !  Compute prolate spheroidal radial function
 !  of the second kind with a small argument
 
-      subroutine rmn2sp(m,n,c,x,Cv,Df,Kd,R2f,R2d)
+   subroutine rmn2sp(m,n,c,x,Cv,Df,Kd,R2f,R2d)
 
-      real(wp) c , ck1 , ck2 , Cv , Df , dn , eps , ga , gb ,   &
-                     & gc , pd , pm , qd , qm , r1 , r2 , R2d , R2f ,   &
-                     & r3 , r4
-      real(wp) sd , sd0 , sd1 , sd2 , sdm , sf , spd1 , spd2 ,  &
-                     & spl , su0 , su1 , su2 , sum , sw , x
-      integer ip , j , j1 , j2 , k , Kd , ki , l1 , m , n , nm , nm1 ,  &
-            & nm2 , nm3
-      dimension pm(0:251) , pd(0:251) , qm(0:251) , qd(0:251) , dn(200) &
-              & , Df(200)
-      if ( abs(Df(1))<1.0d-280 ) then
+      integer,intent(in) :: m
+      integer,intent(in) :: n
+      real(wp) :: c
+      real(wp) :: x
+      real(wp) :: Cv
+      real(wp) :: Df(200)
+      integer :: Kd
+      real(wp),intent(out) :: R2f
+      real(wp),intent(out) :: R2d
+
+      real(wp),dimension(0:251)  :: pd , pm , qd , qm
+      real(wp),dimension(200)  :: dn
+      real(wp) :: ck1 , ck2 , ga , gb , gc , r1 , r2 , &
+                  r3 , r4, sd , sd0 , sd1 , sd2 , sdm , sf , spd1 , &
+                  spd2 , spl , su0 , su1 , su2 , sum , sw
+      integer :: ip , j , j1 , j2 , k , ki , l1 , nm , nm1 ,  &
+                 nm2 , nm3
+
+      real(wp),parameter :: eps = 1.0e-14_wp
+
+      if ( abs(Df(1))<1.0e-280_wp ) then
          R2f = 1.0e+300_wp
          R2d = 1.0e+300_wp
          return
       endif
-      eps = 1.0d-14
+
       ip = 1
       nm1 = int((n-m)/2)
       if ( n-m==2*nm1 ) ip = 0
@@ -688,7 +712,7 @@
             r3 = 1.0_wp
             sf = 1.0_wp
             do l1 = 1 , j
-               r3 = 0.5_wp*r3*(-j+l1-1.0)*(j+l1)/((m+l1)*l1)*(1.0-x)
+               r3 = 0.5_wp*r3*(-j+l1-1.0_wp)*(j+l1)/((m+l1)*l1)*(1.0_wp-x)
                sf = sf + r3
             enddo
             if ( m-j>=2 ) gb = (m-j-1.0_wp)*r2
@@ -696,11 +720,11 @@
             spl = r1*ga*gb*sf
             su1 = su1 + (-1)**(j+m)*dn(k)*spl
             spd1 = m/(x*x-1.0_wp)*spl
-            gc = 0.5_wp*j*(j+1.0)/(m+1.0)
+            gc = 0.5_wp*j*(j+1.0_wp)/(m+1.0_wp)
             sd = 1.0_wp
             r4 = 1.0_wp
             do l1 = 1 , j - 1
-               r4 = 0.5_wp*r4*(-j+l1)*(j+l1+1.0)/((m+l1+1.0)*l1)*(1.0-x)
+               r4 = 0.5_wp*r4*(-j+l1)*(j+l1+1.0_wp)/((m+l1+1.0_wp)*l1)*(1.0_wp-x)
                sd = sd + r4
             enddo
             spd2 = r1*ga*gb*gc*sd
@@ -727,7 +751,8 @@
       sdm = sd0 + sd1 + sd2
       R2f = sum/ck2
       R2d = sdm/ck2
-      end
+
+   end subroutine rmn2sp
 
 !*****************************************************************************************
 !>
@@ -735,29 +760,31 @@
 
       subroutine bernob(n,Bn)
 
-!       Input :  n --- Serial number
-!       Output:  BN(n) --- Bn
+      integer,intent(in) :: n !! Serial number
+      real(wp),intent(out) :: Bn(0:n) !! BN(n) --- Bn
 
-      real(wp) Bn , r1 , r2 , s , tpi
-      integer k , m , n
-      dimension Bn(0:n)
+      real(wp) :: r1 , r2 , s
+      integer :: k , m
 
-      tpi = 6.283185307179586d0
+      real(wp),parameter :: tol = 1.0e-15_wp
+      integer,parameter :: maxiter = 10000
+
       Bn(0) = 1.0_wp
       Bn(1) = -0.5_wp
       Bn(2) = 1.0_wp/6.0_wp
-      r1 = (2.0_wp/tpi)**2
+      r1 = (2.0_wp/twopi)**2
       do m = 4 , n , 2
-         r1 = -r1*(m-1)*m/(tpi*tpi)
+         r1 = -r1*(m-1)*m/(twopi*twopi)
          r2 = 1.0_wp
-         do k = 2 , 10000
+         do k = 2 , maxiter
             s = (1.0_wp/k)**m
             r2 = r2 + s
-            if ( s<1.0d-15 ) exit
+            if ( s<tol ) exit
          enddo
          Bn(m) = r1*r2
       enddo
-      end
+
+   end subroutine bernob
 
 !*****************************************************************************************
 !>
@@ -765,13 +792,12 @@
 
       subroutine bernoa(n,Bn)
 
-!       Input :  n --- Serial number
-!       Output:  BN(n) --- Bn
+      integer,intent(in) :: n  !! Serial number
+      real(wp),intent(out) :: Bn(0:n) !! BN(n) --- Bn
 
-      implicit none
-      real(wp) Bn , r , s
-      integer j , k , m , n
-      dimension Bn(0:n)
+      real(wp) :: r , s
+      integer :: j , k , m
+
       Bn(0) = 1.0_wp
       Bn(1) = -0.5_wp
       do m = 2 , n
@@ -788,18 +814,26 @@
       do m = 3 , n , 2
          Bn(m) = 0.0_wp
       enddo
-      end
+
+   end subroutine bernoa
 
 !*****************************************************************************************
 !>
 !  Compute Q*mn(-ic) for oblate radial functions
 !  with a small argument
 
-      subroutine qstar(m,n,c,Ck,Ck1,Qs,Qt)
+   subroutine qstar(m,n,c,Ck,Ck1,Qs,Qt)
 
-      real(wp) ap , c , Ck , Ck1 , Qs , qs0 , Qt , r , s , sk
-      integer i , ip , k , l , m , n
-      dimension ap(200) , Ck(200)
+      integer,intent(in) :: m
+      integer,intent(in) :: n
+      real(wp),intent(in) :: c
+      real(wp),intent(in) :: Ck(200)
+      real(wp),intent(in) :: Ck1
+      real(wp),intent(out) :: Qs
+      real(wp),intent(out) :: Qt
+
+      real(wp) :: ap(200) , qs0 , r , s , sk
+      integer :: i , ip , k , l
 
       ip = 1
       if ( n-m==2*int((n-m)/2) ) ip = 0
@@ -826,7 +860,8 @@
       enddo
       Qs = (-1)**ip*Ck1*(Ck1*qs0)/c
       Qt = -2.0_wp/Ck1*Qs
-      end
+
+   end subroutine qstar
 
 !*****************************************************************************************
 !>
@@ -834,166 +869,167 @@
 !  Mathieu functions for m ≤ 12  or q ≤ 300 or
 !  q ≥ m*m
 
-      subroutine cv0(Kd,m,q,a0)
+   subroutine cv0(Kd,m,q,a0)
 
-!       Input :  m  --- Order of Mathieu functions
-!                q  --- Parameter of Mathieu functions
-!       Output:  A0 --- Characteristic value
+      integer,intent(in) :: Kd
+      integer,intent(in) :: m !! Order of Mathieu functions
+      real(wp),intent(in) :: q !! Parameter of Mathieu functions
+      real(wp),intent(out) :: a0 !! Characteristic value
 
-      implicit none
-      real(wp) a0 , q , q2
-      integer Kd , m
+      real(wp) :: q2
+
       q2 = q*q
       if ( m==0 ) then
-         if ( q<=1.0 ) then
-            a0 = (((.0036392*q2-.0125868)*q2+.0546875)*q2-.5)*q2
+         if ( q<=1.0_wp ) then
+            a0 = (((.0036392_wp*q2-.0125868_wp)*q2+.0546875_wp)*q2-.5_wp)*q2
          elseif ( q<=10.0 ) then
-            a0 = ((3.999267d-3*q-9.638957d-2)*q-.88297)*q + .5542818
+            a0 = ((3.999267e-3_wp*q-9.638957e-2_wp)*q-.88297_wp)*q + .5542818_wp
          else
             call cvql(Kd,m,q,a0)
          endif
       elseif ( m==1 ) then
          if ( q<=1.0 .and. Kd==2 ) then
-            a0 = (((-6.51e-4*q-.015625)*q-.125)*q+1.0)*q + 1.0
+            a0 = (((-6.51e-4_wp*q-.015625_wp)*q-.125_wp)*q+1.0_wp)*q + 1.0_wp
          elseif ( q<=1.0 .and. Kd==3 ) then
-            a0 = (((-6.51e-4*q+.015625)*q-.125)*q-1.0)*q + 1.0
+            a0 = (((-6.51e-4_wp*q+.015625_wp)*q-.125_wp)*q-1.0_wp)*q + 1.0_wp
          elseif ( q<=10.0 .and. Kd==2 ) then
-            a0 = (((-4.94603d-4*q+1.92917d-2)*q-.3089229)*q+1.33372)    &
-               & *q + .811752
-         elseif ( q<=10.0 .and. Kd==3 ) then
-            a0 = ((1.971096d-3*q-5.482465d-2)*q-1.152218)*q + 1.10427
+            a0 = (((-4.94603e-4_wp*q+1.92917e-2_wp)*q-.3089229_wp)*q+1.33372_wp) &
+               & *q + .811752_wp
+         elseif ( q<=10.0_wp .and. Kd==3 ) then
+            a0 = ((1.971096e-3_wp*q-5.482465e-2_wp)*q-1.152218_wp)*q + 1.10427_wp
          else
             call cvql(Kd,m,q,a0)
          endif
       elseif ( m==2 ) then
          if ( q<=1.0 .and. Kd==1 ) then
-            a0 = (((-.0036391*q2+.0125888)*q2-.0551939)*q2+.416667)     &
-               & *q2 + 4.0
-         elseif ( q<=1.0 .and. Kd==4 ) then
-            a0 = (.0003617*q2-.0833333)*q2 + 4.0
+            a0 = (((-.0036391_wp*q2+.0125888_wp)*q2-.0551939_wp)*q2+.416667_wp) &
+                 *q2 + 4.0_wp
+         elseif ( q<=1.0_wp .and. Kd==4 ) then
+            a0 = (.0003617_wp*q2-.0833333_wp)*q2 + 4.0_wp
          elseif ( q<=15 .and. Kd==1 ) then
-            a0 = (((3.200972d-4*q-8.667445d-3)*q-1.829032d-4)           &
-               & *q+.9919999)*q + 3.3290504
-         elseif ( q<=10.0 .and. Kd==4 ) then
-            a0 = ((2.38446d-3*q-.08725329)*q-4.732542d-3)*q + 4.00909
+            a0 = (((3.200972e-4_wp*q-8.667445e-3_wp)*q-1.829032e-4_wp) &
+                  *q+.9919999_wp)*q + 3.3290504_wp
+         elseif ( q<=10.0_wp .and. Kd==4 ) then
+            a0 = ((2.38446e-3_wp*q-.08725329_wp)*q-4.732542e-3_wp)*q + 4.00909_wp
          else
             call cvql(Kd,m,q,a0)
          endif
       elseif ( m==3 ) then
-         if ( q<=1.0 .and. Kd==2 ) then
-            a0 = ((6.348e-4*q+.015625)*q+.0625)*q2 + 9.0
-         elseif ( q<=1.0 .and. Kd==3 ) then
-            a0 = ((6.348e-4*q-.015625)*q+.0625)*q2 + 9.0
-         elseif ( q<=20.0 .and. Kd==2 ) then
-            a0 = (((3.035731d-4*q-1.453021d-2)*q+.19069602)*q-.1039356) &
-               & *q + 8.9449274
-         elseif ( q<=15.0 .and. Kd==3 ) then
-            a0 = ((9.369364d-5*q-.03569325)*q+.2689874)*q + 8.771735
+         if ( q<=1.0_wp .and. Kd==2 ) then
+            a0 = ((6.348e-4_wp*q+.015625_wp)*q+.0625_wp)*q2 + 9.0_wp
+         elseif ( q<=1.0_wp .and. Kd==3 ) then
+            a0 = ((6.348e-4_wp*q-.015625_wp)*q+.0625_wp)*q2 + 9.0
+         elseif ( q<=20.0_wp .and. Kd==2 ) then
+            a0 = (((3.035731e-4_wp*q-1.453021e-2_wp)*q+.19069602_wp)*q-.1039356_wp) &
+                  *q + 8.9449274_wp
+         elseif ( q<=15.0_wp .and. Kd==3 ) then
+            a0 = ((9.369364e-5_wp*q-.03569325_wp)*q+.2689874_wp)*q + 8.771735_wp
          else
             call cvql(Kd,m,q,a0)
          endif
       elseif ( m==4 ) then
          if ( q<=1.0 .and. Kd==1 ) then
-            a0 = ((-2.1e-6*q2+5.012e-4)*q2+.0333333)*q2 + 16.0
-         elseif ( q<=1.0 .and. Kd==4 ) then
-            a0 = ((3.7e-6*q2-3.669e-4)*q2+.0333333)*q2 + 16.0
-         elseif ( q<=25.0 .and. Kd==1 ) then
-            a0 = (((1.076676d-4*q-7.9684875d-3)*q+.17344854)*q-.5924058)&
-               & *q + 16.620847
-         elseif ( q<=20.0 .and. Kd==4 ) then
-            a0 = ((-7.08719d-4*q+3.8216144d-3)*q+.1907493)*q + 15.744
+            a0 = ((-2.1e-6_wp*q2+5.012e-4_wp)*q2+.0333333_wp)*q2 + 16.0_wp
+         elseif ( q<=1.0_wp .and. Kd==4 ) then
+            a0 = ((3.7e-6_wp*q2-3.669e-4_wp)*q2+.0333333_wp)*q2 + 16.0_wp
+         elseif ( q<=25.0_wp .and. Kd==1 ) then
+            a0 = (((1.076676e-4_wp*q-7.9684875e-3_wp)*q+.17344854_wp)*q-.5924058_wp) &
+                  *q + 16.620847_wp
+         elseif ( q<=20.0_wp .and. Kd==4 ) then
+            a0 = ((-7.08719e-4_wp*q+3.8216144e-3_wp)*q+.1907493_wp)*q + 15.744_wp
          else
             call cvql(Kd,m,q,a0)
          endif
       elseif ( m==5 ) then
-         if ( q<=1.0 .and. Kd==2 ) then
-            a0 = ((6.8e-6*q+1.42e-5)*q2+.0208333)*q2 + 25.0
-         elseif ( q<=1.0 .and. Kd==3 ) then
-            a0 = ((-6.8e-6*q+1.42e-5)*q2+.0208333)*q2 + 25.0
-         elseif ( q<=35.0 .and. Kd==2 ) then
-            a0 = (((2.238231d-5*q-2.983416d-3)*q+.10706975)*q-.600205)  &
-               & *q + 25.93515
-         elseif ( q<=25.0 .and. Kd==3 ) then
-            a0 = ((-7.425364d-4*q+2.18225d-2)*q+4.16399d-2)*q + 24.897
+         if ( q<=1.0_wp .and. Kd==2 ) then
+            a0 = ((6.8e-6_wp*q+1.42e-5_wp)*q2+.0208333_wp)*q2 + 25.0_wp
+         elseif ( q<=1.0_wp .and. Kd==3 ) then
+            a0 = ((-6.8e-6_wp*q+1.42e-5_wp)*q2+.0208333_wp)*q2 + 25.0_wp
+         elseif ( q<=35.0_wp .and. Kd==2 ) then
+            a0 = (((2.238231e-5_wp*q-2.983416e-3_wp)*q+.10706975_wp)*q-.600205_wp) &
+                  *q + 25.93515_wp
+         elseif ( q<=25.0_wp .and. Kd==3 ) then
+            a0 = ((-7.425364e-4_wp*q+2.18225e-2_wp)*q+4.16399e-2_wp)*q + 24.897_wp
          else
             call cvql(Kd,m,q,a0)
          endif
       elseif ( m==6 ) then
-         if ( q<=1.0 ) then
-            a0 = (.4d-6*q2+.0142857)*q2 + 36.0
-         elseif ( q<=40.0 .and. Kd==1 ) then
-            a0 = (((-1.66846d-5*q+4.80263d-4)*q+2.53998d-2)*q-.181233)  &
-               & *q + 36.423
-         elseif ( q<=35.0 .and. Kd==4 ) then
-            a0 = ((-4.57146d-4*q+2.16609d-2)*q-2.349616d-2)*q + 35.99251
+         if ( q<=1.0_wp ) then
+            a0 = (.4e-6_wp*q2+.0142857_wp)*q2 + 36.0_wp
+         elseif ( q<=40.0_wp .and. Kd==1 ) then
+            a0 = (((-1.66846e-5_wp*q+4.80263e-4_wp)*q+2.53998e-2_wp)*q-.181233_wp) &
+                  *q + 36.423_wp
+         elseif ( q<=35.0_wp .and. Kd==4 ) then
+            a0 = ((-4.57146e-4_wp*q+2.16609e-2_wp)*q-2.349616e-2_wp)*q + 35.99251_wp
          else
             call cvql(Kd,m,q,a0)
          endif
       elseif ( m==7 ) then
-         if ( q<=10.0 ) then
+         if ( q<=10.0_wp ) then
             call cvqm(m,q,a0)
-         elseif ( q<=50.0 .and. Kd==2 ) then
-            a0 = (((-1.411114d-5*q+9.730514d-4)*q-3.097887d-3)          &
-               & *q+3.533597d-2)*q + 49.0547
-         elseif ( q<=40.0 .and. Kd==3 ) then
-            a0 = ((-3.043872d-4*q+2.05511d-2)*q-9.16292d-2)*q + 49.19035
+         elseif ( q<=50.0_wp .and. Kd==2 ) then
+            a0 = (((-1.411114e-5_wp*q+9.730514e-4_wp)*q-3.097887e-3_wp) &
+               & *q+3.533597e-2_wp)*q + 49.0547_wp
+         elseif ( q<=40.0_wp .and. Kd==3 ) then
+            a0 = ((-3.043872e-4_wp*q+2.05511e-2_wp)*q-9.16292e-2_wp)*q + 49.19035_wp
          else
             call cvql(Kd,m,q,a0)
          endif
       elseif ( m>=8 ) then
-         if ( q<=3.*m ) then
+         if ( q<=3.0_wp*m ) then
             call cvqm(m,q,a0)
          elseif ( q>m*m ) then
             call cvql(Kd,m,q,a0)
          elseif ( m==8 .and. Kd==1 ) then
-            a0 = (((8.634308d-6*q-2.100289d-3)*q+.169072)*q-4.64336)    &
-               & *q + 109.4211
+            a0 = (((8.634308e-6_wp*q-2.100289e-3_wp)*q+.169072_wp)*q-4.64336_wp) &
+                  *q + 109.4211_wp
          elseif ( m==8 .and. Kd==4 ) then
-            a0 = ((-6.7842d-5*q+2.2057d-3)*q+.48296)*q + 56.59
+            a0 = ((-6.7842e-5_wp*q+2.2057e-3_wp)*q+.48296_wp)*q + 56.59_wp
          elseif ( m==9 .and. Kd==2 ) then
-            a0 = (((2.906435d-6*q-1.019893d-3)*q+.1101965)*q-3.821851)  &
-               & *q + 127.6098
+            a0 = (((2.906435e-6_wp*q-1.019893e-3_wp)*q+.1101965_wp)*q-3.821851_wp) &
+                  *q + 127.6098_wp
          elseif ( m==9 .and. Kd==3 ) then
-            a0 = ((-9.577289d-5*q+.01043839)*q+.06588934)*q + 78.0198
+            a0 = ((-9.577289e-5_wp*q+.01043839_wp)*q+.06588934_wp)*q + 78.0198_wp
          elseif ( m==10 .and. Kd==1 ) then
-            a0 = (((5.44927d-7*q-3.926119d-4)*q+.0612099)*q-2.600805)   &
-               & *q + 138.1923
+            a0 = (((5.44927e-7_wp*q-3.926119e-4_wp)*q+.0612099_wp)*q-2.600805_wp) &
+                  *q + 138.1923_wp
          elseif ( m==10 .and. Kd==4 ) then
-            a0 = ((-7.660143d-5*q+.01132506)*q-.09746023)*q + 99.29494
+            a0 = ((-7.660143e-5_wp*q+.01132506_wp)*q-.09746023_wp)*q + 99.29494_wp
          elseif ( m==11 .and. Kd==2 ) then
-            a0 = (((-5.67615d-7*q+7.152722d-6)*q+.01920291)*q-1.081583) &
-               & *q + 140.88
+            a0 = (((-5.67615e-7_wp*q+7.152722e-6_wp)*q+.01920291_wp)*q-1.081583_wp) &
+                  *q + 140.88_wp
          elseif ( m==11 .and. Kd==3 ) then
-            a0 = ((-6.310551d-5*q+.0119247)*q-.2681195)*q + 123.667
+            a0 = ((-6.310551e-5_wp*q+.0119247_wp)*q-.2681195_wp)*q + 123.667_wp
          elseif ( m==12 .and. Kd==1 ) then
-            a0 = (((-2.38351d-7*q-2.90139d-5)*q+.02023088)*q-1.289)     &
-               & *q + 171.2723
+            a0 = (((-2.38351e-7_wp*q-2.90139e-5_wp)*q+.02023088_wp)*q-1.289_wp) &
+               & *q + 171.2723_wp
          elseif ( m==12 .and. Kd==4 ) then
-            a0 = (((3.08902d-7*q-1.577869d-4)*q+.0247911)*q-1.05454)    &
-               & *q + 161.471
+            a0 = (((3.08902e-7_wp*q-1.577869e-4_wp)*q+.0247911_wp)*q-1.05454_wp) &
+                  *q + 161.471_wp
          endif
       endif
-      end
+
+   end subroutine cv0
 
 !*****************************************************************************************
 !>
 !  Compute the characteristic value of Mathieu
 !  functions for q ≤ m*m
 
-      subroutine cvqm(m,q,a0)
+   subroutine cvqm(m,q,a0)
 
-!       Input :  m  --- Order of Mathieu functions
-!                q  --- Parameter of Mathieu functions
-!       Output:  A0 --- Initial characteristic value
+      integer,intent(in) :: m !! Order of Mathieu functions
+      real(wp),intent(in) :: q !! Parameter of Mathieu functions
+      real(wp),intent(out) :: a0 !! Initial characteristic value
 
-      real(wp) a0 , hm1 , hm3 , hm5 , q
-      integer m
+      real(wp) :: hm1 , hm3 , hm5
 
-      hm1 = .5*q/(m*m-1.0)
-      hm3 = .25*hm1**3/(m*m-4.0)
-      hm5 = hm1*hm3*q/((m*m-1.0)*(m*m-9.0))
-      a0 = m*m + q*(hm1+(5.0*m*m+7.0)*hm3+(9.0*m**4+58.0*m*m+29.0)*hm5)
-      end
+      hm1 = 0.5_wp*q/(m*m-1.0_wp)
+      hm3 = 0.25_wp*hm1**3/(m*m-4.0_wp)
+      hm5 = hm1*hm3*q/((m*m-1.0_wp)*(m*m-9.0_wp))
+      a0 = m*m + q*(hm1+(5.0_wp*m*m+7.0_wp)*hm3+(9.0_wp*m**4+58.0_wp*m*m+29.0_wp)*hm5)
+
+   end subroutine cvqm
 
 !*****************************************************************************************
 !>

@@ -84,7 +84,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title="100.0% of total for modules and submodules.">9646 statements</a>
+    title="100.0% of total for modules and submodules.">9689 statements</a>
      </li> 
     <li><i class="fa fa-code"></i><a href="../src/specfun.f90"> Source File</a></li>
   </ul>
@@ -1019,41 +1019,50 @@ for small argument</p>
   <div class="panel-body">
        
 <p>Compute the zeros of Bessel functions Jn(x) and
-Jn'(x), and arrange them in the order of their
-magnitudes</p>
+  Jn'(x), and arrange them in the order of their
+  magnitudes</p><a href="../proc/jdzo.html" class="pull-right"><emph>Read more&hellip;</emph></a>
     
 <h4>Arguments</h4>      <table class="table table-striped varlist">
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Nt</strong></td><td></td>
+  <td><strong>Nt</strong></td><td><p>Number of total zeros ( NT ≤ 1200 )</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>n</strong></td><td></td>
+  <td><strong>n</strong>(1400)</td><td><p>n, order of Jn(x) or Jn'(x) associated
+with the L-th zero</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>m</strong></td><td></td>
+  <td><strong>m</strong>(1400)</td><td><p>m, serial number of the zeros of Jn(x)
+or Jn'(x) associated with the L-th zero
+( L is the serial number of all the
+zeros of Jn(x) and Jn'(x) )</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>p</strong>(1400)</td><td></td>
+  <td><strong>p</strong>(1400)</td><td><p>0 (TM) or 1 (TE), a code for designating the
+zeros of Jn(x) or Jn'(x).
+In the waveguide applications, the zeros
+of Jn(x) correspond to TM modes and
+those of Jn'(x) correspond to TE modes</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Zo</strong></td><td></td>
+  <td><strong>Zo</strong>(0:1400)</td><td><p>Value of the L-th zero of Jn(x)
+and Jn'(x)</p></td>
 </tr>
 </tbody>
 </table>
@@ -1073,46 +1082,46 @@ functions with a small argument</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>m</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>n</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>c</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>Cv</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>Qt</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Ck</strong></td><td></td>
+  <td><strong>Ck</strong>(200)</td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Bk</strong></td><td></td>
+  <td><strong>Bk</strong>(200)</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -1132,14 +1141,14 @@ of the second kind with a small argument</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>m</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>n</strong></td><td></td>
 </tr>
@@ -1165,7 +1174,7 @@ of the second kind with a small argument</p>
   <td><span class="anchor" ></span>real(kind=wp)</td>
 <td></td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Df</strong></td><td></td>
+  <td><strong>Df</strong>(200)</td><td></td>
 </tr>
 <tr>
   <td><span class="anchor" ></span>integer</td>
@@ -1174,14 +1183,14 @@ of the second kind with a small argument</p>
   <td><strong>Kd</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>R2f</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>R2d</strong></td><td></td>
 </tr>
@@ -1202,16 +1211,16 @@ of the second kind with a small argument</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>n</strong></td><td></td>
+  <td><strong>n</strong></td><td><p>Serial number</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Bn</strong></td><td></td>
+  <td><strong>Bn</strong>(0:n)</td><td><p>BN(n) --- Bn</p></td>
 </tr>
 </tbody>
 </table>
@@ -1230,16 +1239,16 @@ of the second kind with a small argument</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>n</strong></td><td></td>
+  <td><strong>n</strong></td><td><p>Serial number</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Bn</strong></td><td></td>
+  <td><strong>Bn</strong>(0:n)</td><td><p>BN(n) --- Bn</p></td>
 </tr>
 </tbody>
 </table>
@@ -1259,44 +1268,44 @@ with a small argument</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>m</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>n</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>c</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>Ck</strong></td><td></td>
+  <td><strong>Ck</strong>(200)</td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>Ck1</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>Qs</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>Qt</strong></td><td></td>
 </tr>
@@ -1319,28 +1328,28 @@ q ≥ m*m</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
   <td><strong>Kd</strong></td><td></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>m</strong></td><td></td>
+  <td><strong>m</strong></td><td><p>Order of Mathieu functions</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>q</strong></td><td></td>
+  <td><strong>q</strong></td><td><p>Parameter of Mathieu functions</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>a0</strong></td><td></td>
+  <td><strong>a0</strong></td><td><p>Characteristic value</p></td>
 </tr>
 </tbody>
 </table>
@@ -1360,22 +1369,22 @@ functions for q ≤ m*m</p>
 <thead><tr><th>Type</th><th>Intent</th><th>Optional</th><th>Attributes</th><th></th><th>Name</th><th></th></thead>
 <tbody>
 <tr>
-  <td><span class="anchor" ></span>integer</td>
-<td></td>
+  <td><span class="anchor" ></span>integer,</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>m</strong></td><td></td>
+  <td><strong>m</strong></td><td><p>Order of Mathieu functions</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(in)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>q</strong></td><td></td>
+  <td><strong>q</strong></td><td><p>Parameter of Mathieu functions</p></td>
 </tr>
 <tr>
-  <td><span class="anchor" ></span>real(kind=wp)</td>
-<td></td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+<td>intent(out)</td>
   <td></td>  <td></td><td>::</td>
-  <td><strong>a0</strong></td><td></td>
+  <td><strong>a0</strong></td><td><p>Initial characteristic value</p></td>
 </tr>
 </tbody>
 </table>
