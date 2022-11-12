@@ -37,6 +37,9 @@
       real(wp),parameter,private :: halfpi = 0.5_wp*pi
       real(wp),parameter,private :: twopi = 2.0_wp*pi
       real(wp),parameter,private :: sq2 = sqrt(2.0_wp)
+      real(wp),parameter :: gamma = 0.57721566490153286060651209008240243104215933593992_wp
+         !! Euler's constant to 50 decimal places.
+         !! `.5772156649015329D0` in the original code
 
    contains
 !*****************************************************************************************
@@ -1034,37 +1037,43 @@
 !*****************************************************************************************
 !>
 !  Compute the characteristic value of Mathieu
-!  functions  for q ≥ 3m
+!  functions for q ≥ 3m
 
-      subroutine cvql(Kd,m,q,a0)
+   subroutine cvql(Kd,m,q,a0)
 
-!       Input :  m  --- Order of Mathieu functions
-!                q  --- Parameter of Mathieu functions
-!       Output:  A0 --- Initial characteristic value
+      integer,intent(in) :: Kd
+      integer,intent(in) :: m !! Order of Mathieu functions
+      real(wp),intent(in) :: q !! Parameter of Mathieu functions
+      real(wp),intent(out) :: a0 !! Initial characteristic value
 
-      real(wp) a0 , c1 , cv1 , cv2 , d1 , d2 , d3 , d4 , p1 ,   &
-                     & p2 , q , w , w2 , w3 , w4 , w6
-      integer Kd , m
+      real(wp) :: c1 , cv1 , cv2 , d1 , d2 , d3 , d4 , p1 , &
+                  p2 , w , w2 , w3 , w4 , w6
 
-      w = 0.0_wp
-      if ( Kd==1 .or. Kd==2 ) w = 2.0_wp*m + 1.0_wp
-      if ( Kd==3 .or. Kd==4 ) w = 2.0_wp*m - 1.0_wp
+      select case (Kd)
+      case(1,2)
+         w = 2.0_wp*m + 1.0_wp
+      case(3,4)
+         w = 2.0_wp*m - 1.0_wp
+      case default
+         w = 0.0_wp
+      end select
       w2 = w*w
       w3 = w*w2
       w4 = w2*w2
       w6 = w2*w4
-      d1 = 5.0 + 34.0/w2 + 9.0/w4
-      d2 = (33.0+410.0/w2+405.0/w4)/w
-      d3 = (63.0+1260.0/w2+2943.0/w4+486.0/w6)/w2
-      d4 = (527.0+15617.0/w2+69001.0/w4+41607.0/w6)/w3
-      c1 = 128.0
+      d1 = 5.0_wp + 34.0_wp/w2 + 9.0_wp/w4
+      d2 = (33.0_wp+410.0_wp/w2+405.0_wp/w4)/w
+      d3 = (63.0_wp+1260.0_wp/w2+2943.0_wp/w4+486.0_wp/w6)/w2
+      d4 = (527.0_wp+15617.0_wp/w2+69001.0_wp/w4+41607.0_wp/w6)/w3
+      c1 = 128.0_wp
       p2 = q/w4
       p1 = sqrt(p2)
-      cv1 = -2.0*q + 2.0*w*sqrt(q) - (w2+1.0)/8.0
-      cv2 = (w+3.0/w) + d1/(32.0*p1) + d2/(8.0*c1*p2)
-      cv2 = cv2 + d3/(64.0*c1*p1*p2) + d4/(16.0*c1*c1*p2*p2)
+      cv1 = -2.0_wp*q + 2.0_wp*w*sqrt(q) - (w2+1.0_wp)/8.0_wp
+      cv2 = (w+3.0_wp/w) + d1/(32.0_wp*p1) + d2/(8.0_wp*c1*p2)
+      cv2 = cv2 + d3/(64.0_wp*c1*p1*p2) + d4/(16.0_wp*c1*c1*p2*p2)
       a0 = cv1 - cv2/(c1*p1)
-      end
+
+   end subroutine cvql
 
 !*****************************************************************************************
 !>
@@ -1072,14 +1081,14 @@
 !  recurrence such that the magnitude of
 !  Jn(x) at that point is about 10^(-MP)
 
-      integer function msta1(x,Mp)
+   function msta1(x,Mp) result(nn)
 
-!       Input :  x     --- Argument of Jn(x)
-!                MP    --- Value of magnitude
-!       Output:  MSTA1 --- Starting point
+      real(wp),intent(in) :: x !! Argument of Jn(x)
+      integer,intent(in) :: Mp !! Value of magnitude
+      integer :: nn !! Starting point
 
-      real(wp) a0 , f , f0 , f1 , x
-      integer it , Mp , n0 , n1 , nn
+      real(wp) :: a0 , f , f0 , f1
+      integer :: it , n0 , n1
 
       a0 = abs(x)
       n0 = int(1.1_wp*a0) + 1
@@ -1095,8 +1104,8 @@
          n1 = nn
          f1 = f
       enddo
-      msta1 = nn
-      end
+
+   end function msta1
 
 !*****************************************************************************************
 !>
@@ -1104,22 +1113,22 @@
 !  recurrence such that all Jn(x) has MP
 !  significant digits
 
-      integer function msta2(x,n,Mp)
+   function msta2(x,n,Mp) result(nn)
 
-!       Input :  x  --- Argument of Jn(x)
-!                n  --- Order of Jn(x)
-!                MP --- Significant digit
-!       Output:  MSTA2 --- Starting point
+      real(wp),intent(in) :: x !! Argument of Jn(x)
+      integer,intent(in) :: n !! Order of Jn(x)
+      integer,intent(in) :: Mp !! Significant digit
+      integer :: nn !! Starting point
 
-      real(wp) a0 , ejn , f , f0 , f1 , hmp , obj , x
-      integer it , Mp , n , n0 , n1 , nn
+      real(wp) :: a0 , ejn , f , f0 , f1 , hmp , obj
+      integer :: it , n0 , n1
 
       a0 = abs(x)
       hmp = 0.5_wp*Mp
       ejn = envj(n,a0)
       if ( ejn<=hmp ) then
          obj = Mp
-         n0 = int(1.1*a0) + 1
+         n0 = int(1.1_wp*a0) + 1
       else
          obj = hmp + ejn
          n0 = n
@@ -1136,90 +1145,86 @@
          n1 = nn
          f1 = f
       enddo
-      msta2 = nn + 10
-      end
+      nn = nn + 10
+
+   end function msta2
 
 !*****************************************************************************************
 !>
 !
-      real(wp) function envj(n,x)
-      implicit none
-      integer n
-      real(wp) x
-      envj = 0.5_wp*log10(6.28d0*n) - n*log10(1.36d0*x/n)
-      end
+   real(wp) function envj(n,x)
+      integer,intent(in) :: n
+      real(wp),intent(in) :: x
+      envj = 0.5_wp*log10(6.28_wp*n) - n*log10(1.36_wp*x/n)
+   end function envj
 
 !*****************************************************************************************
 !>
 !  Integrate [1-J0(t)]/t with respect to t from 0
 !  to x, and Y0(t)/t with respect to t from x to ∞
 
-      subroutine ittjyb(x,Ttj,Tty)
+   subroutine ittjyb(x,Ttj,Tty)
 
-!       Input :  x   --- Variable in the limits  ( x ≥ 0 )
-!       Output:  TTJ --- Integration of [1-J0(t)]/t from 0 to x
-!                TTY --- Integration of Y0(t)/t from x to ∞
+      real(wp),intent(in) :: x !! Variable in the limits  ( x ≥ 0 )
+      real(wp),intent(out) :: Ttj !! Integration of [1-J0(t)]/t from 0 to x
+      real(wp),intent(out) :: Tty !! Integration of Y0(t)/t from x to ∞
 
-      real(wp) e0 , el , f0 , g0 , t , t1 , Ttj , Tty , x ,&
-                     & x1 , xt
+      real(wp) :: e0 , f0 , g0 , t , t1 , x1 , xt
 
-      el = .5772156649015329d0
       if ( x==0.0_wp ) then
          Ttj = 0.0_wp
          Tty = -1.0e+300_wp
       elseif ( x<=4.0_wp ) then
          x1 = x/4.0_wp
          t = x1*x1
-         Ttj = ((((((.35817d-4*t-.639765d-3)*t+.7092535d-2)*t-          &
-             & .055544803d0)*t+.296292677d0)*t-.999999326d0)            &
-             & *t+1.999999936d0)*t
-         Tty = (((((((-.3546d-5*t+.76217d-4)*t-.1059499d-2)*t+          &
-             & .010787555d0)*t-.07810271d0)*t+.377255736d0)             &
-             & *t-1.114084491d0)*t+1.909859297d0)*t
-         e0 = el + log(x/2.0_wp)
+         Ttj = ((((((.35817e-4_wp*t-.639765e-3_wp)*t+.7092535e-2_wp)*t- &
+               .055544803_wp)*t+.296292677_wp)*t-.999999326_wp) &
+               *t+1.999999936_wp)*t
+         Tty = (((((((-.3546e-5_wp*t+.76217e-4_wp)*t-.1059499e-2_wp)*t+ &
+               .010787555_wp)*t-.07810271_wp)*t+.377255736_wp) &
+               *t-1.114084491_wp)*t+1.909859297_wp)*t
+         e0 = gamma + log(x/2.0_wp)
          Tty = pi/6.0_wp + e0/pi*(2.0_wp*Ttj-e0) - Tty
       elseif ( x<=8.0_wp ) then
-         xt = x + .25d0*pi
+         xt = x + .25_wp*pi
          t1 = 4.0_wp/x
          t = t1*t1
-         f0 = (((((.0145369d0*t-.0666297d0)*t+.1341551d0)*t-.1647797d0) &
-            & *t+.1608874d0)*t-.2021547d0)*t + .7977506d0
-         g0 = ((((((.0160672d0*t-.0759339d0)*t+.1576116d0)*t-.1960154d0)&
-            & *t+.1797457d0)*t-.1702778d0)*t+.3235819d0)*t1
+         f0 = (((((.0145369_wp*t-.0666297_wp)*t+.1341551_wp)*t-.1647797_wp) &
+              *t+.1608874_wp)*t-.2021547_wp)*t + .7977506_wp
+         g0 = ((((((.0160672_wp*t-.0759339_wp)*t+.1576116_wp)*t-.1960154_wp) &
+              *t+.1797457_wp)*t-.1702778_wp)*t+.3235819_wp)*t1
          Ttj = (f0*cos(xt)+g0*sin(xt))/(sqrt(x)*x)
-         Ttj = Ttj + el + log(x/2.0_wp)
+         Ttj = Ttj + gamma + log(x/2.0_wp)
          Tty = (f0*sin(xt)-g0*cos(xt))/(sqrt(x)*x)
       else
          t = 8.0_wp/x
-         xt = x + .25d0*pi
-         f0 = (((((.18118d-2*t-.91909d-2)*t+.017033d0)*t-.9394d-3)      &
-            & *t-.051445d0)*t-.11d-5)*t + .7978846d0
-         g0 = (((((-.23731d-2*t+.59842d-2)*t+.24437d-2)*t-.0233178d0)   &
-            & *t+.595d-4)*t+.1620695d0)*t
-         Ttj = (f0*cos(xt)+g0*sin(xt))/(sqrt(x)*x)                   &
-             & + el + log(x/2.0_wp)
+         xt = x + .25_wp*pi
+         f0 = (((((.18118e-2_wp*t-.91909e-2_wp)*t+.017033_wp)*t-.9394e-3_wp) &
+              *t-.051445_wp)*t-.11e-5_wp)*t + .7978846_wp
+         g0 = (((((-.23731e-2_wp*t+.59842e-2_wp)*t+.24437e-2_wp)*t-.0233178_wp) &
+              *t+.595e-4_wp)*t+.1620695_wp)*t
+         Ttj = (f0*cos(xt)+g0*sin(xt))/(sqrt(x)*x) &
+               + gamma + log(x/2.0_wp)
          Tty = (f0*sin(xt)-g0*cos(xt))/(sqrt(x)*x)
       endif
-      end
+
+   end subroutine ittjyb
 
 !*****************************************************************************************
 !>
 !  Integrate [1-J0(t)]/t with respect to t from 0
 !  to x, and Y0(t)/t with respect to t from x to ∞
 
-      subroutine ittjya(x,Ttj,Tty)
+   subroutine ittjya(x,Ttj,Tty)
 
-!       Input :  x   --- Variable in the limits  ( x ≥ 0 )
-!       Output:  TTJ --- Integration of [1-J0(t)]/t from 0 to x
-!                TTY --- Integration of Y0(t)/t from x to ∞
+      real(wp),intent(in) :: x !! Variable in the limits  ( x ≥ 0 )
+      real(wp),intent(out) :: Ttj !! Integration of [1-J0(t)]/t from 0 to x
+      real(wp),intent(out) :: Tty !! Integration of Y0(t)/t from x to ∞
 
-      real(wp) a0 , b1 , bj0 , bj1 , by0 , by1 , e0 , el , g0 , &
-                     & g1 , px , qx , r , r0 , r1 , r2 , rs , t ,  &
-                     & Ttj
-      real(wp) Tty , vt , x , xk
-      integer k , l
+      real(wp) :: a0 , b1 , bj0 , bj1 , by0 , by1 , e0 , g0 , &
+                  g1 , px , qx , r , r0 , r1 , r2 , rs , t , vt , xk
+      integer :: k , l
 
-      el = .5772156649015329d0
       if ( x==0.0_wp ) then
          Ttj = 0.0_wp
          Tty = -1.0e+300_wp
@@ -1229,22 +1234,22 @@
          do k = 2 , 100
             r = -0.25_wp*r*(k-1.0_wp)/(k*k*k)*x*x
             Ttj = Ttj + r
-            if ( abs(r)<abs(Ttj)*1.0d-12 ) exit
+            if ( abs(r)<abs(Ttj)*1.0e-12_wp ) exit
          enddo
-         Ttj = Ttj*.125d0*x*x
-         e0 = 0.5_wp*(pi*pi/6.0_wp-el*el) - (0.5_wp*log(x/2.0_wp)+el)        &
-            & *log(x/2.0_wp)
-         b1 = el + log(x/2.0_wp) - 1.5d0
+         Ttj = Ttj*.125_wp*x*x
+         e0 = 0.5_wp*(pi*pi/6.0_wp-gamma*gamma) - (0.5_wp*log(x/2.0_wp)+gamma) &
+              *log(x/2.0_wp)
+         b1 = gamma + log(x/2.0_wp) - 1.5_wp
          rs = 1.0_wp
          r = -1.0_wp
          do k = 2 , 100
             r = -0.25_wp*r*(k-1.0_wp)/(k*k*k)*x*x
             rs = rs + 1.0_wp/k
-            r2 = r*(rs+1.0_wp/(2.0_wp*k)-(el+log(x/2.0_wp)))
+            r2 = r*(rs+1.0_wp/(2.0_wp*k)-(gamma+log(x/2.0_wp)))
             b1 = b1 + r2
-            if ( abs(r2)<abs(b1)*1.0d-12 ) exit
+            if ( abs(r2)<abs(b1)*1.0e-12_wp ) exit
          enddo
-         Tty = 2.0_wp/pi*(e0+.125d0*x*x*b1)
+         Tty = 2.0_wp/pi*(e0+.125_wp*x*x*b1)
       else
          a0 = sqrt(2.0_wp/(pi*x))
          bj0 = 0.0_wp
@@ -1255,21 +1260,21 @@
             px = 1.0_wp
             r = 1.0_wp
             do k = 1 , 14
-               r = -.0078125d0*r*(vt-(4.0_wp*k-3.0_wp)**2)/(x*k)          &
-                 & *(vt-(4.0_wp*k-1.0_wp)**2)/((2.0_wp*k-1.0_wp)*x)
+               r = -.0078125_wp*r*(vt-(4.0_wp*k-3.0_wp)**2)/(x*k) &
+                   *(vt-(4.0_wp*k-1.0_wp)**2)/((2.0_wp*k-1.0_wp)*x)
                px = px + r
-               if ( abs(r)<abs(px)*1.0d-12 ) exit
+               if ( abs(r)<abs(px)*1.0e-12_wp ) exit
             enddo
             qx = 1.0_wp
             r = 1.0_wp
             do k = 1 , 14
-               r = -.0078125d0*r*(vt-(4.0_wp*k-1.0_wp)**2)/(x*k)          &
-                 & *(vt-(4.0_wp*k+1.0_wp)**2)/(2.0_wp*k+1.0_wp)/x
+               r = -.0078125_wp*r*(vt-(4.0_wp*k-1.0_wp)**2)/(x*k) &
+                   *(vt-(4.0_wp*k+1.0_wp)**2)/(2.0_wp*k+1.0_wp)/x
                qx = qx + r
-               if ( abs(r)<abs(qx)*1.0d-12 ) exit
+               if ( abs(r)<abs(qx)*1.0e-12_wp ) exit
             enddo
-            qx = .125d0*(vt-1.0_wp)/x*qx
-            xk = x - (.25d0+.5d0*l)*pi
+            qx = .125_wp*(vt-1.0_wp)/x*qx
+            xk = x - (.25_wp+.5_wp*l)*pi
             bj1 = a0*(px*cos(xk)-qx*sin(xk))
             by1 = a0*(px*sin(xk)+qx*cos(xk))
             if ( l==0 ) then
@@ -1290,10 +1295,11 @@
             r1 = -k*(k+1.0_wp)*t*t*r1
             g1 = g1 + r1
          enddo
-         Ttj = 2.0_wp*g1*bj0/(x*x) - g0*bj1/x + el + log(x/2.0_wp)
+         Ttj = 2.0_wp*g1*bj0/(x*x) - g0*bj1/x + gamma + log(x/2.0_wp)
          Tty = 2.0_wp*g1*by0/(x*x) - g0*by1/x
       endif
-      end
+
+   end subroutine ittjya
 
 !*****************************************************************************************
 !>
@@ -1384,7 +1390,7 @@
       suc = r*Df(1)
       sw = 0.0_wp
       do k = 2 , nm
-         r = r*(m+k-1.0)*(m+k+ip-1.5d0)/(k-1.0_wp)/(k+ip-1.5d0)
+         r = r*(m+k-1.0)*(m+k+ip-1.5_wp)/(k-1.0_wp)/(k+ip-1.5_wp)
          suc = suc + r*Df(k)
          if ( k>nm1 .and. abs(suc-sw)<abs(suc)*eps ) exit
          sw = suc
@@ -1400,7 +1406,7 @@
          if ( k==1 ) then
             r = r0
          else
-            r = r*(m+k-1.0)*(m+k+ip-1.5d0)/(k-1.0_wp)/(k+ip-1.5d0)
+            r = r*(m+k-1.0)*(m+k+ip-1.5_wp)/(k-1.0_wp)/(k+ip-1.5_wp)
          endif
          np = m + 2*k - 2 + ip
          R2f = R2f + lg*r*(Df(k)*sy(np))
@@ -1424,7 +1430,7 @@
          if ( k==1 ) then
             r = r0
          else
-            r = r*(m+k-1.0)*(m+k+ip-1.5d0)/(k-1.0_wp)/(k+ip-1.5d0)
+            r = r*(m+k-1.0)*(m+k+ip-1.5_wp)/(k-1.0_wp)/(k+ip-1.5_wp)
          endif
          np = m + 2*k - 2 + ip
          sud = sud + lg*r*(Df(k)*dy(np))
@@ -1447,11 +1453,10 @@
 !       Output:  PS --- psi(x)
 
       implicit none
-      real(wp) a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 , el ,&
+      real(wp) a1 , a2 , a3 , a4 , a5 , a6 , a7 , a8 ,&
                      & Ps , s , x , x2 , xa
       integer k , n
       xa = abs(x)
-      el = .5772156649015329d0
       s = 0.0_wp
       if ( x==int(x) .and. x<=0.0 ) then
          Ps = 1.0e+300_wp
@@ -1461,13 +1466,13 @@
          do k = 1 , n - 1
             s = s + 1.0_wp/k
          enddo
-         Ps = -el + s
+         Ps = -gamma + s
       elseif ( xa+.5==int(xa+.5) ) then
          n = xa - .5
          do k = 1 , n
             s = s + 1.0/(2.0_wp*k-1.0_wp)
          enddo
-         Ps = -el + 2.0_wp*s - 1.386294361119891d0
+         Ps = -gamma + 2.0_wp*s - 1.386294361119891d0
       else
          if ( xa<10.0 ) then
             n = 10 - int(xa)
@@ -1658,7 +1663,7 @@
       x = real(z,wp)
       y = aimag(z)
       x2 = x*x
-      if ( x<=3.5d0 ) then
+      if ( x<=3.5_wp ) then
          er = 1.0_wp
          r = 1.0_wp
          w = 0.0_wp
@@ -1918,14 +1923,13 @@
 !       Output:  CI --- Ci(x)
 !                SI --- Si(x)
 
-      real(wp) bj , Ci , el , eps , p2 , Si , x , x2 , xa ,     &
+      real(wp) bj , Ci , eps , p2 , Si , x , x2 , xa ,     &
                      & xa0 , xa1 , xcs , xf , xg , xg1 , xg2 , xr , xs ,&
                      & xss
       integer k , m
       dimension bj(101)
 
       p2 = 1.570796326794897d0
-      el = .5772156649015329d0
       eps = 1.0d-15
       x2 = x*x
       if ( x==0.0_wp ) then
@@ -1933,7 +1937,7 @@
          Si = 0.0_wp
       elseif ( x<=16.0_wp ) then
          xr = -0.25_wp*x2
-         Ci = el + log(x) + xr
+         Ci = gamma + log(x) + xr
          do k = 2 , 40
             xr = -0.5_wp*xr*(k-1)/(k*k*(2*k-1))*x2
             Ci = Ci + xr
@@ -1967,18 +1971,18 @@
          xr = 1.0_wp
          xg1 = bj(1)
          do k = 2 , m
-            xr = .25d0*xr*(2.0*k-3.0)**2/((k-1.0)*(2.0*k-1.0)**2)*x
+            xr = .25_wp*xr*(2.0*k-3.0)**2/((k-1.0)*(2.0*k-1.0)**2)*x
             xg1 = xg1 + bj(k)*xr
          enddo
          xr = 1.0_wp
          xg2 = bj(1)
          do k = 2 , m
-            xr = .25d0*xr*(2.0*k-5.0)**2/((k-1.0)*(2.0*k-3.0)**2)*x
+            xr = .25_wp*xr*(2.0*k-5.0)**2/((k-1.0)*(2.0*k-3.0)**2)*x
             xg2 = xg2 + bj(k)*xr
          enddo
          xcs = cos(x/2.0_wp)
          xss = sin(x/2.0_wp)
-         Ci = el + log(x) - x*xss*xg1 + 2*xcs*xg2 - 2*xcs*xcs
+         Ci = gamma + log(x) - x*xss*xg1 + 2*xcs*xg2 - 2*xcs*xcs
          Si = x*xcs*xg1 + 2*xss*xg2 - sin(x)
       else
          xr = 1.0_wp
@@ -2008,7 +2012,7 @@
 !       Input :  x   --- Upper limit  ( x ≥ 0 )
 !       Output:  TL0 --- Integration of L0(t) from 0 to x
 
-      real(wp) a , a0 , a1 , af , el , r , rd , s , s0 ,   &
+      real(wp) a , a0 , a1 , af , r , rd , s , s0 ,   &
                      & ti , Tl0 , x
       integer k
       dimension a(18)
@@ -2031,13 +2035,12 @@
             s = s + r
             if ( abs(r/s)<1.0d-12 ) exit
          enddo
-         el = .57721566490153d0
-         s0 = -s/(pi*x*x) + 2.0_wp/pi*(log(2.0_wp*x)+el)
+         s0 = -s/(pi*x*x) + 2.0_wp/pi*(log(2.0_wp*x)+gamma)
          a0 = 1.0_wp
          a1 = 5.0_wp/8.0_wp
          a(1) = a1
          do k = 1 , 10
-            af = ((1.5d0*(k+.50d0)*(k+5.0_wp/6.0_wp)*a1-0.5_wp*(k+0.5_wp)     &
+            af = ((1.5_wp*(k+.50d0)*(k+5.0_wp/6.0_wp)*a1-0.5_wp*(k+0.5_wp)     &
                & **2*(k-0.5_wp)*a0))/(k+1.0_wp)
             a(k+1) = af
             a0 = a1
@@ -2234,7 +2237,7 @@
 
       eps = 1.0d-15
       x2 = x*x
-      if ( abs(x)<3.5d0 ) then
+      if ( abs(x)<3.5_wp ) then
          er = 1.0_wp
          r = 1.0_wp
          do k = 1 , 50
@@ -2482,9 +2485,8 @@
 !       Output:  TTI --- Integration of [I0(t)-1]/t from 0 to x
 !                TTK --- Integration of K0(t)/t from x to ∞
 
-      real(wp) e0 , el , t , t1 , Tti , Ttk , x , x1
+      real(wp) e0 , t , t1 , Tti , Ttk , x , x1
 
-      el = .5772156649015329d0
       if ( x==0.0_wp ) then
          Tti = 0.0_wp
       elseif ( x<=5.0_wp ) then
@@ -2508,7 +2510,7 @@
          t = t1*t1
          Ttk = (((((.77d-6*t+.1544d-4)*t+.48077d-3)*t+.925821d-2)       &
              & *t+.10937537d0)*t+.74999993d0)*t
-         e0 = el + log(x/2.0_wp)
+         e0 = gamma + log(x/2.0_wp)
          Ttk = pi*pi/24.0d0 + e0*(0.5_wp*e0+Tti) - Ttk
       elseif ( x<=4.0_wp ) then
          t = 2.0_wp/x
@@ -2622,8 +2624,8 @@
       do k = 0 , Km - 1
          l1 = (k+1)*(k+2)/2 + 1
          l2 = (k+1)*(k+2)/2 + k + 2
-         f = (0.5_wp*k+0.125d0/(k+1))*f0
-         g = -(1.5d0*k+0.625d0/(3.0*(k+1.0_wp)))*g0
+         f = (0.5_wp*k+0.125_wp/(k+1))*f0
+         g = -(1.5_wp*k+0.625d0/(3.0*(k+1.0_wp)))*g0
          a(l1) = f
          a(l2) = g
          f0 = f
@@ -2633,7 +2635,7 @@
          do j = 1 , k
             l3 = k*(k+1)/2 + j + 1
             l4 = (k+1)*(k+2)/2 + j + 1
-            a(l4) = (j+0.5_wp*k+0.125d0/(2.0*j+k+1.0))*a(l3)             &
+            a(l4) = (j+0.5_wp*k+0.125_wp/(2.0*j+k+1.0))*a(l3)             &
                   & - (j+0.5_wp*k-1.0+0.625d0/(2.0*j+k+1.0))*a(l3-1)
          enddo
       enddo
@@ -2650,12 +2652,11 @@
 !       Output:  TTI --- Integration of [I0(t)-1]/t from 0 to x
 !                TTK --- Integration of K0(t)/t from x to ∞
 
-      real(wp) b1 , c , e0 , el , r , r2 , rc , rs , Tti , &
+      real(wp) b1 , c , e0 , r , r2 , rc , rs , Tti , &
                      & Ttk , x
       integer k
       dimension c(8)
 
-      el = .5772156649015329d0
       data c/1.625d0 , 4.1328125d0 , 1.45380859375d+1 ,                 &
          & 6.553353881835d+1 , 3.6066157150269d+2 , 2.3448727161884d+3 ,&
          & 1.7588273098916d+4 , 1.4950639538279d+5/
@@ -2668,11 +2669,11 @@
          Tti = 1.0_wp
          r = 1.0_wp
          do k = 2 , 50
-            r = .25d0*r*(k-1.0_wp)/(k*k*k)*x*x
+            r = .25_wp*r*(k-1.0_wp)/(k*k*k)*x*x
             Tti = Tti + r
             if ( abs(r/Tti)<1.0d-12 ) exit
          enddo
-         Tti = Tti*.125d0*x*x
+         Tti = Tti*.125_wp*x*x
       else
          Tti = 1.0_wp
          r = 1.0_wp
@@ -2684,19 +2685,19 @@
          Tti = Tti*exp(x)/rc
       endif
       if ( x<=12.0d0 ) then
-         e0 = (0.5_wp*log(x/2.0_wp)+el)*log(x/2.0_wp) + pi*pi/24.0d0 +    &
-            & 0.5_wp*el*el
-         b1 = 1.5d0 - (el+log(x/2.0_wp))
+         e0 = (0.5_wp*log(x/2.0_wp)+gamma)*log(x/2.0_wp) + pi*pi/24.0d0 +    &
+            & 0.5_wp*gamma*gamma
+         b1 = 1.5_wp - (gamma+log(x/2.0_wp))
          rs = 1.0_wp
          r = 1.0_wp
          do k = 2 , 50
-            r = .25d0*r*(k-1.0_wp)/(k*k*k)*x*x
+            r = .25_wp*r*(k-1.0_wp)/(k*k*k)*x*x
             rs = rs + 1.0_wp/k
-            r2 = r*(rs+1.0_wp/(2.0_wp*k)-(el+log(x/2.0_wp)))
+            r2 = r*(rs+1.0_wp/(2.0_wp*k)-(gamma+log(x/2.0_wp)))
             b1 = b1 + r2
             if ( abs(r2/b1)<1.0d-12 ) exit
          enddo
-         Ttk = e0 - .125d0*x*x*b1
+         Ttk = e0 - .125_wp*x*x*b1
       else
          Ttk = 1.0_wp
          r = 1.0_wp
@@ -2783,8 +2784,8 @@
                & *(vv-(4.0*k+1.0)**2.0)/(k*(2.0*k+1.0)*x2)
             qx = qx + rq
          enddo
-         qx = 0.125d0*(vv-1.0_wp)*qx/x
-         xk = x - (0.5_wp*(j+v0)+0.25d0)*pi
+         qx = 0.125_wp*(vv-1.0_wp)*qx/x
+         xk = x - (0.5_wp*(j+v0)+0.25_wp)*pi
          a0 = sqrt(rp2/x)
          ck = cos(xk)
          sk = sin(xk)
@@ -3028,7 +3029,7 @@
       su0 = r*Df(1)
       sw = 0.0_wp
       do k = 2 , nm
-         r = r*(m+k-1.0)*(m+k+ip-1.5d0)/(k-1.0_wp)/(k+ip-1.5d0)
+         r = r*(m+k-1.0)*(m+k+ip-1.5_wp)/(k-1.0_wp)/(k+ip-1.5_wp)
          su0 = su0 + r*Df(k)
          if ( k>nm1 .and. abs((su0-sw)/su0)<1.0d-14 ) exit
          sw = su0
@@ -3244,8 +3245,8 @@
                    & *(vv-(4.0*k+1.0)**2.0)/(k*(2.0*k+1.0)*z2)
                cqz = cqz + crq
             enddo
-            cqz = 0.125d0*(vv-1.0)*cqz/z1
-            zk = z1 - (0.5_wp*(j+v0)+0.25d0)*pi
+            cqz = 0.125_wp*(vv-1.0)*cqz/z1
+            zk = z1 - (0.5_wp*(j+v0)+0.25_wp)*pi
             ca0 = sqrt(rp2/z1)
             cck = cos(zk)
             csk = sin(zk)
@@ -3508,8 +3509,8 @@
                 & *(vv-(4.0*k+1.0)**2.0)/(k*(2.0*k+1.0)*z2)
             cqz = cqz + crq
          enddo
-         cqz = 0.125d0*(vv-1.0)*cqz/z1
-         zk = z1 - (0.5_wp*v0+0.25d0)*pi
+         cqz = 0.125_wp*(vv-1.0)*cqz/z1
+         zk = z1 - (0.5_wp*v0+0.25_wp)*pi
          ca0 = sqrt(rp2/z1)
          cck = cos(zk)
          csk = sin(zk)
@@ -3699,9 +3700,9 @@
          k0 = 12
          if ( x>=35.0 ) k0 = 10
          if ( x>=50.0 ) k0 = 8
-         t1 = x - 0.25d0*pi
+         t1 = x - 0.25_wp*pi
          p0 = 1.0_wp
-         q0 = -0.125d0/x
+         q0 = -0.125_wp/x
          do k = 1 , k0
             p0 = p0 + a(k)*x**(-2*k)
             q0 = q0 + b(k)*x**(-2*k-1)
@@ -3847,12 +3848,11 @@
 !       Output:  TI --- Integration of I0(t) from 0 to x
 !                TK --- Integration of K0(t) from 0 to x
 
-      real(wp) a , b1 , b2 , e0 , el , r , rc1 , rc2 , rs ,&
+      real(wp) a , b1 , b2 , e0 , r , rc1 , rc2 , rs ,&
                      & Ti , Tk , tw , x , x2
       integer k
       dimension a(10)
 
-      el = .5772156649015329d0
       data a/.625d0 , 1.0078125d0 , 2.5927734375d0 , 9.1868591308594d0 ,&
          & 4.1567974090576d+1 , 2.2919635891914d+2 , 1.491504060477d+3 ,&
          & 1.1192354495579d+4 , 9.515939374212d+4 , 9.0412425769041d+5/
@@ -3865,7 +3865,7 @@
          Ti = 1.0_wp
          r = 1.0_wp
          do k = 1 , 50
-            r = .25d0*r*(2*k-1.0_wp)/(2*k+1.0_wp)/(k*k)*x2
+            r = .25_wp*r*(2*k-1.0_wp)/(2*k+1.0_wp)/(k*k)*x2
             Ti = Ti + r
             if ( abs(r/Ti)<1.0d-12 ) exit
          enddo
@@ -3882,14 +3882,14 @@
          Ti = rc1*exp(x)*Ti
       endif
       if ( x<12.0d0 ) then
-         e0 = el + log(x/2.0_wp)
+         e0 = gamma + log(x/2.0_wp)
          b1 = 1.0_wp - e0
          b2 = 0.0_wp
          rs = 0.0_wp
          r = 1.0_wp
          tw = 0.0_wp
          do k = 1 , 50
-            r = .25d0*r*(2*k-1.0_wp)/(2*k+1.0_wp)/(k*k)*x2
+            r = .25_wp*r*(2*k-1.0_wp)/(2*k+1.0_wp)/(k*k)*x2
             b1 = b1 + r*(1.0_wp/(2*k+1)-e0)
             rs = rs + 1.0_wp/k
             b2 = b2 + r*rs
@@ -3929,14 +3929,13 @@
       real(wp) a , a0 , b , Bj , bju0 , bju1 , bjv0 , bjv1 ,    &
                      & bjvl , By , byv0 , byv1 , byvk , ck , cs , cs0 , &
                      & cs1 , Dj , Dy , ec
-      real(wp) el , f , f0 , f1 , f2 , ga , gb , pv0 ,     &
+      real(wp) f , f0 , f1 , f2 , ga , gb , pv0 ,     &
                      & pv1 , px , qx , r , r0 , r1 , rp , rp2 , rq ,    &
                      & sk , v
       real(wp) v0 , vg , vl , Vm , vv , w0 , w1 , x , x2 , xk
       integer j , k , k0 , l , m , n
       dimension Bj(0:*) , Dj(0:*) , By(0:*) , Dy(0:*)
 
-      el = .5772156649015329d0
       rp2 = .63661977236758d0
       x2 = x*x
       n = int(v)
@@ -3997,8 +3996,8 @@
                   & *(vv-(4.0*k+1.0)**2.0)/(k*(2.0*k+1.0)*x2)
                qx = qx + rq
             enddo
-            qx = 0.125d0*(vv-1.0)*qx/x
-            xk = x - (0.5_wp*(j+v0)+0.25d0)*pi
+            qx = 0.125_wp*(vv-1.0)*qx/x
+            xk = x - (0.5_wp*(j+v0)+0.25_wp)*pi
             a0 = sqrt(rp2/x)
             ck = cos(xk)
             sk = sin(xk)
@@ -4076,7 +4075,7 @@
             byv0 = (bjv0*cos(pv0)-bju0)/sin(pv0)
             byv1 = (bjv1*cos(pv1)-bju1)/sin(pv1)
          else
-            ec = log(x/2.0_wp) + el
+            ec = log(x/2.0_wp) + gamma
             cs0 = 0.0_wp
             w0 = 0.0_wp
             r0 = 1.0_wp
@@ -4234,9 +4233,9 @@
             & .6765925884246826d+00 , -.6883914268109947d+01/
          data b1/ - .1025390625000000d+00 , .2775764465332031d+00 ,     &
             & -.1993531733751297d+01 , .2724882731126854d+02/
-         t1 = x - 0.25d0*pi
+         t1 = x - 0.25_wp*pi
          p0 = 1.0_wp
-         q0 = -0.125d0/x
+         q0 = -0.125_wp/x
          do k = 1 , 4
             p0 = p0 + a(k)*x**(-2*k)
             q0 = q0 + b(k)*x**(-2*k-1)
@@ -4613,7 +4612,7 @@
 !       Input :  x   --- Upper limit  ( x ≥ 0 )
 !       Output:  TH0 --- Integration of H0(t) from 0 and x
 
-      real(wp) a , a0 , a1 , af , bf , bg , el , r , rd ,  &
+      real(wp) a , a0 , a1 , af , bf , bg , r , rd ,  &
                      & s , s0 , Th0 , ty , x , xp
       integer k
       dimension a(25)
@@ -4626,7 +4625,7 @@
             if ( k==1 ) rd = 0.5_wp
             r = -r*rd*k/(k+1.0_wp)*(x/(2.0_wp*k+1.0_wp))**2
             s = s + r
-            if ( abs(r)<abs(s)*1.0d-12 ) exit
+            if ( abs(r)<abs(s)*1.0e-12_wp ) exit
          enddo
          Th0 = 2.0_wp/pi*x*x*s
       else
@@ -4634,15 +4633,14 @@
          do k = 1 , 12
             r = -r*k/(k+1.0_wp)*((2.0_wp*k+1.0_wp)/x)**2
             s = s + r
-            if ( abs(r)<abs(s)*1.0d-12 ) exit
+            if ( abs(r)<abs(s)*1.0e-12_wp ) exit
          enddo
-         el = .57721566490153d0
-         s0 = s/(pi*x*x) + 2.0_wp/pi*(log(2.0_wp*x)+el)
+         s0 = s/(pi*x*x) + 2.0_wp/pi*(log(2.0_wp*x)+gamma)
          a0 = 1.0_wp
          a1 = 5.0_wp/8.0_wp
          a(1) = a1
          do k = 1 , 20
-            af = ((1.5d0*(k+0.5_wp)*(k+5.0_wp/6.0_wp)*a1-0.5_wp*(k+0.5_wp)      &
+            af = ((1.5_wp*(k+0.5_wp)*(k+5.0_wp/6.0_wp)*a1-0.5_wp*(k+0.5_wp)      &
                & *(k+0.5_wp)*(k-0.5_wp)*a0))/(k+1.0_wp)
             a(k+1) = af
             a0 = a1
@@ -4660,7 +4658,7 @@
             r = -r/(x*x)
             bg = bg + a(2*k+1)*r
          enddo
-         xp = x + .25d0*pi
+         xp = x + .25_wp*pi
          ty = sqrt(2.0_wp/(pi*x))*(bg*cos(xp)-bf*sin(xp))
          Th0 = ty + s0
       endif
@@ -5595,7 +5593,7 @@
 !       Output:  HF --- F(a,b,c,x)
 !                ISFER --- Error flag
 
-      real(wp) a , a0 , aa , b , bb , c , c0 , c1 , el , eps ,  &
+      real(wp) a , a0 , aa , b , bb , c , c0 , c1 , eps ,  &
                      & f0 , f1 , g0 , g1 , g2 , g3 , ga , gabc , gam ,  &
                      & gb
       real(wp) gbm , gc , gca , gcab , gcb , gm , Hf , hw , pa ,&
@@ -5605,7 +5603,6 @@
       integer Isfer , j , k , m , nm
       logical l0 , l1 , l2 , l3 , l4 , l5
 
-      el = .5772156649015329d0
       Isfer = 0
       l0 = c==int(c) .and. c<0.0
       l1 = 1.0_wp - x<1.0d-15 .and. c - a - b<=0.0
@@ -5704,7 +5701,7 @@
                do k = 1 , m
                   sp0 = sp0 + 1.0_wp/(a+k-1.0) + 1.0/(b+k-1.0) - 1.0/k
                enddo
-               f1 = pa + pb + sp0 + 2.0_wp*el + log(1.0_wp-x)
+               f1 = pa + pb + sp0 + 2.0_wp*gamma + log(1.0_wp-x)
                do k = 1 , 250
                   sp = sp + (1.0_wp-a)/(k*(a+k-1.0)) + (1.0-b)           &
                      & /(k*(b+k-1.0))
@@ -5713,7 +5710,7 @@
                      sm = sm + (1.0_wp-a)/((j+k)*(a+j+k-1.0))            &
                         & + 1.0/(b+j+k-1.0)
                   enddo
-                  rp = pa + pb + 2.0_wp*el + sp + sm + log(1.0_wp-x)
+                  rp = pa + pb + 2.0_wp*gamma + sp + sm + log(1.0_wp-x)
                   r1 = r1*(a+m+k-1.0_wp)*(b+m+k-1.0)/(k*(m+k))*(1.0-x)
                   f1 = f1 + r1*rp
                   if ( abs(f1-hw)<abs(f1)*eps ) exit
@@ -5731,7 +5728,7 @@
                do k = 1 , m
                   sp0 = sp0 + 1.0_wp/k
                enddo
-               f1 = pa + pb - sp0 + 2.0_wp*el + log(1.0_wp-x)
+               f1 = pa + pb - sp0 + 2.0_wp*gamma + log(1.0_wp-x)
                do k = 1 , 250
                   sp = sp + (1.0_wp-a)/(k*(a+k-1.0)) + (1.0-b)           &
                      & /(k*(b+k-1.0))
@@ -5739,7 +5736,7 @@
                   do j = 1 , m
                      sm = sm + 1.0_wp/(j+k)
                   enddo
-                  rp = pa + pb + 2.0_wp*el + sp - sm + log(1.0_wp-x)
+                  rp = pa + pb + 2.0_wp*gamma + sp - sm + log(1.0_wp-x)
                   r1 = r1*(a+k-1.0_wp)*(b+k-1.0)/(k*(m+k))*(1.0-x)
                   f1 = f1 + r1*rp
                   if ( abs(f1-hw)<abs(f1)*eps ) exit
@@ -5934,7 +5931,7 @@
 !       Output:  ZHF --- F(a,b,c,z)
 !                ISFER --- Error flag
 
-      real(wp) a , a0 , aa , b , bb , c , ca , cb , el , eps ,  &
+      real(wp) a , a0 , aa , b , bb , c , ca , cb , eps ,  &
                      & g0 , g1 , g2 , g3 , ga , gab , gabc , gam , gb , &
                      & gba
       real(wp) gbm , gc , gca , gcab , gcb , gcbk , gm , pa ,   &
@@ -5961,7 +5958,6 @@
       bb = b
       a0 = abs(z)
       if ( a0>0.95d0 ) eps = 1.0d-8
-      el = .5772156649015329d0
       if ( l0 .or. l1 ) then
          Isfer = 3
          return
@@ -6053,7 +6049,7 @@
                      sp0 = sp0 + 1.0_wp/(a+k-1.0_wp) + 1.0/(b+k-1.0_wp)    &
                          & - 1.d0/k
                   enddo
-                  zf1 = pa + pb + sp0 + 2.0_wp*el + log(1.0_wp-z)
+                  zf1 = pa + pb + sp0 + 2.0_wp*gamma + log(1.0_wp-z)
                   do k = 1 , 500
                      sp = sp + (1.0_wp-a)/(k*(a+k-1.0_wp)) + (1.0_wp-b)    &
                         & /(k*(b+k-1.0_wp))
@@ -6062,7 +6058,7 @@
                         sm = sm + (1.0_wp-a)/((j+k)*(a+j+k-1.0_wp))       &
                            & + 1.0_wp/(b+j+k-1.0_wp)
                      enddo
-                     zp = pa + pb + 2.0_wp*el + sp + sm + log(1.0_wp-z)
+                     zp = pa + pb + 2.0_wp*gamma + sp + sm + log(1.0_wp-z)
                      zr1 = zr1*(a+m+k-1.0_wp)*(b+m+k-1.0_wp)/(k*(m+k))    &
                          & *(1.0_wp-z)
                      zf1 = zf1 + zr1*zp
@@ -6082,7 +6078,7 @@
                   do k = 1 , m
                      sp0 = sp0 + 1.0_wp/k
                   enddo
-                  zf1 = pa + pb - sp0 + 2.0_wp*el + log(1.0_wp-z)
+                  zf1 = pa + pb - sp0 + 2.0_wp*gamma + log(1.0_wp-z)
                   do k = 1 , 500
                      sp = sp + (1.0_wp-a)/(k*(a+k-1.0_wp)) + (1.0_wp-b)    &
                         & /(k*(b+k-1.0_wp))
@@ -6090,7 +6086,7 @@
                      do j = 1 , m
                         sm = sm + 1.0_wp/(j+k)
                      enddo
-                     zp = pa + pb + 2.0_wp*el + sp - sm + log(1.0_wp-z)
+                     zp = pa + pb + 2.0_wp*gamma + sp - sm + log(1.0_wp-z)
                      zr1 = zr1*(a+k-1.d0)*(b+k-1.d0)/(k*(m+k))*(1.d0-z)
                      zf1 = zf1 + zr1*zp
                      if ( abs(zf1-zw)<abs(zf1)*eps ) exit
@@ -6192,7 +6188,7 @@
             enddo
             if ( mab==0 ) zf0 = (0.0_wp,0.0_wp)
             zc1 = gc/(ga*gcb*(-z)**a)
-            sp = -2.0_wp*el - pa - pca
+            sp = -2.0_wp*gamma - pa - pca
             do j = 1 , mab
                sp = sp + 1.0_wp/j
             enddo
@@ -6219,7 +6215,7 @@
                do j = k + 1 , k + mab
                   sj2 = sj2 + 1.0_wp/j
                enddo
-               zp = -2.0_wp*el - pa - pac + sj2 - 1.0_wp/(k+a-c)          &
+               zp = -2.0_wp*gamma - pa - pac + sj2 - 1.0_wp/(k+a-c)          &
                   & - pi/tan(pi*(k+a-c)) + log(-z)
                zf1 = zf1 + rk2*zr*zp
                ws = abs(zf1)
@@ -6263,7 +6259,7 @@
          Bpt = 0.0_wp
          Ant = 0.0_wp
          Bnt = 0.0_wp
-      elseif ( abs(x)<=9.25d0 ) then
+      elseif ( abs(x)<=9.25_wp ) then
          do l = 0 , 1
             x = (-1)**l*x
             fx = x
@@ -6305,7 +6301,7 @@
          q2 = 1.414213562373095d0
          q0 = .3333333333333333d0
          q1 = .6666666666666667d0
-         xe = x*sqrt(x)/1.5d0
+         xe = x*sqrt(x)/1.5_wp
          xp6 = 1.0_wp/sqrt(6.0_wp*pi*xe)
          su1 = 1.0_wp
          r = 1.0_wp
@@ -6445,7 +6441,7 @@
 !                CDY(n) --- Yn'(z)
 !                NM --- Highest order computed
 
-      real(wp) a , a0 , a1 , b , b1 , el , r2p , y0
+      real(wp) a , a0 , a1 , b , b1 , r2p , y0
       complex(wp) Cbj , cbj0 , cbj1 , cbjk , cbs , Cby , cby0 , cby1 ,   &
                & Cdj , Cdy , ce , cf , cf1 , cf2 , cp0 , cp1 , cq0 ,    &
                & cq1 , cs0 , csu
@@ -6454,7 +6450,6 @@
       dimension Cbj(0:n) , Cdj(0:n) , Cby(0:n) , Cdy(0:n) , a(4) ,      &
               & b(4) , a1(4) , b1(4)
 
-      el = 0.5772156649015329d0
       r2p = .63661977236758d0
       y0 = abs(aimag(z))
       a0 = abs(z)
@@ -6507,7 +6502,7 @@
          do k = 0 , Nm
             Cbj(k) = Cbj(k)/cs0
          enddo
-         ce = log(z/2.0_wp) + el
+         ce = log(z/2.0_wp) + gamma
          Cby(0) = r2p*(ce*Cbj(0)-4.0_wp*csu/cs0)
          Cby(1) = r2p*(-Cbj(0)/z+(ce-1.0_wp)*Cbj(1)-4.0_wp*csv/cs0)
       else
@@ -6519,12 +6514,12 @@
             & .6765925884246826d+00 , -.6883914268109947d+01/
          data b1/ - .1025390625000000d+00 , .2775764465332031d+00 ,     &
             & -.1993531733751297d+01 , .2724882731126854d+02/
-         ct1 = z - 0.25d0*pi
+         ct1 = z - 0.25_wp*pi
          cp0 = (1.0_wp,0.0_wp)
          do k = 1 , 4
             cp0 = cp0 + a(k)*z**(-2*k)
          enddo
-         cq0 = -0.125d0/z
+         cq0 = -0.125_wp/z
          do k = 1 , 4
             cq0 = cq0 + b(k)*z**(-2*k-1)
          enddo
@@ -6588,12 +6583,11 @@
 !                DK(n) --- Kn'(x)
 !                NM --- Highest order computed
 
-      real(wp) a0 , Bi , Bk , bkl , bs , Di , Dk , el , f , f0 ,&
+      real(wp) a0 , Bi , Bk , bkl , bs , Di , Dk , f , f0 ,&
                      & f1 , g , g0 , g1 , r , s0 , sk0 , vt , x
       integer k , k0 , l , m , n , Nm
       dimension Bi(0:n) , Di(0:n) , Bk(0:n) , Dk(0:n)
 
-      el = 0.5772156649015329d0
       Nm = n
       if ( x<=1.0e-100_wp ) then
          do k = 0 , n
@@ -6631,7 +6625,7 @@
          Bi(k) = s0*Bi(k)
       enddo
       if ( x<=8.0_wp ) then
-         Bk(0) = -(log(0.5_wp*x)+el)*Bi(0) + s0*sk0
+         Bk(0) = -(log(0.5_wp*x)+gamma)*Bi(0) + s0*sk0
          Bk(1) = (1.0_wp/x-Bi(1)*Bk(0))/Bi(0)
       else
          a0 = sqrt(pi/(2.0_wp*x))*exp(-x)
@@ -6644,7 +6638,7 @@
             vt = 4.0_wp*l
             r = 1.0_wp
             do k = 1 , k0
-               r = 0.125d0*r*(vt-(2.0*k-1.0)**2)/(k*x)
+               r = 0.125_wp*r*(vt-(2.0*k-1.0)**2)/(k*x)
                bkl = bkl + r
             enddo
             Bk(l) = a0*bkl
@@ -6826,7 +6820,7 @@
 !       Output:  ZF --- Y0(z) or Y1(z) or Y1'(z)
 !                ZD --- Y0'(z) or Y1'(z) or Y1''(z)
 
-      real(wp) a , a0 , a1 , b , b1 , el , rp2 , w0 , w1
+      real(wp) a , a0 , a1 , b , b1 , rp2 , w0 , w1
       complex(wp) cbj0 , cbj1 , cby0 , cby1 , cdy0 , cdy1 , ci , cp ,    &
                & cp0 , cp1 , cq0 , cq1 , cr , cs , ct1 , ct2 , cu , z , &
                & z1 , z2
@@ -6834,7 +6828,6 @@
       integer k , k0 , Kf
       dimension a(12) , b(12) , a1(12) , b1(12)
 
-      el = 0.5772156649015329d0
       rp2 = 2.0_wp/pi
       ci = (0.0_wp,1.0_wp)
       a0 = abs(z)
@@ -6876,7 +6869,7 @@
             cs = cs + cp
             if ( abs(cp)<abs(cs)*1.0d-15 ) exit
          enddo
-         cby0 = rp2*(log(z1/2.0_wp)+el)*cbj0 - rp2*cs
+         cby0 = rp2*(log(z1/2.0_wp)+gamma)*cbj0 - rp2*cs
          w1 = 0.0_wp
          cr = (1.0_wp,0.0_wp)
          cs = (1.0_wp,0.0_wp)
@@ -6887,7 +6880,7 @@
             cs = cs + cp
             if ( abs(cp)<abs(cs)*1.0d-15 ) exit
          enddo
-         cby1 = rp2*((log(z1/2.0_wp)+el)*cbj1-1.0_wp/z1-0.25_wp*z1*cs)
+         cby1 = rp2*((log(z1/2.0_wp)+gamma)*cbj1-1.0_wp/z1-0.25_wp*z1*cs)
       else
          data a/ - .703125d-01 , .112152099609375d+00 ,                 &
             & -.5725014209747314d+00 , .6074042001273483d+01 ,          &
@@ -6916,12 +6909,12 @@
          k0 = 12
          if ( a0>=35.0 ) k0 = 10
          if ( a0>=50.0 ) k0 = 8
-         ct1 = z1 - .25d0*pi
+         ct1 = z1 - .25_wp*pi
          cp0 = (1.0_wp,0.0_wp)
          do k = 1 , k0
             cp0 = cp0 + a(k)*z1**(-2*k)
          enddo
-         cq0 = -0.125d0/z1
+         cq0 = -0.125_wp/z1
          do k = 1 , k0
             cq0 = cq0 + b(k)*z1**(-2*k-1)
          enddo
@@ -6998,14 +6991,14 @@
       if ( x==0.0_wp ) then
          Fr = 0.5_wp*sqrt(halfpi)
          Fi = (-1)**Ks*Fr
-         Fm = sqrt(0.25d0*pi)
+         Fm = sqrt(0.25_wp*pi)
          Fa = (-1)**Ks*45.0d0
          Gr = 0.5_wp
          Gi = 0.0_wp
          Gm = 0.5_wp
          Ga = 0.0_wp
       else
-         if ( xa<=2.5d0 ) then
+         if ( xa<=2.5_wp ) then
             xr = p2p*xa
             c1 = xr
             do k = 1 , 50
@@ -7022,7 +7015,7 @@
                s1 = s1 + xr
                if ( abs(xr/s1)<eps ) goto 50
             enddo
-         elseif ( xa<5.5d0 ) then
+         elseif ( xa<5.5_wp ) then
             m = int(42+1.75*x2)
             xsu = 0.0_wp
             xc = 0.0_wp
@@ -7119,7 +7112,7 @@
       c1 = 0.355028053887817d0
       c2 = 0.258819403792807d0
       sr3 = 1.732050807568877d0
-      z = xa**1.5/1.5d0
+      z = xa**1.5/1.5_wp
       xq = sqrt(xa)
       call ajyik(z,vj1,vj2,vy1,vy2,vi1,vi2,vk1,vk2)
       if ( x==0.0_wp ) then
@@ -7226,7 +7219,7 @@
             if ( xa>3000.0 ) km2 = 0
             kmax = 2*km + 1
          endif
-         xe = xa*xq/1.5d0
+         xe = xa*xq/1.5_wp
          xr1 = 1.0_wp/xe
          xar = 1.0_wp/xq
          xf = sqrt(xar)
@@ -7338,18 +7331,18 @@
             kb = k
             fl = Ck(k+1)
             f1 = 1.0_wp
-            f2 = 0.25d0*((m+ip)*(m+ip+1.0)-Cv+cs)/(m+1.0)*f1
+            f2 = 0.25_wp*((m+ip)*(m+ip+1.0)-Cv+cs)/(m+1.0)*f1
             Ck(1) = f1
             if ( kb==1 ) then
                fs = f2
             elseif ( kb==2 ) then
                Ck(2) = f2
-               fs = 0.125d0*(((m+ip+2.0)*(m+ip+3.0)-Cv+cs)*f2-cs*f1)    &
+               fs = 0.125_wp*(((m+ip+2.0)*(m+ip+3.0)-Cv+cs)*f2-cs*f1)    &
                   & /(m+2.0)
             else
                Ck(2) = f2
                do j = 3 , kb + 1
-                  f = 0.25d0*(((2.0*j+m+ip-4.0)*(2.0*j+m+ip-3.0)-Cv+cs) &
+                  f = 0.25_wp*(((2.0*j+m+ip-4.0)*(2.0*j+m+ip-3.0)-Cv+cs) &
                     & *f2-cs*f1)/((j-1.0)*(j+m-1.0))
                   if ( j<=kb ) Ck(j) = f
                   f1 = f2
@@ -7466,7 +7459,7 @@
       do k = 1 , 16
          cr = -0.5_wp*cr*(2.0*k-n-1.0)*(2.0*k-n-2.0)/(k*z*z)
          Cdn = Cdn + cr
-         if ( abs(cr)<abs(Cdn)*1.0d-12 ) exit
+         if ( abs(cr)<abs(Cdn)*1.0e-12_wp ) exit
       enddo
       Cdn = cb0*Cdn
       end
@@ -7565,12 +7558,11 @@
 !                v   --- Degree of Pmv(x)
 !       Output:  PMV --- Pmv(x)
 
-      real(wp) c0 , el , eps , pa , Pmv , pss , psv , pv0 ,&
+      real(wp) c0 , eps , pa , Pmv , pss , psv , pv0 ,&
                      & qr , r , r0 , r1 , r2 , rg , s , s0 , s1 , s2 , v
       real(wp) v0 , vs , x , xq
       integer j , k , m , nv
 
-      el = .5772156649015329d0
       eps = 1.0d-14
       nv = int(v)
       v0 = v - nv
@@ -7630,7 +7622,7 @@
             pv0 = -vs*r2/m*s0
          endif
          call psi_spec(v,psv)
-         pa = 2.0_wp*(psv+el) + pi/tan(pi*v) + 1.0_wp/v
+         pa = 2.0_wp*(psv+gamma) + pi/tan(pi*v) + 1.0_wp/v
          s1 = 0.0_wp
          do j = 1 , m
             s1 = s1 + (j*j+v*v)/(j*(j*j-v*v))
@@ -7913,26 +7905,26 @@
 
       s = 1.0_wp
       r = 1.0_wp
-      if ( x<24.5d0 ) then
+      if ( x<24.5_wp ) then
          do k = 1 , 60
             r = -r*x*x*(2.0*k-1.0_wp)/(2.0*k+1.0_wp)**3
             s = s + r
-            if ( abs(r)<abs(s)*1.0d-12 ) exit
+            if ( abs(r)<abs(s)*1.0e-12_wp ) exit
          enddo
          Tth = pi/2.0_wp - 2.0_wp/pi*x*s
       else
          do k = 1 , 10
             r = -r*(2.0*k-1.0_wp)**3/((2.0*k+1.0_wp)*x*x)
             s = s + r
-            if ( abs(r)<abs(s)*1.0d-12 ) exit
+            if ( abs(r)<abs(s)*1.0e-12_wp ) exit
          enddo
          Tth = 2.0_wp/(pi*x)*s
          t = 8.0_wp/x
-         xt = x + .25d0*pi
-         f0 = (((((.18118d-2*t-.91909d-2)*t+.017033d0)*t-.9394d-3)      &
-            & *t-.051445d0)*t-.11d-5)*t + .7978846d0
-         g0 = (((((-.23731d-2*t+.59842d-2)*t+.24437d-2)*t-.0233178d0)   &
-            & *t+.595d-4)*t+.1620695d0)*t
+         xt = x + .25_wp*pi
+         f0 = (((((.18118e-2_wp*t-.91909e-2_wp)*t+.017033_wp)*t-.9394e-3_wp)      &
+            & *t-.051445_wp)*t-.11e-5_wp)*t + .7978846_wp
+         g0 = (((((-.23731e-2_wp*t+.59842e-2_wp)*t+.24437e-2_wp)*t-.0233178_wp)   &
+            & *t+.595e-4_wp)*t+.1620695_wp)*t
          tty = (f0*sin(xt)-g0*cos(xt))/(sqrt(x)*x)
          Tth = Tth + tty
       endif
@@ -8073,13 +8065,12 @@
 !                DK1 --- K1'(x)
 
       real(wp) a , a1 , b , Bi0 , Bi1 , Bk0 , Bk1 , ca , cb ,   &
-                     & ct , Di0 , Di1 , Dk0 , Dk1 , el , r , w0 ,  &
+                     & ct , Di0 , Di1 , Dk0 , Dk1 , r , w0 ,  &
                      & ww , x
       real(wp) x2 , xr , xr2
       integer k , k0
       dimension a(12) , b(12) , a1(8)
 
-      el = 0.5772156649015329d0
       x2 = x*x
       if ( x==0.0_wp ) then
          Bi0 = 1.0_wp
@@ -8095,20 +8086,20 @@
          Bi0 = 1.0_wp
          r = 1.0_wp
          do k = 1 , 50
-            r = 0.25d0*r*x2/(k*k)
+            r = 0.25_wp*r*x2/(k*k)
             Bi0 = Bi0 + r
             if ( abs(r/Bi0)<1.0d-15 ) exit
          enddo
          Bi1 = 1.0_wp
          r = 1.0_wp
          do k = 1 , 50
-            r = 0.25d0*r*x2/(k*(k+1))
+            r = 0.25_wp*r*x2/(k*(k+1))
             Bi1 = Bi1 + r
             if ( abs(r/Bi1)<1.0d-15 ) exit
          enddo
          Bi1 = 0.5_wp*x*Bi1
       else
-         data a/0.125d0 , 7.03125d-2 , 7.32421875d-2 ,                  &
+         data a/0.125_wp , 7.03125d-2 , 7.32421875d-2 ,                  &
             & 1.1215209960938d-1 , 2.2710800170898d-1 ,                 &
             & 5.7250142097473d-1 , 1.7277275025845d0 ,                  &
             & 6.0740420012735d0 , 2.4380529699556d01 ,                  &
@@ -8138,20 +8129,20 @@
       endif
       ww = 0.0_wp
       if ( x<=9.0_wp ) then
-         ct = -(log(x/2.0_wp)+el)
+         ct = -(log(x/2.0_wp)+gamma)
          Bk0 = 0.0_wp
          w0 = 0.0_wp
          r = 1.0_wp
          do k = 1 , 50
             w0 = w0 + 1.0_wp/k
-            r = 0.25d0*r/(k*k)*x2
+            r = 0.25_wp*r/(k*k)*x2
             Bk0 = Bk0 + r*(w0+ct)
             if ( abs((Bk0-ww)/Bk0)<1.0d-15 ) exit
             ww = Bk0
          enddo
          Bk0 = Bk0 + ct
       else
-         data a1/0.125d0 , 0.2109375d0 , 1.0986328125d0 ,               &
+         data a1/0.125_wp , 0.2109375d0 , 1.0986328125d0 ,               &
             & 1.1775970458984d01 , 2.1461706161499d02 ,                 &
             & 5.9511522710323d03 , 2.3347645606175d05 ,                 &
             & 1.2312234987631d07/
@@ -8714,7 +8705,7 @@
          g1 = 3.625609908222d0
          g2 = 1.225416702465d0
       else
-         x1 = 0.25d0
+         x1 = 0.25_wp
          y1 = 0.5_wp*a
          call cgama(x1,y1,1,ugr,ugi)
          g1 = sqrt(ugr*ugr+ugi*ugi)
@@ -8729,7 +8720,7 @@
       h(1) = a
       do l1 = 4 , 200 , 2
          m = l1/2
-         hl = a*h1 - 0.25d0*(l1-2.0_wp)*(l1-3.0_wp)*h0
+         hl = a*h1 - 0.25_wp*(l1-2.0_wp)*(l1-3.0_wp)*h0
          h(m) = hl
          h0 = h1
          h1 = hl
@@ -8757,7 +8748,7 @@
       d(2) = a
       do l2 = 5 , 160 , 2
          m = (l2+1)/2
-         dl = a*d2 - 0.25d0*(l2-2.0_wp)*(l2-3.0_wp)*d1
+         dl = a*d2 - 0.25_wp*(l2-2.0_wp)*(l2-3.0_wp)*d1
          d(m) = dl
          d1 = d2
          d2 = dl
@@ -8815,7 +8806,7 @@
       suc = r*Df(1)
       sw = 0.0_wp
       do k = 2 , nm
-         r = r*(m+k-1.0)*(m+k+ip-1.5d0)/(k-1.0_wp)/(k+ip-1.5d0)
+         r = r*(m+k-1.0)*(m+k+ip-1.5_wp)/(k-1.0_wp)/(k+ip-1.5_wp)
          suc = suc + r*Df(k)
          if ( k>nm1 .and. abs(suc-sw)<abs(suc)*eps ) exit
          sw = suc
@@ -8865,7 +8856,7 @@
          if ( k==1 ) then
             r = r0
          else
-            r = r*(m+k-1.0)*(m+k+ip-1.5d0)/(k-1.0_wp)/(k+ip-1.5d0)
+            r = r*(m+k-1.0)*(m+k+ip-1.5_wp)/(k-1.0_wp)/(k+ip-1.5_wp)
          endif
          np = m + 2*k - 2 + ip
          R1f = R1f + lg*r*Df(k)*sj(np)
@@ -8883,7 +8874,7 @@
          if ( k==1 ) then
             r = r0
          else
-            r = r*(m+k-1.0)*(m+k+ip-1.5d0)/(k-1.0_wp)/(k+ip-1.5d0)
+            r = r*(m+k-1.0)*(m+k+ip-1.5_wp)/(k-1.0_wp)/(k+ip-1.5_wp)
          endif
          np = m + 2*k - 2 + ip
          sud = sud + lg*r*Df(k)*dj(np)
@@ -8948,11 +8939,10 @@
 !       Input :  z   --- Argument of E1(z)
 !       Output:  CE1 --- E1(z)
 
-      real(wp) a0 , el , x , xt
+      real(wp) a0 , x , xt
       complex(wp) Ce1 , cr , z , zc , zd , zdc
       integer k
 
-      el = 0.5772156649015328d0
       x = real(z,wp)
       a0 = abs(z)
 !       Continued fraction converges slowly near negative real axis,
@@ -8972,10 +8962,10 @@
          if ( x<=0.0 .and. aimag(z)==0.0 ) then
 !     Careful on the branch cut -- use the sign of the imaginary part
 !     to get the right sign on the factor if pi.
-            Ce1 = -el - log(-z) + z*Ce1 - sign(pi,aimag(z))            &
+            Ce1 = -gamma - log(-z) + z*Ce1 - sign(pi,aimag(z))            &
                 & *(0.0_wp,1.0_wp)
          else
-            Ce1 = -el - log(z) + z*Ce1
+            Ce1 = -gamma - log(z) + z*Ce1
          endif
       else
 !          Continued fraction https://dlmf.nist.gov/6.9
@@ -9030,7 +9020,7 @@
             & *t+2.287317974d0)*t-2.567250468d0)*t+1.076611469d0)*x1
          Ty = 2.0_wp/pi*log(x/2.0_wp)*Tj - Ty
       elseif ( x<=8.0_wp ) then
-         xt = x - .25d0*pi
+         xt = x - .25_wp*pi
          t = 16.0_wp/(x*x)
          f0 = ((((((.1496119d-2*t-.739083d-2)*t+.016236617d0)*t-        &
             & .022007499d0)*t+.023644978d0)*t-.031280848d0)             &
@@ -9042,7 +9032,7 @@
          Ty = -(f0*sin(xt)+g0*cos(xt))/sqrt(x)
       else
          t = 64.0d0/(x*x)
-         xt = x - .25d0*pi
+         xt = x - .25_wp*pi
          f0 = (((((((-.268482d-4*t+.1270039d-3)*t-.2755037d-3)*t+       &
             & .3992825d-3)*t-.5366169d-3)*t+.10089872d-2)               &
             & *t-.40403539d-2)*t+.0623347304d0)*8.0_wp/x
@@ -9155,12 +9145,11 @@
 !       Output:  TJ --- Integration of J0(t) from 0 to x
 !                TY --- Integration of Y0(t) from 0 to x
 
-      real(wp) a , a0 , a1 , af , bf , bg , el , eps , r , &
+      real(wp) a , a0 , a1 , af , bf , bg , eps , r , &
                      & r2 , rc , rs , Tj , Ty , ty1 , ty2 , x , x2 , xp
       integer k
       dimension a(18)
 
-      el = .5772156649015329d0
       eps = 1.0d-12
       if ( x==0.0_wp ) then
          Tj = 0.0_wp
@@ -9174,7 +9163,7 @@
             Tj = Tj + r
             if ( abs(r)<abs(Tj)*eps ) exit
          enddo
-         ty1 = (el+log(x/2.0_wp))*Tj
+         ty1 = (gamma+log(x/2.0_wp))*Tj
          rs = 0.0_wp
          ty2 = 1.0_wp
          r = 1.0_wp
@@ -9191,7 +9180,7 @@
          a1 = 5.0_wp/8.0_wp
          a(1) = a1
          do k = 1 , 16
-            af = ((1.5d0*(k+0.5_wp)*(k+5.0_wp/6.0_wp)*a1-0.5_wp*(k+0.5_wp)      &
+            af = ((1.5_wp*(k+0.5_wp)*(k+5.0_wp/6.0_wp)*a1-0.5_wp*(k+0.5_wp)      &
                & *(k+0.5_wp)*(k-0.5_wp)*a0))/(k+1.0_wp)
             a(k+1) = af
             a0 = a1
@@ -9209,7 +9198,7 @@
             r = -r/(x*x)
             bg = bg + a(2*k+1)*r
          enddo
-         xp = x + .25d0*pi
+         xp = x + .25_wp*pi
          rc = sqrt(2.0_wp/(pi*x))
          Tj = 1.0_wp - rc*(bf*cos(xp)+bg*sin(xp))
          Ty = rc*(bg*cos(xp)-bf*sin(xp))
@@ -9325,7 +9314,7 @@
 !                HER --- ker'x
 !                HEI --- kei'x
 
-      real(wp) Bei , Ber , cn0 , cp0 , cs , Dei , Der , el ,    &
+      real(wp) Bei , Ber , cn0 , cp0 , cs , Dei , Der ,    &
                      & eps , fac , Gei , Ger , gs , Hei , Her ,    &
                      & pn0 , pn1 , pp0 , pp1
       real(wp) qn0 , qn1 , qp0 , qp1 , r , r0 , r1 , rc , rs ,  &
@@ -9334,7 +9323,6 @@
       real(wp) xt
       integer k , km , m
 
-      el = .5772156649015329d0
       eps = 1.0d-15
       if ( x==0.0_wp ) then
          Ber = 1.0_wp
@@ -9347,7 +9335,7 @@
          Hei = 0.0_wp
          return
       endif
-      x2 = 0.25d0*x*x
+      x2 = 0.25_wp*x*x
       x4 = x2*x2
       if ( abs(x)<10.0_wp ) then
          Ber = 1.0_wp
@@ -9364,7 +9352,7 @@
             Bei = Bei + r
             if ( abs(r)<abs(Bei)*eps ) exit
          enddo
-         Ger = -(log(x/2.0_wp)+el)*Ber + 0.25d0*pi*Bei
+         Ger = -(log(x/2.0_wp)+gamma)*Ber + 0.25_wp*pi*Bei
          r = 1.0_wp
          gs = 0.0_wp
          do m = 1 , 60
@@ -9373,7 +9361,7 @@
             Ger = Ger + r*gs
             if ( abs(r*gs)<abs(Ger)*eps ) exit
          enddo
-         Gei = x2 - (log(x/2.0_wp)+el)*Bei - 0.25d0*pi*Ber
+         Gei = x2 - (log(x/2.0_wp)+gamma)*Bei - 0.25_wp*pi*Ber
          r = x2
          gs = 1.0_wp
          do m = 1 , 60
@@ -9397,8 +9385,8 @@
             if ( abs(r)<abs(Dei)*eps ) exit
          enddo
          r = -0.25_wp*x*x2
-         gs = 1.5d0
-         Her = 1.5d0*r - Ber/x - (log(x/2.d0)+el)*Der + 0.25*pi*Dei
+         gs = 1.5_wp
+         Her = 1.5_wp*r - Ber/x - (log(x/2.d0)+gamma)*Der + 0.25*pi*Dei
          do m = 1 , 60
             r = -0.25_wp*r/m/(m+1.0_wp)/(2.0_wp*m+1.0_wp)**2*x4
             gs = gs + 1.0_wp/(2*m+1.0_wp) + 1.0_wp/(2*m+2.0_wp)
@@ -9407,7 +9395,7 @@
          enddo
          r = 0.5_wp*x
          gs = 1.0_wp
-         Hei = 0.5_wp*x - Bei/x - (log(x/2.d0)+el)*Dei - 0.25*pi*Der
+         Hei = 0.5_wp*x - Bei/x - (log(x/2.d0)+gamma)*Dei - 0.25*pi*Der
          do m = 1 , 60
             r = -0.25_wp*r/(m*m)/(2*m-1.0_wp)/(2*m+1.0_wp)*x4
             gs = gs + 1.0_wp/(2.0_wp*m) + 1.0_wp/(2*m+1.0_wp)
@@ -9425,10 +9413,10 @@
          fac = 1.0_wp
          do k = 1 , km
             fac = -fac
-            xt = 0.25d0*k*pi - int(0.125d0*k)*twopi
+            xt = 0.25_wp*k*pi - int(0.125_wp*k)*twopi
             cs = cos(xt)
             ss = sin(xt)
-            r0 = 0.125d0*r0*(2.0_wp*k-1.0_wp)**2/k/x
+            r0 = 0.125_wp*r0*(2.0_wp*k-1.0_wp)**2/k/x
             rc = r0*cs
             rs = r0*ss
             pp0 = pp0 + rc
@@ -9441,10 +9429,10 @@
          xe2 = exp(-xd)
          xc1 = 1.d0/sqrt(twopi*x)
          xc2 = sqrt(0.5_wp*pi/x)
-         cp0 = cos(xd+0.125d0*pi)
-         cn0 = cos(xd-0.125d0*pi)
-         sp0 = sin(xd+0.125d0*pi)
-         sn0 = sin(xd-0.125d0*pi)
+         cp0 = cos(xd+0.125_wp*pi)
+         cn0 = cos(xd-0.125_wp*pi)
+         sp0 = sin(xd+0.125_wp*pi)
+         sn0 = sin(xd-0.125_wp*pi)
          Ger = xc2*xe2*(pn0*cp0-qn0*sp0)
          Gei = xc2*xe2*(-pn0*sp0-qn0*cp0)
          Ber = xc1*xe1*(pp0*cn0+qp0*sn0) - Gei/pi
@@ -9457,10 +9445,10 @@
          fac = 1.0_wp
          do k = 1 , km
             fac = -fac
-            xt = 0.25d0*k*pi - int(0.125d0*k)*twopi
+            xt = 0.25_wp*k*pi - int(0.125_wp*k)*twopi
             cs = cos(xt)
             ss = sin(xt)
-            r1 = 0.125d0*r1*(4.d0-(2.0_wp*k-1.0_wp)**2)/k/x
+            r1 = 0.125_wp*r1*(4.d0-(2.0_wp*k-1.0_wp)**2)/k/x
             rc = r1*cs
             rs = r1*ss
             pp1 = pp1 + fac*rc
@@ -9489,14 +9477,13 @@
 !                ID --- Estimated number of significant digits
 
       real(wp) a , a0 , a1 , a2 , b , da1 , da2 , db1 , db2 ,   &
-                     & el , ga , ga1 , h0 , hm1 , hm2 , hm3 , hmax ,    &
-                     & hmin , Hu , hu1
+                     ga , ga1 , h0 , hm1 , hm2 , hm3 , hmax ,    &
+                     hmin , Hu , hu1
       real(wp) hu2 , hw , ps , r , rn , rn1 , s0 , s1 , s2 ,    &
-                     & sa , sb , ua , ub , x
+                     sa , sb , ua , ub , x
       integer Id , id1 , id2 , j , k , m , n
 
       Id = -100
-      el = 0.5772156649015329d0
       n = abs(b-1)
       rn1 = 1.0_wp
       rn = 1.0_wp
@@ -9545,7 +9532,7 @@
          if ( b>=0.0 ) s0 = s0 - 1.0_wp/m
          if ( b<0.0 ) s0 = s0 + (1.0_wp-a)/(m*(a+m-1.0_wp))
       enddo
-      hm2 = ps + 2.0_wp*el + s0
+      hm2 = ps + 2.0_wp*gamma + s0
       r = 1.0_wp
       hmax = 0.0_wp
       hmin = 1.0e+300_wp
@@ -9567,7 +9554,7 @@
                s2 = s2 + 1.0_wp/m
             enddo
          endif
-         hw = 2.0_wp*el + ps + s1 - s2
+         hw = 2.0_wp*gamma + ps + s1 - s2
          r = r*(a0+k-1.0_wp)*x/((n+k)*k)
          hm2 = hm2 + r*hw
          hu2 = abs(hm2)
@@ -9721,11 +9708,11 @@
          Ger = ((((((-.2458d-4*u+.309699d-2)*u-.19636347d0)*u+          &
              & 5.65539121d0)*u-60.60977451d0)*u+171.36272133d0)         &
              & *u-59.05819744d0)*u - .57721566d0
-         Ger = Ger - log(0.5_wp*x)*Ber + .25d0*pi*Bei
+         Ger = Ger - log(0.5_wp*x)*Ber + .25_wp*pi*Bei
          Gei = t2*((((((.29532d-3*u-.02695875d0)*u+1.17509064d0)*u-     &
              & 21.30060904d0)*u+124.2356965d0)*u-142.91827687d0)        &
              & *u+6.76454936d0)
-         Gei = Gei - log(0.5_wp*x)*Bei - .25d0*pi*Ber
+         Gei = Gei - log(0.5_wp*x)*Bei - .25_wp*pi*Ber
          Der = x*t2*                                                    &
              & ((((((-.394d-5*u+.45957d-3)*u-.02609253d0)*u+.66047849d0)&
              & *u-6.0681481d0)*u+14.22222222d0)*u-4.0_wp)
@@ -9734,11 +9721,11 @@
          Her = x*t2*((((((-.1075d-4*u+.116137d-2)*u-.06136358d0)*u+     &
              & 1.4138478d0)*u-11.36433272d0)*u+21.42034017d0)           &
              & *u-3.69113734d0)
-         Her = Her - log(0.5_wp*x)*Der - Ber/x + .25d0*pi*Dei
+         Her = Her - log(0.5_wp*x)*Der - Ber/x + .25_wp*pi*Dei
          Hei = x*((((((.11997d-3*u-.926707d-2)*u+.33049424d0)*u-        &
              & 4.65950823d0)*u+19.41182758d0)*u-13.39858846d0)          &
              & *u+.21139217d0)
-         Hei = Hei - log(0.5_wp*x)*Dei - Bei/x - .25d0*pi*Der
+         Hei = Hei - log(0.5_wp*x)*Dei - Bei/x - .25_wp*pi*Der
       else
          t = 8.0_wp/x
          tnr = 0.0_wp
@@ -10364,7 +10351,7 @@
          bi0 = 1.0_wp
          r = 1.0_wp
          do k = 1 , 30
-            r = 0.25d0*r*x2/(k*(k+v0))
+            r = 0.25_wp*r*x2/(k*(k+v0))
             bi0 = bi0 + r
             if ( abs(r/bi0)<1.0d-15 ) exit
          enddo
@@ -10374,7 +10361,7 @@
          sum = 1.0_wp
          r = 1.0_wp
          do k = 1 , k0
-            r = -0.125d0*r*(vt-(2.0_wp*k-1.0_wp)**2.0)/(k*x)
+            r = -0.125_wp*r*(vt-(2.0_wp*k-1.0_wp)**2.0)/(k*x)
             sum = sum + r
          enddo
          bi0 = ca*sum
@@ -10408,7 +10395,7 @@
          sum = 1.0_wp
          r = 1.0_wp
          do k = 1 , k0
-            r = 0.125d0*r*(vt-(2.0*k-1.0)**2.0)/(k*x)
+            r = 0.125_wp*r*(vt-(2.0*k-1.0)**2.0)/(k*x)
             sum = sum + r
          enddo
          bk0 = cb*sum
@@ -10419,7 +10406,7 @@
          r = 1.0_wp
          do k = 1 , 50
             w0 = w0 + 1.0_wp/k
-            r = 0.25d0*r/(k*k)*x2
+            r = 0.25_wp*r/(k*k)*x2
             cs = cs + r*(w0+ct)
             wa = abs(cs)
             if ( abs((wa-ww)/wa)<1.0d-15 ) exit
@@ -10435,8 +10422,8 @@
          r1 = 1.0_wp
          r2 = 1.0_wp
          do k = 1 , 120
-            r1 = 0.25d0*r1*x2/(k*(k-v0))
-            r2 = 0.25d0*r2*x2/(k*(k+v0))
+            r1 = 0.25_wp*r1*x2/(k*(k-v0))
+            r2 = 0.25_wp*r2*x2/(k*(k+v0))
             sum = sum + a2*r1 - a1*r2
             wa = abs(sum)
             if ( abs((wa-ww)/wa)<1.0d-15 ) exit
@@ -10566,13 +10553,13 @@
       enddo
       su1 = Df(1)*r1
       do k = 2 , kb
-         r1 = -r1*(k+m+ip-1.5d0)/(k-1.0_wp)
+         r1 = -r1*(k+m+ip-1.5_wp)/(k-1.0_wp)
          su1 = su1 + r1*Df(k)
       enddo
       su2 = 0.0_wp
       sw = 0.0_wp
       do k = kb + 1 , nm
-         if ( k/=1 ) r1 = -r1*(k+m+ip-1.5d0)/(k-1.0_wp)
+         if ( k/=1 ) r1 = -r1*(k+m+ip-1.5_wp)/(k-1.0_wp)
          su2 = su2 + r1*Df(k)
          if ( abs(sw-su2)<abs(su2)*1.0d-14 ) exit
          sw = su2
@@ -10674,8 +10661,8 @@
                   & *(vv-(4.0*k+1.0)**2.0)/(k*(2.0*k+1.0)*x2)
                qx = qx + rq
             enddo
-            qx = 0.125d0*(vv-1.0)*qx/x
-            xk = x - (0.5_wp*l/3.0_wp+0.25d0)*pi
+            qx = 0.125_wp*(vv-1.0)*qx/x
+            xk = x - (0.5_wp*l/3.0_wp+0.25_wp)*pi
             a0 = sqrt(rp2/x)
             ck = cos(xk)
             sk = sin(xk)
@@ -10705,7 +10692,7 @@
             if ( l==2 ) uj2 = b0*vjl/gn2
          enddo
          pv1 = pi/3.0_wp
-         pv2 = pi/1.5d0
+         pv2 = pi/1.5_wp
          Vy1 = uu0*(Vj1*cos(pv1)-uj1)
          Vy2 = uu0*(Vj2*cos(pv2)-uj2)
       endif
@@ -10715,7 +10702,7 @@
             vil = 1.0_wp
             r = 1.0_wp
             do k = 1 , 40
-               r = 0.25d0*r*x2/(k*(k+vl))
+               r = 0.25_wp*r*x2/(k*(k+vl))
                vil = vil + r
                if ( abs(r)<1.0d-15 ) exit
             enddo
@@ -10730,7 +10717,7 @@
             vsl = 1.0_wp
             r = 1.0_wp
             do k = 1 , k0
-               r = -0.125d0*r*(vv-(2.0_wp*k-1.0_wp)**2.0)/(k*x)
+               r = -0.125_wp*r*(vv-(2.0_wp*k-1.0_wp)**2.0)/(k*x)
                vsl = vsl + r
             enddo
             if ( l==1 ) Vi1 = c0*vsl
@@ -10747,7 +10734,7 @@
             sum = 1.0_wp
             r = 1.0_wp
             do k = 1 , 60
-               r = 0.25d0*r*x2/(k*(k-vl))
+               r = 0.25_wp*r*x2/(k*(k-vl))
                sum = sum + r
                if ( abs(r)<1.0d-15 ) exit
             enddo
@@ -10761,7 +10748,7 @@
             sum = 1.0_wp
             r = 1.0_wp
             do k = 1 , k0
-               r = 0.125d0*r*(vv-(2.0*k-1.0)**2.0)/(k*x)
+               r = 0.125_wp*r*(vv-(2.0*k-1.0)**2.0)/(k*x)
                sum = sum + r
             enddo
             if ( l==1 ) Vk1 = c0*sum
@@ -10834,7 +10821,7 @@
          ci0 = (1.0_wp,0.0_wp)
          cr = (1.0_wp,0.0_wp)
          do k = 1 , 50
-            cr = 0.25d0*cr*z2/(k*(k+v0))
+            cr = 0.25_wp*cr*z2/(k*(k+v0))
             ci0 = ci0 + cr
             if ( abs(cr/ci0)<1.0d-15 ) exit
          enddo
@@ -10844,7 +10831,7 @@
          cs = (1.0_wp,0.0_wp)
          cr = (1.0_wp,0.0_wp)
          do k = 1 , k0
-            cr = -0.125d0*cr*(vt-(2.0_wp*k-1.0_wp)**2.0)/(k*z1)
+            cr = -0.125_wp*cr*(vt-(2.0_wp*k-1.0_wp)**2.0)/(k*z1)
             cs = cs + cr
          enddo
          cbi0 = ca*cs
@@ -10872,7 +10859,7 @@
          cs = (1.0_wp,0.0_wp)
          cr = (1.0_wp,0.0_wp)
          do k = 1 , k0
-            cr = 0.125d0*cr*(vt-(2.0_wp*k-1.0_wp)**2.0)/(k*z1)
+            cr = 0.125_wp*cr*(vt-(2.0_wp*k-1.0_wp)**2.0)/(k*z1)
             cs = cs + cr
          enddo
          cbk0 = cb*cs
@@ -10883,7 +10870,7 @@
          cr = (1.0_wp,0.0_wp)
          do k = 1 , 50
             w0 = w0 + 1.0_wp/k
-            cr = 0.25d0*cr/(k*k)*z2
+            cr = 0.25_wp*cr/(k*k)*z2
             cp = cr*(w0+ct)
             cs = cs + cp
             if ( k>=10 .and. abs(cp/cs)<1.0d-15 ) exit
@@ -10898,8 +10885,8 @@
          cr1 = (1.0_wp,0.0_wp)
          cr2 = (1.0_wp,0.0_wp)
          do k = 1 , 50
-            cr1 = 0.25d0*cr1*z2/(k*(k-v0))
-            cr2 = 0.25d0*cr2*z2/(k*(k+v0))
+            cr1 = 0.25_wp*cr1*z2/(k*(k-v0))
+            cr2 = 0.25_wp*cr2*z2/(k*(k+v0))
             cp = ca2*cr1 - ca1*cr2
             csu = csu + cp
             if ( k>=10 .and. abs(cp/csu)<1.0d-15 ) exit
@@ -10996,7 +10983,7 @@
          ci0 = (1.0_wp,0.0_wp)
          cr = (1.0_wp,0.0_wp)
          do k = 1 , 50
-            cr = 0.25d0*cr*z2/(k*(k+v0))
+            cr = 0.25_wp*cr*z2/(k*(k+v0))
             ci0 = ci0 + cr
             if ( abs(cr)<abs(ci0)*1.0d-15 ) exit
          enddo
@@ -11006,7 +10993,7 @@
          cs = (1.0_wp,0.0_wp)
          cr = (1.0_wp,0.0_wp)
          do k = 1 , k0
-            cr = -0.125d0*cr*(vt-(2.0_wp*k-1.0_wp)**2.0)/(k*z1)
+            cr = -0.125_wp*cr*(vt-(2.0_wp*k-1.0_wp)**2.0)/(k*z1)
             cs = cs + cr
          enddo
          cbi0 = ca*cs
@@ -11034,7 +11021,7 @@
          cs = (1.0_wp,0.0_wp)
          cr = (1.0_wp,0.0_wp)
          do k = 1 , k0
-            cr = 0.125d0*cr*(vt-(2.0_wp*k-1.0_wp)**2.0)/(k*z1)
+            cr = 0.125_wp*cr*(vt-(2.0_wp*k-1.0_wp)**2.0)/(k*z1)
             cs = cs + cr
          enddo
          cbk0 = cb*cs
@@ -11045,7 +11032,7 @@
          cr = (1.0_wp,0.0_wp)
          do k = 1 , 50
             w0 = w0 + 1.0_wp/k
-            cr = 0.25d0*cr/(k*k)*z2
+            cr = 0.25_wp*cr/(k*k)*z2
             cp = cr*(w0+ct)
             cs = cs + cp
             if ( k>=10 .and. abs(cp/cs)<1.0d-15 ) exit
@@ -11061,8 +11048,8 @@
          cr2 = (1.0_wp,0.0_wp)
          ws0 = 0.0_wp
          do k = 1 , 50
-            cr1 = 0.25d0*cr1*z2/(k*(k-v0))
-            cr2 = 0.25d0*cr2*z2/(k*(k+v0))
+            cr1 = 0.25_wp*cr1*z2/(k*(k-v0))
+            cr2 = 0.25_wp*cr2*z2/(k*(k+v0))
             csu = csu + ca2*cr1 - ca1*cr2
             ws = abs(csu)
             if ( k>=10 .and. abs(ws-ws0)/ws<1.0d-15 ) exit
@@ -11203,7 +11190,7 @@
       if ( xa==0.0 ) then
          c = 0.0_wp
          s = 0.0_wp
-      elseif ( xa<2.5d0 ) then
+      elseif ( xa<2.5_wp ) then
          r = xa
          c = r
          do k = 1 , 50
@@ -11220,7 +11207,7 @@
             s = s + r
             if ( abs(r)<abs(s)*eps ) goto 100
          enddo
-      elseif ( xa<4.5d0 ) then
+      elseif ( xa<4.5_wp ) then
          m = int(42.0+1.75*t)
          su = 0.0_wp
          c = 0.0_wp
@@ -11454,7 +11441,7 @@
             & *t2-.4394275d-2)*t2 + .999999997d0
          q0 = t*(((((.8099d-5*t2-.35614d-4)*t2+.85844d-4)*t2-.218024d-3)&
             & *t2+.1144106d-2)*t2-.031249995d0)
-         ta0 = x - .25d0*pi
+         ta0 = x - .25_wp*pi
          Bj0 = a0*(p0*cos(ta0)-q0*sin(ta0))
          By0 = a0*(p0*sin(ta0)+q0*cos(ta0))
          p1 = ((((.10632d-4*t2-.50363d-4)*t2+.145575d-3)*t2-.559487d-3) &
@@ -11619,7 +11606,7 @@
          do k = 2 , m1
             Ga = Ga*k
          enddo
-      elseif ( x+.5d0==int(x+0.5_wp) .and. x>0.0 ) then
+      elseif ( x+.5_wp==int(x+0.5_wp) .and. x>0.0 ) then
          m = int(x)
          Ga = sqrtpi
          do k = 1 , m
@@ -11655,7 +11642,7 @@
       nv = int(v)
       v0 = v - nv
       na = abs(nv)
-      qe = exp(0.25d0*x*x)
+      qe = exp(0.25_wp*x*x)
       q2p = sqrt(2.0_wp/pi)
       ja = 0
       if ( na>=1 ) ja = 1
@@ -11687,7 +11674,7 @@
             f0 = f1
             f1 = f
          enddo
-      elseif ( x>=0.0 .and. x<=7.5d0 ) then
+      elseif ( x>=0.0 .and. x<=7.5_wp ) then
          v2 = v
          if ( v2<1.0 ) v2 = v2 + 1.0_wp
          call vvsa(v2,x,f1)
@@ -11702,7 +11689,7 @@
             f1 = f0
             f0 = f
          enddo
-      elseif ( x>7.5d0 ) then
+      elseif ( x>7.5_wp ) then
          call vvla(v0,x,pv0)
          m = 100 + abs(na)
          Vv(1) = pv0
@@ -11719,7 +11706,7 @@
             Vv(k) = s0*Vv(k)
          enddo
       else
-         if ( xa<=7.5d0 ) then
+         if ( xa<=7.5_wp ) then
             call vvsa(v0,x,f0)
             v1 = v0 + 1.0
             call vvsa(v1,x,f1)
@@ -11982,13 +11969,12 @@
 !                CDK(n) --- Kn'(z)
 !                NM --- Highest order computed
 
-      real(wp) a0 , el , fac , vt
+      real(wp) a0 , fac , vt
       complex(wp) ca0 , Cbi , Cbk , cbkl , cbs , Cdi , Cdk , cf , cf0 ,  &
                & cf1 , cg , cg0 , cg1 , ci , cr , cs0 , csk0 , z , z1
       integer k , k0 , l , m , n , Nm
       dimension Cbi(0:n) , Cdi(0:n) , Cbk(0:n) , Cdk(0:n)
 
-      el = 0.57721566490153d0
       a0 = abs(z)
       Nm = n
       if ( a0<1.0e-100_wp ) then
@@ -12029,7 +12015,7 @@
          Cbi(k) = cs0*Cbi(k)
       enddo
       if ( a0<=9.0 ) then
-         Cbk(0) = -(log(0.5_wp*z1)+el)*Cbi(0) + cs0*csk0
+         Cbk(0) = -(log(0.5_wp*z1)+gamma)*Cbi(0) + cs0*csk0
          Cbk(1) = (1.0_wp/z1-Cbi(1)*Cbk(0))/Cbi(0)
       else
          ca0 = sqrt(pi/(2.0_wp*z1))*exp(-z1)
@@ -12042,7 +12028,7 @@
             vt = 4.0_wp*l
             cr = (1.0_wp,0.0_wp)
             do k = 1 , k0
-               cr = 0.125d0*cr*(vt-(2.0*k-1.0)**2)/(k*z1)
+               cr = 0.125_wp*cr*(vt-(2.0*k-1.0)**2)/(k*z1)
                cbkl = cbkl + cr
             enddo
             Cbk(l) = ca0*cbkl
@@ -12333,20 +12319,20 @@
          Cbi0 = (1.0_wp,0.0_wp)
          cr = (1.0_wp,0.0_wp)
          do k = 1 , 50
-            cr = 0.25d0*cr*z2/(k*k)
+            cr = 0.25_wp*cr*z2/(k*k)
             Cbi0 = Cbi0 + cr
             if ( abs(cr/Cbi0)<1.0d-15 ) exit
          enddo
          Cbi1 = (1.0_wp,0.0_wp)
          cr = (1.0_wp,0.0_wp)
          do k = 1 , 50
-            cr = 0.25d0*cr*z2/(k*(k+1))
+            cr = 0.25_wp*cr*z2/(k*(k+1))
             Cbi1 = Cbi1 + cr
             if ( abs(cr/Cbi1)<1.0d-15 ) exit
          enddo
          Cbi1 = 0.5_wp*z1*Cbi1
       else
-         data a/0.125d0 , 7.03125d-2 , 7.32421875d-2 ,                  &
+         data a/0.125_wp , 7.03125d-2 , 7.32421875d-2 ,                  &
             & 1.1215209960938d-1 , 2.2710800170898d-1 ,                 &
             & 5.7250142097473d-1 , 1.7277275025845d0 ,                  &
             & 6.0740420012735d0 , 2.4380529699556d01 ,                  &
@@ -12381,14 +12367,14 @@
          cr = (1.0_wp,0.0_wp)
          do k = 1 , 50
             w0 = w0 + 1.0_wp/k
-            cr = 0.25d0*cr/(k*k)*z2
+            cr = 0.25_wp*cr/(k*k)*z2
             cs = cs + cr*(w0+ct)
             if ( abs((cs-cw)/cs)<1.0d-15 ) exit
             cw = cs
          enddo
          Cbk0 = ct + cs
       else
-         data a1/0.125d0 , 0.2109375d0 , 1.0986328125d0 ,               &
+         data a1/0.125_wp , 0.2109375d0 , 1.0986328125d0 ,               &
             & 1.1775970458984d01 , 2.1461706161499d02 ,                 &
             & 5.9511522710323d03 , 2.3347645606175d05 ,                 &
             & 1.2312234987631d07 , 8.401390346421d08 ,                  &
