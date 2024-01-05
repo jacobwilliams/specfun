@@ -71,7 +71,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="100.0% of total for modules and submodules.">9702 statements</a>
+                 title="100.0% of total for modules and submodules.">9749 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -1795,7 +1795,7 @@ of the second kind with a small argument</p>
             <td>::</td>
             <td><strong>Bn</strong>(0:n)</td>
             <td>
-<p>BN(n) --- Bn</p>
+<p><code>Bn</code></p>
             </td>
         </tr>
     </tbody>
@@ -1850,7 +1850,7 @@ of the second kind with a small argument</p>
             <td>::</td>
             <td><strong>Bn</strong>(0:n)</td>
             <td>
-<p>BN(n) --- Bn</p>
+<p><code>Bn</code></p>
             </td>
         </tr>
     </tbody>
@@ -2903,7 +2903,7 @@ and Pmn'(x) for a given order</p>
 </h3></div>
     <div class="card-body">
           
-  <p>Compute complex Error function erf(z) &amp; erf'(z)</p>
+  <p>Compute complex Error function <code>erf(z)</code> &amp; <code>erf'(z)</code></p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -2919,46 +2919,46 @@ and Pmn'(x) for a given order</p>
         <tr>
             <td>
               <span class="anchor" id="variable-z~5"></span>
-              complex(kind=wp)
+              complex(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>z</strong></td>
             <td>
-
+<p>Complex argument of erf(z)</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-cer"></span>
-              complex(kind=wp)
+              complex(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Cer</strong></td>
             <td>
-
+<p><code>erf(z)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-cder"></span>
-              complex(kind=wp)
+              complex(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Cder</strong></td>
             <td>
-
+<p><code>erf'(z)</code></p>
             </td>
         </tr>
     </tbody>
@@ -2969,7 +2969,7 @@ and Pmn'(x) for a given order</p>
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-rswfp"></span> <h3>public  subroutine <a href='../proc/rswfp.html'>rswfp</a>(m, n, c, x, Cv, Kf, R1f, R1d, R2f, R2d)  
+    <div class="card-header codesum"><span class="anchor" id="proc-rswfp"></span> <h3>public  subroutine <a href='../proc/rswfp.html'>rswfp</a>(m, n, c, x, cv, Kf, R1f, R1d, R2f, R2d)  
 </h3></div>
     <div class="card-body">
           
@@ -2990,151 +2990,156 @@ first and second kinds, and their derivatives</p>
         <tr>
             <td>
               <span class="anchor" id="variable-m~18"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>m</strong></td>
             <td>
-
+<p>Mode parameter, <code>m = 0,1,2,...</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-n~16"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>n</strong></td>
             <td>
-
+<p>Mode parameter, <code>n = m,m+1,m+2,...</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-c~5"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>c</strong></td>
             <td>
-
+<p>Spheroidal parameter</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-x~15"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-
+<p>Argument of radial function ( <code>x &gt; 1.0</code> )</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-cv~3"></span>
-              real(kind=wp)
+              <span class="anchor" id="variable-cv"></span>
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
-            <td><strong>Cv</strong></td>
+            <td><strong>cv</strong></td>
             <td>
-
+<p>Characteristic value</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-kf"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Kf</strong></td>
             <td>
-
+<p>Function code:
+ * <code>KF=1</code> for the first kind
+ * <code>KF=2</code> for the second kind
+ * <code>KF=3</code> for both the first and second kinds</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-r1f"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>R1f</strong></td>
             <td>
-
+<p>Radial function of the first kind</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-r1d"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>R1d</strong></td>
             <td>
-
+<p>Derivative of the radial function of
+the first kind</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-r2f~3"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>R2f</strong></td>
             <td>
-
+<p>Radial function of the second kind</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-r2d~3"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>R2d</strong></td>
             <td>
-
+<p>Derivative of the radial function of
+the second kind</p>
             </td>
         </tr>
     </tbody>
@@ -3149,7 +3154,7 @@ first and second kinds, and their derivatives</p>
 </h3></div>
     <div class="card-body">
           
-  <p>Compute Bessel functions Jn(x) and Yn(x), and
+  <p>Compute Bessel functions <code>Jn(x)</code> and <code>Yn(x)</code>, and
 their first and second derivatives</p>
 
   <h4>Arguments</h4>
@@ -3166,121 +3171,121 @@ their first and second derivatives</p>
         <tr>
             <td>
               <span class="anchor" id="variable-n~17"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>n</strong></td>
             <td>
-
+<p>Order of Jn(x) and Yn(x)</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-x~16"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-
+<p>Argument of Jn(x) and Yn(x) ( x &gt; 0 )</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-bjn"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Bjn</strong></td>
             <td>
-
+<p><code>Jn(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-djn"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Djn</strong></td>
             <td>
-
+<p><code>Jn'(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-fjn"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Fjn</strong></td>
             <td>
-
+<p><code>Jn"(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-byn"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Byn</strong></td>
             <td>
-
+<p><code>Yn(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-dyn"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Dyn</strong></td>
             <td>
-
+<p><code>Yn'(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-fyn"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Fyn</strong></td>
             <td>
-
+<p><code>Yn"(x)</code></p>
             </td>
         </tr>
     </tbody>
@@ -3311,31 +3316,31 @@ their first and second derivatives</p>
         <tr>
             <td>
               <span class="anchor" id="variable-x~17"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-
+<p>Argument of <code>Г(x) ( |x| ≤ 1 )</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-ga"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Ga</strong></td>
             <td>
-
+<p><code>Г(x)</code></p>
             </td>
         </tr>
     </tbody>
@@ -3351,7 +3356,7 @@ their first and second derivatives</p>
     <div class="card-body">
           
   <p>Compute cosine and sine integrals
-Si(x) and Ci(x) ( x ≥ 0 )</p>
+<code>Si(x)</code> and <code>Ci(x)</code> ( <code>x ≥ 0</code> )</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -3367,46 +3372,46 @@ Si(x) and Ci(x) ( x ≥ 0 )</p>
         <tr>
             <td>
               <span class="anchor" id="variable-x~18"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-
+<p>Argument of <code>Ci(x)</code> and <code>Si(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-ci"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Ci</strong></td>
             <td>
-
+<p><code>Ci(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-si"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Si</strong></td>
             <td>
-
+<p><code>Si(x)</code></p>
             </td>
         </tr>
     </tbody>
@@ -3437,16 +3442,16 @@ Si(x) and Ci(x) ( x ≥ 0 )</p>
         <tr>
             <td>
               <span class="anchor" id="variable-n~18"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>n</strong></td>
             <td>
-
+<p>Serial number</p>
             </td>
         </tr>
         <tr>
@@ -3454,14 +3459,14 @@ Si(x) and Ci(x) ( x ≥ 0 )</p>
               <span class="anchor" id="variable-en"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
-              dimension(0:n)
+              
             </td>
             <td>::</td>
-            <td><strong>En</strong></td>
+            <td><strong>En</strong>(0:n)</td>
             <td>
-
+<p><code>En</code></p>
             </td>
         </tr>
     </tbody>
@@ -3493,9 +3498,9 @@ by the secant method</p>
         <tr>
             <td>
               <span class="anchor" id="variable-kd~6"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
@@ -3508,46 +3513,46 @@ by the secant method</p>
         <tr>
             <td>
               <span class="anchor" id="variable-m~20"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>m</strong></td>
             <td>
-
+<p>Order of Mathieu functions</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-q~5"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>q</strong></td>
             <td>
-
+<p>Parameter of Mathieu functions</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-a~3"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(inout)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>a</strong></td>
             <td>
-
+<p>Parameter of Mathieu functions</p>
             </td>
         </tr>
     </tbody>
@@ -3563,7 +3568,7 @@ by the secant method</p>
     <div class="card-body">
           
   <p>Compute cosine and sine integrals
-Si(x) and Ci(x)  ( x ≥ 0 )</p>
+<code>Si(x)</code> and <code>Ci(x)</code>  ( <code>x ≥ 0</code> )</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -3579,46 +3584,46 @@ Si(x) and Ci(x)  ( x ≥ 0 )</p>
         <tr>
             <td>
               <span class="anchor" id="variable-x~20"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-
+<p>Argument of <code>Ci(x)</code> and <code>Si(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-ci~2"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Ci</strong></td>
             <td>
-
+<p><code>Ci(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-si~2"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Si</strong></td>
             <td>
-
+<p><code>Si(x)</code></p>
             </td>
         </tr>
     </tbody>
@@ -3650,31 +3655,31 @@ L0(t) with respect to t from 0 to x</p>
         <tr>
             <td>
               <span class="anchor" id="variable-x~21"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-
+<p>Upper limit  ( x ≥ 0 )</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-tl0"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Tl0</strong></td>
             <td>
-
+<p>Integration of L0(t) from 0 to x</p>
             </td>
         </tr>
     </tbody>
@@ -3689,8 +3694,8 @@ L0(t) with respect to t from 0 to x</p>
 </h3></div>
     <div class="card-body">
           
-  <p>Compute the Legendre functions Qn(z) and
-their derivatives Qn'(z) for a complex
+  <p>Compute the Legendre functions <code>Qn(z)</code> and
+their derivatives <code>Qn'(z)</code> for a complex
 argument</p>
 
   <h4>Arguments</h4>
@@ -3707,46 +3712,46 @@ argument</p>
         <tr>
             <td>
               <span class="anchor" id="variable-n~19"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>n</strong></td>
             <td>
-
+<p>Degree of Qn(z), n = 0,1,2,...</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-x~22"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-
+<p>Real part of z</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-y~3"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>y</strong></td>
             <td>
-
+<p>Imaginary part of z</p>
             </td>
         </tr>
         <tr>
@@ -3754,14 +3759,14 @@ argument</p>
               <span class="anchor" id="variable-cqn"></span>
               complex(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
-              dimension(0:n)
+              
             </td>
             <td>::</td>
-            <td><strong>Cqn</strong></td>
+            <td><strong>Cqn</strong>(0:n)</td>
             <td>
-
+<p><code>Cqn</code></p>
             </td>
         </tr>
         <tr>
@@ -3769,14 +3774,14 @@ argument</p>
               <span class="anchor" id="variable-cqd"></span>
               complex(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
-              dimension(0:n)
+              
             </td>
             <td>::</td>
-            <td><strong>Cqd</strong></td>
+            <td><strong>Cqd</strong>(0:n)</td>
             <td>
-
+<p><code>Cqd</code></p>
             </td>
         </tr>
     </tbody>
@@ -3812,31 +3817,31 @@ Bi'(b)</p>
         <tr>
             <td>
               <span class="anchor" id="variable-nt~2"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Nt</strong></td>
             <td>
-
+<p>Total number of zeros</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-kf~2"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Kf</strong></td>
             <td>
-
+<p>Function code:</p><a href="../proc/airyzo.html#variable-kf~2" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
@@ -3844,14 +3849,14 @@ Bi'(b)</p>
               <span class="anchor" id="variable-xa"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
-              dimension(nt)
+              
             </td>
             <td>::</td>
-            <td><strong>Xa</strong></td>
+            <td><strong>Xa</strong>(Nt)</td>
             <td>
-
+<p>a, the m-th zero of Ai(x) or b, the m-th zero of Bi(x)</p>
             </td>
         </tr>
         <tr>
@@ -3859,14 +3864,14 @@ Bi'(b)</p>
               <span class="anchor" id="variable-xb"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
-              dimension(nt)
+              
             </td>
             <td>::</td>
-            <td><strong>Xb</strong></td>
+            <td><strong>Xb</strong>(Nt)</td>
             <td>
-
+<p>a', the m-th zero of Ai'(x) or b', the m-th zero of Bi'(x)</p>
             </td>
         </tr>
         <tr>
@@ -3874,14 +3879,14 @@ Bi'(b)</p>
               <span class="anchor" id="variable-xc"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
-              dimension(nt)
+              
             </td>
             <td>::</td>
-            <td><strong>Xc</strong></td>
+            <td><strong>Xc</strong>(Nt)</td>
             <td>
-
+<p>Ai(a') or Bi(b')</p>
             </td>
         </tr>
         <tr>
@@ -3889,14 +3894,14 @@ Bi'(b)</p>
               <span class="anchor" id="variable-xd"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
-              dimension(nt)
+              
             </td>
             <td>::</td>
-            <td><strong>Xd</strong></td>
+            <td><strong>Xd</strong>(Nt)</td>
             <td>
-
+<p>Ai'(a) or Bi'(b) ( The index is the serial number of zeros )</p>
             </td>
         </tr>
     </tbody>
@@ -3927,31 +3932,31 @@ Bi'(b)</p>
         <tr>
             <td>
               <span class="anchor" id="variable-x~24"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-
+<p>Argument of <code>erf(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-err"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Err</strong></td>
             <td>
-
+<p><code>erf(x)</code></p>
             </td>
         </tr>
     </tbody>
@@ -3966,8 +3971,8 @@ Bi'(b)</p>
 </h3></div>
     <div class="card-body">
           
-  <p>Compute error function erf(z) for a complex
-argument (z=x+iy)</p>
+  <p>Compute error function <code>erf(z)</code> for a complex
+argument <code>(z=x+iy)</code></p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -3983,31 +3988,31 @@ argument (z=x+iy)</p>
         <tr>
             <td>
               <span class="anchor" id="variable-z~7"></span>
-              complex(kind=wp)
+              complex(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>z</strong></td>
             <td>
-
+<p>Complex argument</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-cer~2"></span>
-              complex(kind=wp)
+              complex(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Cer</strong></td>
             <td>
-
+<p><code>erf(z)</code></p>
             </td>
         </tr>
     </tbody>
@@ -4038,16 +4043,16 @@ argument (z=x+iy)</p>
         <tr>
             <td>
               <span class="anchor" id="variable-n~20"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>n</strong></td>
             <td>
-
+<p>Serial number</p>
             </td>
         </tr>
         <tr>
@@ -4055,14 +4060,14 @@ argument (z=x+iy)</p>
               <span class="anchor" id="variable-en~2"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
-              dimension(0:n)
+              
             </td>
             <td>::</td>
-            <td><strong>En</strong></td>
+            <td><strong>En</strong>(0:n)</td>
             <td>
-
+<p><code>En</code></p>
             </td>
         </tr>
     </tbody>
@@ -4138,7 +4143,7 @@ Mathieu functions</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-cv~4"></span>
+              <span class="anchor" id="variable-cv~3"></span>
               real(kind=wp),
             </td>
 <td></td>
@@ -4711,7 +4716,7 @@ and joining factors</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-cv~5"></span>
+              <span class="anchor" id="variable-cv~4"></span>
               real(kind=wp)
             </td>
 <td></td>
@@ -6177,7 +6182,7 @@ functions of the first kind and their derivatives</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-cv~6"></span>
+              <span class="anchor" id="variable-cv~5"></span>
               real(kind=wp)
             </td>
 <td></td>
@@ -9442,7 +9447,7 @@ prolate and oblate spheroidal functions, c2k</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-cv~7"></span>
+              <span class="anchor" id="variable-cv~6"></span>
               real(kind=wp)
             </td>
 <td></td>
@@ -10161,7 +10166,7 @@ functions of the first kind and their derivatives</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-cv~8"></span>
+              <span class="anchor" id="variable-cv~7"></span>
               real(kind=wp)
             </td>
 <td></td>
@@ -12931,7 +12936,7 @@ with a small argument, Rmn(-ic,ix) &amp; Rmn'(-ic,ix)</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-cv~9"></span>
+              <span class="anchor" id="variable-cv~8"></span>
               real(kind=wp)
             </td>
 <td></td>
@@ -13465,7 +13470,7 @@ and second kinds, and their derivatives</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-cv~10"></span>
+              <span class="anchor" id="variable-cv~9"></span>
               real(kind=wp)
             </td>
 <td></td>
@@ -14005,7 +14010,7 @@ prolate and oblate spheroidal functions, dk</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-cv~11"></span>
+              <span class="anchor" id="variable-cv~10"></span>
               real(kind=wp)
             </td>
 <td></td>
@@ -15581,7 +15586,7 @@ wave functions</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-cv~12"></span>
+              <span class="anchor" id="variable-cv~11"></span>
               real(kind=wp)
             </td>
 <td></td>

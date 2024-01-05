@@ -71,7 +71,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 0.1% of total for procedures.">12 statements</a>
+                 title=" 0.2% of total for procedures.">19 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -123,6 +123,12 @@
   
   
   
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/jyndd.html#src">jyndd</a>
+      </div>
+    </div>
 
 
   </div>
@@ -134,7 +140,7 @@
 </h2>
     
 
-    <p>Compute Bessel functions Jn(x) and Yn(x), and
+    <p>Compute Bessel functions <code>Jn(x)</code> and <code>Yn(x)</code>, and
 their first and second derivatives</p>
 
 
@@ -152,121 +158,121 @@ their first and second derivatives</p>
         <tr>
             <td>
               <span class="anchor" id="variable-n~17"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>n</strong></td>
             <td>
-                
+                <p>Order of Jn(x) and Yn(x)</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-x~16"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-                
+                <p>Argument of Jn(x) and Yn(x) ( x &gt; 0 )</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-bjn"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Bjn</strong></td>
             <td>
-                
+                <p><code>Jn(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-djn"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Djn</strong></td>
             <td>
-                
+                <p><code>Jn'(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-fjn"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Fjn</strong></td>
             <td>
-                
+                <p><code>Jn"(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-byn"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Byn</strong></td>
             <td>
-                
+                <p><code>Yn(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-dyn"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Dyn</strong></td>
             <td>
-                
+                <p><code>Yn'(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-fyn"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Fyn</strong></td>
             <td>
-                
+                <p><code>Yn"(x)</code></p>
             </td>
         </tr>
     </tbody>
@@ -576,6 +582,36 @@ implementation in a submodule of an interface in a parent module.
 
 
     
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="w">      </span><span class="k">subroutine </span><span class="n">jyndd</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">Bjn</span><span class="p">,</span><span class="n">Djn</span><span class="p">,</span><span class="n">Fjn</span><span class="p">,</span><span class="n">Byn</span><span class="p">,</span><span class="n">Dyn</span><span class="p">,</span><span class="n">Fyn</span><span class="p">)</span>
+
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="c">!! Argument of Jn(x) and Yn(x) ( x &gt; 0 )</span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="c">!! Order of Jn(x) and Yn(x)</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Bjn</span><span class="w"> </span><span class="c">!! `Jn(x)`</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Djn</span><span class="w"> </span><span class="c">!! `Jn&#39;(x)`</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Fjn</span><span class="w"> </span><span class="c">!! `Jn&quot;(x)`</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Byn</span><span class="w"> </span><span class="c">!! `Yn(x)`</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Dyn</span><span class="w"> </span><span class="c">!! `Yn&#39;(x)`</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Fyn</span><span class="w"> </span><span class="c">!! `Yn&quot;(x)`</span>
+
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bj</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">by</span>
+<span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">nm</span>
+
+<span class="w">      </span><span class="k">call </span><span class="n">jynbh</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">nm</span><span class="p">,</span><span class="n">bj</span><span class="p">,</span><span class="n">by</span><span class="p">)</span>
+<span class="w">      </span><span class="c">! Compute derivatives by differentiation formulas</span>
+<span class="w">      </span><span class="n">Bjn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bj</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">      </span><span class="n">Byn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">by</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">      </span><span class="n">Djn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">bj</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">n</span><span class="o">*</span><span class="n">bj</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">x</span>
+<span class="w">      </span><span class="n">Dyn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">by</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">n</span><span class="o">*</span><span class="n">by</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">x</span>
+<span class="w">      </span><span class="n">Fjn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">*</span><span class="n">Bjn</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Djn</span><span class="o">/</span><span class="n">x</span>
+<span class="w">      </span><span class="n">Fyn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">*</span><span class="n">Byn</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Dyn</span><span class="o">/</span><span class="n">x</span>
+
+<span class="w">      </span><span class="k">end subroutine </span><span class="n">jyndd</span>
+</pre></div>
+
+    </section>
+    <br>
     
     </div>
   </div>

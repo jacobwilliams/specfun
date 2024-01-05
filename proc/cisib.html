@@ -71,7 +71,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 0.2% of total for procedures.">16 statements</a>
+                 title=" 0.2% of total for procedures.">19 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -123,6 +123,12 @@
   
   
   
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/cisib.html#src">cisib</a>
+      </div>
+    </div>
 
 
   </div>
@@ -135,7 +141,7 @@
     
 
     <p>Compute cosine and sine integrals
-Si(x) and Ci(x) ( x ≥ 0 )</p>
+<code>Si(x)</code> and <code>Ci(x)</code> ( <code>x ≥ 0</code> )</p>
 
 
     <h3>Arguments</h3>
@@ -152,46 +158,46 @@ Si(x) and Ci(x) ( x ≥ 0 )</p>
         <tr>
             <td>
               <span class="anchor" id="variable-x~18"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-                
+                <p>Argument of <code>Ci(x)</code> and <code>Si(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-ci"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Ci</strong></td>
             <td>
-                
+                <p><code>Ci(x)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-si"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Si</strong></td>
             <td>
-                
+                <p><code>Si(x)</code></p>
             </td>
         </tr>
     </tbody>
@@ -209,6 +215,43 @@ Si(x) and Ci(x) ( x ≥ 0 )</p>
 
 
     
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="w">   </span><span class="k">subroutine </span><span class="n">cisib</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">Ci</span><span class="p">,</span><span class="n">Si</span><span class="p">)</span>
+
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="c">!! Argument of `Ci(x)` and `Si(x)`</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Ci</span><span class="w"> </span><span class="c">!! `Ci(x)`</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Si</span><span class="w"> </span><span class="c">!! `Si(x)`</span>
+
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fx</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">gx</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">x2</span>
+
+<span class="w">      </span><span class="n">x2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">*</span><span class="n">x</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="o">==</span><span class="mf">0.0_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         </span><span class="n">Ci</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0e+300_wp</span>
+<span class="w">         </span><span class="n">Si</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0_wp</span>
+<span class="w">      </span><span class="k">elseif</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="o">&lt;=</span><span class="mf">1.0_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         </span><span class="n">Ci</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((((</span><span class="o">-</span><span class="mf">3.0e-8_wp</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mf">3.10e-6_wp</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="o">-</span><span class="mf">2.3148e-4_wp</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mf">1.041667e-2_wp</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">            </span><span class="p">&amp;</span><span class="w"> </span><span class="o">*</span><span class="n">x2</span><span class="o">-</span><span class="mf">0.25</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.577215665_wp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">log</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="w">         </span><span class="n">Si</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((((</span><span class="mf">3.1e-7_wp</span><span class="o">*</span><span class="n">x2</span><span class="o">-</span><span class="mf">2.834e-5_wp</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mf">1.66667e-003_wp</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="o">-</span><span class="mf">5.555556e-002_wp</span><span class="p">)&amp;</span>
+<span class="w">            </span><span class="p">&amp;</span><span class="w"> </span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">*</span><span class="n">x</span>
+<span class="w">      </span><span class="k">else</span>
+<span class="k">         </span><span class="n">fx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((((</span><span class="n">x2</span><span class="o">+</span><span class="mi">3</span><span class="mf">8.027264_wp</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mi">26</span><span class="mf">5.187033_wp</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mi">33</span><span class="mf">5.67732_wp</span><span class="p">)</span><span class="w">    </span><span class="p">&amp;</span>
+<span class="w">            </span><span class="p">&amp;</span><span class="w"> </span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mi">3</span><span class="mf">8.102495_wp</span><span class="p">)</span><span class="w">                                          </span><span class="p">&amp;</span>
+<span class="w">            </span><span class="p">&amp;</span><span class="w"> </span><span class="o">/</span><span class="p">((((</span><span class="n">x2</span><span class="o">+</span><span class="mi">4</span><span class="mf">0.021433_wp</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mi">32</span><span class="mf">2.624911_wp</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mi">57</span><span class="mf">0.23628_wp</span><span class="p">)</span><span class="w">   </span><span class="p">&amp;</span>
+<span class="w">            </span><span class="p">&amp;</span><span class="w"> </span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mi">15</span><span class="mf">7.105423d0</span><span class="p">)</span>
+<span class="w">         </span><span class="n">gx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((((</span><span class="n">x2</span><span class="o">+</span><span class="mi">4</span><span class="mf">2.242855_wp</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mi">30</span><span class="mf">2.757865_wp</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mi">35</span><span class="mf">2.018498_wp</span><span class="p">)</span><span class="w">   </span><span class="p">&amp;</span>
+<span class="w">            </span><span class="p">&amp;</span><span class="w"> </span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mi">2</span><span class="mf">1.821899_wp</span><span class="p">)</span><span class="w">                                          </span><span class="p">&amp;</span>
+<span class="w">            </span><span class="p">&amp;</span><span class="w"> </span><span class="o">/</span><span class="p">((((</span><span class="n">x2</span><span class="o">+</span><span class="mi">4</span><span class="mf">8.196927_wp</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mi">48</span><span class="mf">2.485984_wp</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mi">111</span><span class="mf">4.978885_wp</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">            </span><span class="p">&amp;</span><span class="w"> </span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="mi">44</span><span class="mf">9.690326_wp</span><span class="p">)</span><span class="o">/</span><span class="n">x</span>
+<span class="w">         </span><span class="n">Ci</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fx</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">gx</span><span class="o">*</span><span class="nb">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">x</span>
+<span class="w">         </span><span class="n">Si</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.570796327_wp</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">fx</span><span class="o">*</span><span class="nb">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">gx</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">x</span>
+<span class="w">      </span><span class="k">endif</span>
+
+<span class="k">   end subroutine </span><span class="n">cisib</span>
+</pre></div>
+
+    </section>
+    <br>
     
     </div>
   </div>

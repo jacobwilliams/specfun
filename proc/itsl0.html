@@ -71,7 +71,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 0.4% of total for procedures.">41 statements</a>
+                 title=" 0.4% of total for procedures.">43 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -123,6 +123,12 @@
   
   
   
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/itsl0.html#src">itsl0</a>
+      </div>
+    </div>
 
 
   </div>
@@ -152,31 +158,31 @@ L0(t) with respect to t from 0 to x</p>
         <tr>
             <td>
               <span class="anchor" id="variable-x~21"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-                
+                <p>Upper limit  ( x ≥ 0 )</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-tl0"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Tl0</strong></td>
             <td>
-                
+                <p>Integration of L0(t) from 0 to x</p>
             </td>
         </tr>
     </tbody>
@@ -194,6 +200,61 @@ L0(t) with respect to t from 0 to x</p>
 
 
     
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="w">   </span><span class="k">subroutine </span><span class="n">itsl0</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">Tl0</span><span class="p">)</span>
+
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="w">  </span><span class="c">!! Upper limit  ( x ≥ 0 )</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Tl0</span><span class="w"> </span><span class="c">!! Integration of L0(t) from 0 to x</span>
+
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">a0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">a1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">af</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">rd</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">s0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">ti</span>
+<span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">k</span>
+
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">two_pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0_wp</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pi</span>
+
+<span class="w">      </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="o">&lt;=</span><span class="mi">2</span><span class="mf">0.0_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5_wp</span>
+<span class="w">         </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">100</span>
+<span class="w">            </span><span class="n">rd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">k</span><span class="o">==</span><span class="mi">1</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="n">rd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5_wp</span>
+<span class="w">            </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="o">*</span><span class="n">rd</span><span class="o">*</span><span class="n">k</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">k</span><span class="o">+</span><span class="mf">1.0_wp</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
+<span class="w">            </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">r</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">r</span><span class="o">/</span><span class="n">s</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">1.0e-12_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">exit</span>
+<span class="k">         enddo</span>
+<span class="k">         </span><span class="n">Tl0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0_wp</span><span class="o">/</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">s</span>
+<span class="w">      </span><span class="k">else</span>
+<span class="k">         </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">         </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">10</span>
+<span class="w">            </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="o">*</span><span class="n">k</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">*</span><span class="p">((</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">k</span><span class="o">+</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">/</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+<span class="w">            </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">r</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">r</span><span class="o">/</span><span class="n">s</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">1.0e-12_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">exit</span>
+<span class="k">         enddo</span>
+<span class="k">         </span><span class="n">s0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">s</span><span class="o">/</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">2.0_wp</span><span class="o">/</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="nb">log</span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="nb">gamma</span><span class="p">)</span>
+<span class="w">         </span><span class="n">a0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">         </span><span class="n">a1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">5.0_wp</span><span class="o">/</span><span class="mf">8.0_wp</span>
+<span class="w">         </span><span class="n">a</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a1</span>
+<span class="w">         </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">10</span>
+<span class="w">            </span><span class="n">af</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="mf">1.5_wp</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mf">0.50_wp</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mf">5.0_wp</span><span class="o">/</span><span class="mf">6.0_wp</span><span class="p">)</span><span class="o">*</span><span class="n">a1</span><span class="o">-</span><span class="mf">0.5_wp</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mf">0.5_wp</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                 </span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mf">0.5_wp</span><span class="p">)</span><span class="o">*</span><span class="n">a0</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mf">1.0_wp</span><span class="p">)</span>
+<span class="w">            </span><span class="n">a</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">af</span>
+<span class="w">            </span><span class="n">a0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a1</span>
+<span class="w">            </span><span class="n">a1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">af</span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">         </span><span class="n">ti</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">         </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">         </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">11</span>
+<span class="w">            </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="o">/</span><span class="n">x</span>
+<span class="w">            </span><span class="n">ti</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ti</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">r</span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">         </span><span class="n">Tl0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ti</span><span class="o">/</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">two_pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="nb">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">s0</span>
+<span class="w">      </span><span class="k">endif</span>
+
+<span class="k">   end subroutine </span><span class="n">itsl0</span>
+</pre></div>
+
+    </section>
+    <br>
     
     </div>
   </div>

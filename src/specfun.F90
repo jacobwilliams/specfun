@@ -776,7 +776,7 @@
       subroutine bernob(n,Bn)
 
       integer,intent(in) :: n !! Serial number
-      real(wp),intent(out) :: Bn(0:n) !! BN(n) --- Bn
+      real(wp),intent(out) :: Bn(0:n) !! `Bn`
 
       real(wp) :: r1 , r2 , s
       integer :: k , m
@@ -808,7 +808,7 @@
       subroutine bernoa(n,Bn)
 
       integer,intent(in) :: n  !! Serial number
-      real(wp),intent(out) :: Bn(0:n) !! BN(n) --- Bn
+      real(wp),intent(out) :: Bn(0:n) !! `Bn`
 
       real(wp) :: r , s
       integer :: j , k , m
@@ -1543,7 +1543,7 @@
             do
                nn = int((q-3.0_wp*m)/delta) + 1
                delta = (q-3.0_wp*m)/nn
-               q1 = 2.0*m
+               q1 = 2.0_wp*m
                call cvqm(m,q1,a1)
                q2 = 3.0_wp*m
                call cvqm(m,q2,a2)
@@ -1660,23 +1660,21 @@
 
 !*****************************************************************************************
 !>
-!  Compute complex Error function erf(z) & erf'(z)
+!  Compute complex Error function `erf(z)` & `erf'(z)`
 
-      subroutine cerf(z,Cer,Cder)
+   subroutine cerf(z,Cer,Cder)
 
-!       Input:   z   --- Complex argument of erf(z)
-!                x   --- Real part of z
-!                y   --- Imaginary part of z
-!       Output:  CER --- erf(z)
-!                CDER --- erf'(z)
+      complex(wp),intent(in) :: z !! Complex argument of erf(z)
+      complex(wp),intent(out) :: Cer !! `erf(z)`
+      complex(wp),intent(out) :: Cder !! `erf'(z)`
 
-      real(wp) c0 , cs , ei1 , ei2 , eps , er , er0 , er1 ,     &
-                     & er2 , eri , err , r , ss , w , w1 , w2 , x ,&
-                     & x2 , y
-      integer k , n
-      complex(wp) z , Cer , Cder
+      real(wp) :: c0 , cs , ei1 , ei2 , er , er0 , er1 , &
+                  er2 , eri , err , r , ss , w , w1 , w2 , x ,&
+                  x2 , y
+      integer :: k , n
 
-      eps = 1.0d-12
+      real(wp),parameter :: eps = 1.0e-12_wp
+
       x = real(z,wp)
       y = aimag(z)
       x2 = x*x
@@ -1713,8 +1711,8 @@
          er2 = 0.0_wp
          w1 = 0.0_wp
          do n = 1 , 100
-            er2 = er2 + exp(-0.25_wp*n*n)/(n*n+4.0_wp*x2)                  &
-                & *(2.0_wp*x-2.0_wp*x*cosh(n*y)*cs+n*sinh(n*y)*ss)
+            er2 = er2 + exp(-0.25_wp*n*n)/(n*n+4.0_wp*x2) &
+                  *(2.0_wp*x-2.0_wp*x*cosh(n*y)*cs+n*sinh(n*y)*ss)
             if ( abs((er2-w1)/er2)<eps ) exit
             w1 = er2
          enddo
@@ -1723,44 +1721,44 @@
          ei2 = 0.0_wp
          w2 = 0.0_wp
          do n = 1 , 100
-            ei2 = ei2 + exp(-0.25_wp*n*n)/(n*n+4.0_wp*x2)                  &
-                & *(2.0_wp*x*cosh(n*y)*ss+n*sinh(n*y)*cs)
+            ei2 = ei2 + exp(-0.25_wp*n*n)/(n*n+4.0_wp*x2) &
+                  *(2.0_wp*x*cosh(n*y)*ss+n*sinh(n*y)*cs)
             if ( abs((ei2-w2)/ei2)<eps ) exit
             w2 = ei2
          enddo
          eri = ei1 + c0*ei2
       endif
-      Cer = dcmplx(err,eri)
+      Cer = cmplx(err,eri,kind=wp)
       Cder = 2.0_wp/sqrtpi*exp(-z*z)
-      end
+
+   end subroutine cerf
 
 !*****************************************************************************************
 !>
 !  Compute prolate spheriodal radial functions of the
 !  first and second kinds, and their derivatives
 
-      subroutine rswfp(m,n,c,x,Cv,Kf,R1f,R1d,R2f,R2d)
+   subroutine rswfp(m,n,c,x,Cv,Kf,R1f,R1d,R2f,R2d)
 
-!       Input :  m  --- Mode parameter, m = 0,1,2,...
-!                n  --- Mode parameter, n = m,m+1,m+2,...
-!                c  --- Spheroidal parameter
-!                x  --- Argument of radial function ( x > 1.0_wp )
-!                cv --- Characteristic value
-!                KF --- Function code
-!                       KF=1 for the first kind
-!                       KF=2 for the second kind
-!                       KF=3 for both the first and second kinds
-!       Output:  R1F --- Radial function of the first kind
-!                R1D --- Derivative of the radial function of
-!                        the first kind
-!                R2F --- Radial function of the second kind
-!                R2D --- Derivative of the radial function of
-!                        the second kind
+      integer,intent(in) :: m  !! Mode parameter, `m = 0,1,2,...`
+      integer,intent(in) :: n  !! Mode parameter, `n = m,m+1,m+2,...`
+      real(wp),intent(in) :: c  !! Spheroidal parameter
+      real(wp),intent(in) :: x  !! Argument of radial function ( `x > 1.0` )
+      real(wp),intent(in) :: cv !! Characteristic value
+      integer,intent(in) :: Kf !! Function code:
+                               !!  * `KF=1` for the first kind
+                               !!  * `KF=2` for the second kind
+                               !!  * `KF=3` for both the first and second kinds
+      real(wp),intent(out) :: R1f !! Radial function of the first kind
+      real(wp),intent(out) :: R1d !! Derivative of the radial function of
+                                  !! the first kind
+      real(wp),intent(out) :: R2f !! Radial function of the second kind
+      real(wp),intent(out) :: R2d !! Derivative of the radial function of
+                                  !! the second kind
 
-      implicit none
-      real(wp) c , Cv , df , R1d , R1f , R2d , R2f , x
-      integer id , kd , Kf , m , n
-      dimension df(200)
+      real(wp) :: df(200)
+      integer :: id , kd
+
       kd = 1
       call sdmn(m,n,c,Cv,kd,df)
       if ( Kf/=2 ) call rmn1(m,n,c,x,df,kd,R1f,R1d)
@@ -1768,115 +1766,132 @@
          call rmn2l(m,n,c,x,df,kd,R2f,R2d,id)
          if ( id>-8 ) call rmn2sp(m,n,c,x,Cv,df,kd,R2f,R2d)
       endif
-      end
+
+   end subroutine rswfp
 
 !*****************************************************************************************
 !>
-!  Compute Bessel functions Jn(x) and Yn(x), and
+!  Compute Bessel functions `Jn(x)` and `Yn(x)`, and
 !  their first and second derivatives
 
       subroutine jyndd(n,x,Bjn,Djn,Fjn,Byn,Dyn,Fyn)
 
-!       Input:   x   ---  Argument of Jn(x) and Yn(x) ( x > 0 )
-!                n   ---  Order of Jn(x) and Yn(x)
-!       Output:  BJN ---  Jn(x)
-!                DJN ---  Jn'(x)
-!                FJN ---  Jn"(x)
-!                BYN ---  Yn(x)
-!                DYN ---  Yn'(x)
-!                FYN ---  Yn"(x)
+      real(wp),intent(in) :: x !! Argument of Jn(x) and Yn(x) ( x > 0 )
+      integer,intent(in) :: n !! Order of Jn(x) and Yn(x)
+      real(wp),intent(out) :: Bjn !! `Jn(x)`
+      real(wp),intent(out) :: Djn !! `Jn'(x)`
+      real(wp),intent(out) :: Fjn !! `Jn"(x)`
+      real(wp),intent(out) :: Byn !! `Yn(x)`
+      real(wp),intent(out) :: Dyn !! `Yn'(x)`
+      real(wp),intent(out) :: Fyn !! `Yn"(x)`
 
-      real(wp) bj , Bjn , by , Byn , Djn , Dyn , Fjn , Fyn , x
-      integer n , nm
-      dimension bj(2) , by(2)
+      real(wp),dimension(2) :: bj , by
+      integer :: nm
 
       call jynbh(n+1,n,x,nm,bj,by)
-!       Compute derivatives by differentiation formulas
+      ! Compute derivatives by differentiation formulas
       Bjn = bj(1)
       Byn = by(1)
       Djn = -bj(2) + n*bj(1)/x
       Dyn = -by(2) + n*by(1)/x
       Fjn = (n*n/(x*x)-1.0_wp)*Bjn - Djn/x
       Fyn = (n*n/(x*x)-1.0_wp)*Byn - Dyn/x
-      end
+
+      end subroutine jyndd
 
 !*****************************************************************************************
 !>
 !  Compute gamma function Г(x)
 
-      subroutine gam0(x,Ga)
+   subroutine gam0(x,Ga)
 
-!       Input :  x  --- Argument of Г(x)  ( |x| ≤ 1 )
-!       Output:  GA --- Г(x)
+      real(wp),intent(in) :: x !! Argument of `Г(x) ( |x| ≤ 1 )`
+      real(wp),intent(out) :: Ga !! `Г(x)`
 
-      real(wp) g , Ga , gr , x
-      integer k
-      dimension g(25)
+      real(wp) :: gr
+      integer :: k
 
-      data g/1.0_wp , 0.5772156649015329d0 , -0.6558780715202538d0 ,     &
-         & -0.420026350340952d-1 , 0.1665386113822915d0 ,               &
-         & -.421977345555443d-1 , -.96219715278770d-2 ,                 &
-         & .72189432466630d-2 , -.11651675918591d-2 ,                   &
-         & -.2152416741149d-3 , .1280502823882d-3 , -.201348547807d-4 , &
-         & -.12504934821d-5 , .11330272320d-5 , -.2056338417d-6 ,       &
-         & .61160950d-8 , .50020075d-8 , -.11812746d-8 , .1043427d-9 ,  &
-         & .77823d-11 , -.36968d-11 , .51d-12 , -.206d-13 , -.54d-14 ,  &
-         & .14d-14/
-      gr = (25)
+      real(wp),dimension(25),parameter :: g = [ 1.0_wp , &
+                                                0.5772156649015329_wp , &
+                                               -0.6558780715202538_wp , &
+                                               -0.420026350340952e-1_wp , &
+                                                0.1665386113822915_wp , &
+                                               -0.421977345555443e-1_wp , &
+                                               -0.96219715278770e-2_wp , &
+                                                0.72189432466630e-2_wp , &
+                                               -0.11651675918591e-2_wp , &
+                                               -0.2152416741149e-3_wp , &
+                                                0.1280502823882e-3_wp , &
+                                               -0.201348547807e-4_wp , &
+                                               -0.12504934821e-5_wp , &
+                                                0.11330272320e-5_wp , &
+                                               -0.2056338417e-6_wp , &
+                                                0.61160950e-8_wp , &
+                                                0.50020075e-8_wp , &
+                                               -0.11812746e-8_wp , &
+                                                0.1043427e-9_wp ,  &
+                                                0.77823e-11_wp , &
+                                               -0.36968e-11_wp , &
+                                                0.51e-12_wp , &
+                                               -0.206e-13_wp , &
+                                               -0.54e-14_wp ,  &
+                                                0.14e-14_wp]
+      gr = g(25) ! JW: typo in the original code
       do k = 24 , 1 , -1
          gr = gr*x + g(k)
       enddo
       Ga = 1.0_wp/(gr*x)
-      end
+
+   end subroutine gam0
 
 !*****************************************************************************************
 !>
 !  Compute cosine and sine integrals
-!  Si(x) and Ci(x) ( x ≥ 0 )
+!  `Si(x)` and `Ci(x)` ( `x ≥ 0` )
 
-      subroutine cisib(x,Ci,Si)
+   subroutine cisib(x,Ci,Si)
 
-!       Input :  x  --- Argument of Ci(x) and Si(x)
-!       Output:  CI --- Ci(x)
-!                SI --- Si(x)
+      real(wp),intent(in) :: x !! Argument of `Ci(x)` and `Si(x)`
+      real(wp),intent(out) :: Ci !! `Ci(x)`
+      real(wp),intent(out) :: Si !! `Si(x)`
 
-      real(wp) Ci , fx , gx , Si , x , x2
+      real(wp) :: fx , gx , x2
 
       x2 = x*x
       if ( x==0.0_wp ) then
          Ci = -1.0e+300_wp
          Si = 0.0_wp
       elseif ( x<=1.0_wp ) then
-         Ci = ((((-3.0d-8*x2+3.10d-6)*x2-2.3148d-4)*x2+1.041667d-2)     &
-            & *x2-0.25)*x2 + 0.577215665d0 + log(x)
-         Si = ((((3.1d-7*x2-2.834d-5)*x2+1.66667d-003)*x2-5.555556d-002)&
+         Ci = ((((-3.0e-8_wp*x2+3.10e-6_wp)*x2-2.3148e-4_wp)*x2+1.041667e-2_wp) &
+            & *x2-0.25)*x2 + 0.577215665_wp + log(x)
+         Si = ((((3.1e-7_wp*x2-2.834e-5_wp)*x2+1.66667e-003_wp)*x2-5.555556e-002_wp)&
             & *x2+1.0_wp)*x
       else
-         fx = ((((x2+38.027264d0)*x2+265.187033d0)*x2+335.67732d0)      &
-            & *x2+38.102495d0)                                          &
-            & /((((x2+40.021433d0)*x2+322.624911d0)*x2+570.23628d0)     &
+         fx = ((((x2+38.027264_wp)*x2+265.187033_wp)*x2+335.67732_wp)    &
+            & *x2+38.102495_wp)                                          &
+            & /((((x2+40.021433_wp)*x2+322.624911_wp)*x2+570.23628_wp)   &
             & *x2+157.105423d0)
-         gx = ((((x2+42.242855d0)*x2+302.757865d0)*x2+352.018498d0)     &
-            & *x2+21.821899d0)                                          &
-            & /((((x2+48.196927d0)*x2+482.485984d0)*x2+1114.978885d0)   &
-            & *x2+449.690326d0)/x
+         gx = ((((x2+42.242855_wp)*x2+302.757865_wp)*x2+352.018498_wp)   &
+            & *x2+21.821899_wp)                                          &
+            & /((((x2+48.196927_wp)*x2+482.485984_wp)*x2+1114.978885_wp) &
+            & *x2+449.690326_wp)/x
          Ci = fx*sin(x)/x - gx*cos(x)/x
-         Si = 1.570796327d0 - fx*cos(x)/x - gx*sin(x)/x
+         Si = 1.570796327_wp - fx*cos(x)/x - gx*sin(x)/x
       endif
-      end
+
+   end subroutine cisib
 
 !*****************************************************************************************
 !>
 !  Compute Euler number En
 
-      subroutine eulera(n,En)
+   subroutine eulera(n,En)
 
-!       Input :  n --- Serial number
-!       Output:  EN(n) --- En
+      integer,intent(in) :: n !! Serial number
+      real(wp),intent(out) :: En(0:n)  !! `En`
 
-      real(wp) En , r , s
-      integer j , k , m , n
-      dimension En(0:n)
+      real(wp) :: r , s
+      integer :: j , k , m
 
       En(0) = 1.0_wp
       do m = 1 , n/2
@@ -1890,64 +1905,66 @@
          enddo
          En(2*m) = -s
       enddo
-      end
+
+   end subroutine eulera
 
 !*****************************************************************************************
 !>
 !  calculate the accurate characteristic value
 !  by the secant method
 
-      subroutine refine(Kd,m,q,a)
+   subroutine refine(Kd,m,q,a)
 
-!       Input :  m --- Order of Mathieu functions
-!                q --- Parameter of Mathieu functions
-!                A --- Initial characteristic value
-!       Output:  A --- Refineed characteristic value
+      integer,intent(in) :: Kd
+      integer,intent(in) :: m !! Order of Mathieu functions
+      real(wp),intent(in) :: q !! Parameter of Mathieu functions
+      real(wp),intent(inout) :: a !! Parameter of Mathieu functions
 
-      real(wp) a , ca , delta , f , f0 , f1 , q , x , x0 ,&
-                     & x1
-      integer it , Kd , m , mj
+      real(wp) :: ca , delta , f , f0 , f1 , x , x0 , x1
+      integer :: it , mj
 
       real(wp),parameter :: eps = 1.0e-14_wp
+
       mj = 10 + m
       ca = a
       delta = 0.0_wp
       x0 = a
       call cvf(Kd,m,q,x0,mj,f0)
-      x1 = 1.002*a
+      x1 = 1.002_wp*a
       call cvf(Kd,m,q,x1,mj,f1)
       do it = 1 , 100
          mj = mj + 1
          x = x1 - (x1-x0)/(1.0_wp-f0/f1)
          call cvf(Kd,m,q,x,mj,f)
-         if ( abs(1.0-x1/x)<eps .or. f==0.0_wp ) exit
+         if ( abs(1.0_wp-x1/x)<eps .or. f==0.0_wp ) exit
          x0 = x1
          f0 = f1
          x1 = x
          f1 = f
       enddo
       a = x
-      end
+
+   end subroutine refine
 
 !*****************************************************************************************
 !>
 !  Compute cosine and sine integrals
-!  Si(x) and Ci(x)  ( x ≥ 0 )
+!  `Si(x)` and `Ci(x)`  ( `x ≥ 0` )
 
-      subroutine cisia(x,Ci,Si)
+   subroutine cisia(x,Ci,Si)
 
-!       Input :  x  --- Argument of Ci(x) and Si(x)
-!       Output:  CI --- Ci(x)
-!                SI --- Si(x)
+      real(wp),intent(in) :: x !! Argument of `Ci(x)` and `Si(x)`
+      real(wp),intent(out) :: Ci !! `Ci(x)`
+      real(wp),intent(out) :: Si !! `Si(x)`
 
-      real(wp) bj , Ci , eps , p2 , Si , x , x2 , xa ,     &
-                     & xa0 , xa1 , xcs , xf , xg , xg1 , xg2 , xr , xs ,&
-                     & xss
-      integer k , m
-      dimension bj(101)
+      real(wp) :: bj(101) , eps, x2 , xa , &
+                  xa0 , xa1 , xcs , xf , xg , xg1 , xg2 , xr , xs ,&
+                  xss
+      integer :: k , m
 
-      p2 = 1.570796326794897d0
-      eps = 1.0d-15
+      real(wp),parameter :: p2 = pi / 2.0_wp !1.570796326794897d0
+
+      eps = 1.0e-15_wp
       x2 = x*x
       if ( x==0.0_wp ) then
          Ci = -1.0e+300_wp
@@ -1968,7 +1985,7 @@
             if ( abs(xr)<abs(Si)*eps ) return
          enddo
       elseif ( x<=32.0_wp ) then
-         m = int(47.2+.82*x)
+         m = int(47.2_wp+.82_wp*x)
          xa1 = 0.0_wp
          xa0 = 1.0e-100_wp
          do k = m , 1 , -1
@@ -1988,13 +2005,13 @@
          xr = 1.0_wp
          xg1 = bj(1)
          do k = 2 , m
-            xr = .25_wp*xr*(2.0*k-3.0_wp)**2/((k-1.0_wp)*(2.0*k-1.0_wp)**2)*x
+            xr = .25_wp*xr*(2.0_wp*k-3.0_wp)**2/((k-1.0_wp)*(2.0_wp*k-1.0_wp)**2)*x
             xg1 = xg1 + bj(k)*xr
          enddo
          xr = 1.0_wp
          xg2 = bj(1)
          do k = 2 , m
-            xr = .25_wp*xr*(2.0*k-5.0_wp)**2/((k-1.0_wp)*(2.0*k-3.0_wp)**2)*x
+            xr = .25_wp*xr*(2.0_wp*k-5.0_wp)**2/((k-1.0_wp)*(2.0_wp*k-3.0_wp)**2)*x
             xg2 = xg2 + bj(k)*xr
          enddo
          xcs = cos(x/2.0_wp)
@@ -2017,22 +2034,23 @@
          Ci = xf*sin(x)/x - xg*cos(x)/x
          Si = p2 - xf*cos(x)/x - xg*sin(x)/x
       endif
-      end
+
+   end subroutine cisia
 
 !*****************************************************************************************
 !>
 !  Evaluate the integral of modified Struve function
 !  L0(t) with respect to t from 0 to x
 
-      subroutine itsl0(x,Tl0)
+   subroutine itsl0(x,Tl0)
 
-!       Input :  x   --- Upper limit  ( x ≥ 0 )
-!       Output:  TL0 --- Integration of L0(t) from 0 to x
+      real(wp),intent(in) :: x  !! Upper limit  ( x ≥ 0 )
+      real(wp),intent(out) :: Tl0 !! Integration of L0(t) from 0 to x
 
-      real(wp) a , a0 , a1 , af , r , rd , s , s0 ,   &
-                     & ti , Tl0 , x
-      integer k
-      dimension a(18)
+      real(wp) :: a(18) , a0 , a1 , af , r , rd , s , s0 , ti
+      integer :: k
+
+      real(wp),parameter :: two_pi = 2.0_wp * pi
 
       r = 1.0_wp
       if ( x<=20.0_wp ) then
@@ -2042,7 +2060,7 @@
             if ( k==1 ) rd = 0.5_wp
             r = r*rd*k/(k+1.0_wp)*(x/(2.0_wp*k+1.0_wp))**2
             s = s + r
-            if ( abs(r/s)<1.0d-12 ) exit
+            if ( abs(r/s)<1.0e-12_wp ) exit
          enddo
          Tl0 = 2.0_wp/pi*x*x*s
       else
@@ -2050,15 +2068,15 @@
          do k = 1 , 10
             r = r*k/(k+1.0_wp)*((2.0_wp*k+1.0_wp)/x)**2
             s = s + r
-            if ( abs(r/s)<1.0d-12 ) exit
+            if ( abs(r/s)<1.0e-12_wp ) exit
          enddo
          s0 = -s/(pi*x*x) + 2.0_wp/pi*(log(2.0_wp*x)+gamma)
          a0 = 1.0_wp
          a1 = 5.0_wp/8.0_wp
          a(1) = a1
          do k = 1 , 10
-            af = ((1.5_wp*(k+.50d0)*(k+5.0_wp/6.0_wp)*a1-0.5_wp*(k+0.5_wp)     &
-               & **2*(k-0.5_wp)*a0))/(k+1.0_wp)
+            af = ((1.5_wp*(k+0.50_wp)*(k+5.0_wp/6.0_wp)*a1-0.5_wp*(k+0.5_wp) &
+                 **2*(k-0.5_wp)*a0))/(k+1.0_wp)
             a(k+1) = af
             a0 = a1
             a1 = af
@@ -2069,30 +2087,29 @@
             r = r/x
             ti = ti + a(k)*r
          enddo
-         Tl0 = ti/sqrt(2*pi*x)*exp(x) + s0
+         Tl0 = ti/sqrt(two_pi*x)*exp(x) + s0
       endif
-      end
+
+   end subroutine itsl0
 
 !*****************************************************************************************
 !>
-!  Compute the Legendre functions Qn(z) and
-!  their derivatives Qn'(z) for a complex
+!  Compute the Legendre functions `Qn(z)` and
+!  their derivatives `Qn'(z)` for a complex
 !  argument
 
-      subroutine clqn(n,x,y,Cqn,Cqd)
+   subroutine clqn(n,x,y,Cqn,Cqd)
 
-!       Input :  x --- Real part of z
-!                y --- Imaginary part of z
-!                n --- Degree of Qn(z), n = 0,1,2,...
-!       Output:  CQN(n) --- Qn(z)
-!                CQD(n) --- Qn'(z)
+      integer,intent(in) :: n !! Degree of Qn(z), n = 0,1,2,...
+      real(wp),intent(in) :: x !! Real part of z
+      real(wp),intent(in) :: y !! Imaginary part of z
+      complex(wp),intent(out) :: Cqn(0:n) !! `Cqn`
+      complex(wp),intent(out) :: Cqd(0:n) !! `Cqd`
 
-      complex(wp) cq0 , cq1 , Cqd , cqf0 , cqf1 , cqf2 , Cqn , z
-      integer k , km , ls , n
-      real(wp) x , y
-      dimension Cqn(0:n) , Cqd(0:n)
+      complex(wp) :: cq0 , cq1 , cqf0 , cqf1 , cqf2 , z
+      integer :: k , km , ls
 
-      z = dcmplx(x,y)
+      z = cmplx(x,y,kind=wp)
       if ( z==1.0_wp ) then
          do k = 0 , n
             Cqn(k) = (1.0e+300_wp,0.0_wp)
@@ -2119,7 +2136,7 @@
          if ( abs(z)>1.1_wp ) then
             km = 40 + n
          else
-            km = (40+n)*int(-1.0-1.8*log(abs(z-1.0_wp)))
+            km = (40+n)*int(-1.0_wp-1.8_wp*log(abs(z-1.0_wp)))
          endif
          cqf2 = 0.0_wp
          cqf1 = 1.0_wp
@@ -2137,7 +2154,8 @@
       do k = 1 , n
          Cqd(k) = (k*z*Cqn(k)-k*Cqn(k-1))/(z*z-1.0_wp)
       enddo
-      end
+
+   end subroutine clqn
 
 !*****************************************************************************************
 !>
@@ -2148,28 +2166,24 @@
 !  b', and the associated values of Bi(b') and
 !  Bi'(b)
 
-      subroutine airyzo(Nt,Kf,Xa,Xb,Xc,Xd)
+   subroutine airyzo(Nt,Kf,Xa,Xb,Xc,Xd)
 
-!       Input :  NT    --- Total number of zeros
-!                KF    --- Function code
-!                          KF=1 for Ai(x) and Ai'(x)
-!                          KF=2 for Bi(x) and Bi'(x)
-!       Output:  XA(m) --- a, the m-th zero of Ai(x) or
-!                          b, the m-th zero of Bi(x)
-!                XB(m) --- a', the m-th zero of Ai'(x) or
-!                          b', the m-th zero of Bi'(x)
-!                XC(m) --- Ai(a') or Bi(b')
-!                XD(m) --- Ai'(a) or Bi'(b)
-!                          ( m --- Serial number of zeros )
+      integer,intent(in) :: Nt !! Total number of zeros
+      integer,intent(in) :: Kf !! Function code:
+                               !!
+                               !!  * KF=1 for Ai(x) and Ai'(x)
+                               !!  * KF=2 for Bi(x) and Bi'(x)
+      real(wp),intent(out) :: Xa(Nt) !! a, the m-th zero of Ai(x) or b, the m-th zero of Bi(x)
+      real(wp),intent(out) :: Xb(Nt) !! a', the m-th zero of Ai'(x) or b', the m-th zero of Bi'(x)
+      real(wp),intent(out) :: Xc(Nt) !! Ai(a') or Bi(b')
+      real(wp),intent(out) :: Xd(Nt) !! Ai'(a) or Bi'(b) ( The index is the serial number of zeros )
 
-      real(wp) ad , ai , bd , bi , err , rt , rt0 , u ,    &
-                     & u1 , x , Xa , Xb , Xc , Xd
-      integer i , Kf , Nt
-      dimension Xa(Nt) , Xb(Nt) , Xc(Nt) , Xd(Nt)
+      real(wp) :: ad , ai , bd , bi , err , rt , rt0 , u , u1 , x
+      integer :: i
 
       rt = 0.0_wp
       do i = 1 , Nt
-         rt0 = 0d0
+         rt0 = 0.0_wp
          if ( Kf==1 ) then
             u = 3.0_wp*pi*(4.0_wp*i-1)/8.0_wp
             u1 = 1/(u*u)
@@ -2178,81 +2192,87 @@
                rt0 = -1.17371d0
             else
                u = 3.0_wp*pi*(4.0_wp*i-3.0_wp)/8.0_wp
-               u1 = 1/(u*u)
+               u1 = 1.0_wp/(u*u)
             endif
          endif
-!             DLMF 9.9.18
-         if ( rt0==0 ) rt0 = -(u*u)**(1.0_wp/3.0_wp)                      &
-                           & *(+1d0+u1*(5d0/48d0+u1*                    &
-                           & (-5d0/36d0+u1*(77125d0/82944d0+            &
-                           & u1*(-108056875d0/6967296d0)))))
- 50      x = rt0
-         call airyb(x,ai,bi,ad,bd)
-         if ( Kf==1 ) rt = rt0 - ai/ad
-         if ( Kf==2 ) rt = rt0 - bi/bd
-         err = abs((rt-rt0)/rt)
-         if ( err>1.d-12 ) then
-            rt0 = rt
-            goto 50
-         else
-            Xa(i) = rt
-            if ( err>1d-14 ) call airyb(rt,ai,bi,ad,bd)
-            if ( Kf==1 ) Xd(i) = ad
-            if ( Kf==2 ) Xd(i) = bd
-         endif
+         ! DLMF 9.9.18
+         if ( rt0==0 ) rt0 = -(u*u)**(1.0_wp/3.0_wp) &
+                             *(+1.0_wp+u1*(5.0_wp/48.0_wp+u1* &
+                             (-5.0_wp/36.0_wp+u1*(77125.0_wp/82944.0_wp+ &
+                             u1*(-108056875.0_wp/6967296.0_wp)))))
+         do
+            x = rt0
+            call airyb(x,ai,bi,ad,bd)
+            if ( Kf==1 ) rt = rt0 - ai/ad
+            if ( Kf==2 ) rt = rt0 - bi/bd
+            err = abs((rt-rt0)/rt)
+            if ( err>1.0e-12_wp ) then
+               rt0 = rt
+            else
+               Xa(i) = rt
+               if ( err>1.0e-14_wp ) call airyb(rt,ai,bi,ad,bd)
+               if ( Kf==1 ) Xd(i) = ad
+               if ( Kf==2 ) Xd(i) = bd
+               exit
+            endif
+         end do
       enddo
       do i = 1 , Nt
-         rt0 = 0d0
+         rt0 = 0.0_wp
          if ( Kf==1 ) then
             if ( i==1 ) then
-               rt0 = -1.01879d0
+               rt0 = -1.01879_wp
             else
                u = 3.0_wp*pi*(4.0_wp*i-3.0_wp)/8.0_wp
                u1 = 1/(u*u)
             endif
          elseif ( Kf==2 ) then
             if ( i==1 ) then
-               rt0 = -2.29444d0
+               rt0 = -2.29444_wp
             else
                u = 3.0_wp*pi*(4.0_wp*i-1.0_wp)/8.0_wp
                u1 = 1/(u*u)
             endif
          endif
-!             DLMF 9.9.19
-         if ( rt0==0 ) rt0 = -(u*u)**(1.0_wp/3.0_wp)                      &
-                           & *(+1d0+u1*(-7d0/48d0+u1*                   &
-                           & (+35d0/288d0+u1*(-181223d0/207360d0+       &
-                           & u1*(18683371d0/1244160d0)))))
- 100     x = rt0
-         call airyb(x,ai,bi,ad,bd)
-         if ( Kf==1 ) rt = rt0 - ad/(ai*x)
-         if ( Kf==2 ) rt = rt0 - bd/(bi*x)
-         err = abs((rt-rt0)/rt)
-         if ( err>1.0d-12 ) then
-            rt0 = rt
-            goto 100
-         else
-            Xb(i) = rt
-            if ( err>1d-14 ) call airyb(rt,ai,bi,ad,bd)
-            if ( Kf==1 ) Xc(i) = ai
-            if ( Kf==2 ) Xc(i) = bi
-         endif
+         ! DLMF 9.9.19
+         if ( rt0==0 ) rt0 = -(u*u)**(1.0_wp/3.0_wp) &
+                             *(+1.0_wp+u1*(-7.0_wp/48.0_wp+u1* &
+                             (+35.0_wp/288.0_wp+u1*(-181223.0_wp/207360.0_wp+ &
+                             u1*(18683371.0_wp/1244160.0_wp)))))
+         do
+            x = rt0
+            call airyb(x,ai,bi,ad,bd)
+            if ( Kf==1 ) rt = rt0 - ad/(ai*x)
+            if ( Kf==2 ) rt = rt0 - bd/(bi*x)
+            err = abs((rt-rt0)/rt)
+            if ( err>1.0e-12_wp ) then
+               rt0 = rt
+            else
+               Xb(i) = rt
+               if ( err>1.0e-14_wp ) call airyb(rt,ai,bi,ad,bd)
+               if ( Kf==1 ) Xc(i) = ai
+               if ( Kf==2 ) Xc(i) = bi
+               exit
+            endif
+         end do
       enddo
-      end
+
+   end subroutine airyzo
 
 !*****************************************************************************************
 !>
 !  Compute error function erf(x)
 
-      subroutine error(x,Err)
+   subroutine error(x,Err)
 
-!       Input:   x   --- Argument of erf(x)
-!       Output:  ERR --- erf(x)
+      real(wp),intent(in) :: x !! Argument of `erf(x)`
+      real(wp),intent(out) :: Err !! `erf(x)`
 
-      real(wp) c0 , eps , er , Err , r , x , x2
-      integer k
+      real(wp) :: c0 , er , r , x2
+      integer :: k
 
-      eps = 1.0d-15
+      real(wp),parameter :: eps = 1.0e-15_wp
+
       x2 = x*x
       if ( abs(x)<3.5_wp ) then
          er = 1.0_wp
@@ -2275,81 +2295,83 @@
          Err = 1.0_wp - c0*er
          if ( x<0.0_wp ) Err = -Err
       endif
-      end
+
+   end subroutine error
 
 !*****************************************************************************************
 !>
-!  Compute error function erf(z) for a complex
-!  argument (z=x+iy)
+!  Compute error function `erf(z)` for a complex
+!  argument `(z=x+iy)`
 
-      subroutine cerror(z,Cer)
+   subroutine cerror(z,Cer)
 
-!       Input :  z   --- Complex argument
-!       Output:  CER --- erf(z)
+      complex(wp),intent(in) :: z !! Complex argument
+      complex(wp),intent(out) :: Cer !! `erf(z)`
 
-      complex(wp) c0 , Cer , cl , cr , cs , z , z1
-      integer k
-      real(wp) a0
+      complex(wp) :: c0 , cl , cr , cs , z1
+      integer :: k
+      real(wp) :: a0
 
       a0 = abs(z)
       c0 = exp(-z*z)
       z1 = z
       if ( real(z,wp)<0.0_wp ) z1 = -z
-!
-!       Cutoff radius R = 4.36; determined by balancing rounding error
-!       and asymptotic expansion error, see below.
-!
-!       The resulting maximum global accuracy expected is around 1e-8
-!
-      if ( a0<=4.36d0 ) then
-!
-!          Rounding error in the Taylor expansion is roughly
-!
-!          ~ R*R * EPSILON * R**(2 R**2) / (2 R**2 Gamma(R**2 + 1/2))
-!
+      !
+      !       Cutoff radius R = 4.36; determined by balancing rounding error
+      !       and asymptotic expansion error, see below.
+      !
+      !       The resulting maximum global accuracy expected is around 1e-8
+      !
+      if ( a0<=4.36_wp ) then
+         !
+         !          Rounding error in the Taylor expansion is roughly
+         !
+         !          ~ R*R * EPSILON * R**(2 R**2) / (2 R**2 Gamma(R**2 + 1/2))
+         !
          cs = z1
          cr = z1
          do k = 1 , 120
             cr = cr*z1*z1/(k+0.5_wp)
             cs = cs + cr
-            if ( abs(cr/cs)<1.0d-15 ) exit
+            if ( abs(cr/cs)<1.0e-15_wp ) exit
          enddo
          Cer = 2.0_wp*c0*cs/sqrtpi
       else
          cl = 1.0_wp/z1
          cr = cl
-!
-!          Asymptotic series; maximum K must be at most ~ R^2.
-!
-!          The maximum accuracy obtainable from this expansion is roughly
-!
-!          ~ Gamma(2R**2 + 2) / (
-!                   (2 R**2)**(R**2 + 1/2) Gamma(R**2 + 3/2) 2**(R**2 + 1/2))
-!
+         !
+         !          Asymptotic series; maximum K must be at most ~ R^2.
+         !
+         !          The maximum accuracy obtainable from this expansion is roughly
+         !
+         !          ~ Gamma(2R**2 + 2) / (
+         !                   (2 R**2)**(R**2 + 1/2) Gamma(R**2 + 3/2) 2**(R**2 + 1/2))
+         !
          do k = 1 , 20
             cr = -cr*(k-0.5_wp)/(z1*z1)
             cl = cl + cr
-            if ( abs(cr/cl)<1.0d-15 ) exit
+            if ( abs(cr/cl)<1.0e-15_wp ) exit
          enddo
          Cer = 1.0_wp - c0*cl/sqrtpi
       endif
       if ( real(z,wp)<0.0_wp ) Cer = -Cer
-      end
+
+   end subroutine cerror
 
 !*****************************************************************************************
 !>
 ! Compute Euler number En
 
-      subroutine eulerb(n,En)
+   subroutine eulerb(n,En)
 
-!       Input :  n --- Serial number
-!       Output:  EN(n) --- En
+      integer,intent(in) :: n !! Serial number
+      real(wp),intent(out) :: En(0:n) !! `En`
 
-      real(wp) En , hpi , r1 , r2 , s
-      integer isgn , k , m , n
-      dimension En(0:n)
+      real(wp) :: r1 , r2 , s
+      integer :: isgn , k , m
 
-      hpi = 2.0_wp/3.141592653589793d0
+      real(wp),parameter :: hpi = 2.0_wp / pi ! 2.0_wp/3.141592653589793d0
+
       En(0) = 1.0_wp
       En(2) = -1.0_wp
       r1 = -4.0_wp*hpi**3
@@ -2361,11 +2383,12 @@
             isgn = -isgn
             s = (1.0_wp/k)**(m+1)
             r2 = r2 + isgn*s
-            if ( s<1.0d-15 ) exit
+            if ( s<1.0e-15_wp ) exit
          enddo
          En(m) = r1*r2
       enddo
-      end
+
+   end subroutine eulerb
 
 !*****************************************************************************************
 !>
@@ -2585,7 +2608,7 @@
          qc1 = 0.0_wp
          qc2 = 1.0_wp/x
          do j = 1 , n
-            qc2 = qc2*j/((2.0*j+1.0_wp)*x)
+            qc2 = qc2*j/((2.0_wp*j+1.0_wp)*x)
             if ( j==n-1 ) qc1 = qc2
          enddo
          do l = 0 , 1
@@ -2652,8 +2675,8 @@
          do j = 1 , k
             l3 = k*(k+1)/2 + j + 1
             l4 = (k+1)*(k+2)/2 + j + 1
-            a(l4) = (j+0.5_wp*k+0.125_wp/(2.0*j+k+1.0_wp))*a(l3)             &
-                  & - (j+0.5_wp*k-1.0+0.625d0/(2.0*j+k+1.0_wp))*a(l3-1)
+            a(l4) = (j+0.5_wp*k+0.125_wp/(2.0_wp*j+k+1.0_wp))*a(l3)             &
+                  & - (j+0.5_wp*k-1.0+0.625d0/(2.0_wp*j+k+1.0_wp))*a(l3-1)
          enddo
       enddo
       end
@@ -2688,7 +2711,7 @@
          do k = 2 , 50
             r = .25_wp*r*(k-1.0_wp)/(k*k*k)*x*x
             Tti = Tti + r
-            if ( abs(r/Tti)<1.0d-12 ) exit
+            if ( abs(r/Tti)<1.0e-12_wp ) exit
          enddo
          Tti = Tti*.125_wp*x*x
       else
@@ -2712,7 +2735,7 @@
             rs = rs + 1.0_wp/k
             r2 = r*(rs+1.0_wp/(2.0_wp*k)-(gamma+log(x/2.0_wp)))
             b1 = b1 + r2
-            if ( abs(r2/b1)<1.0d-12 ) exit
+            if ( abs(r2/b1)<1.0e-12_wp ) exit
          enddo
          Ttk = e0 - .125_wp*x*x*b1
       else
@@ -2766,7 +2789,7 @@
             do i = 1 , 50
                r = -0.25_wp*r*x2/(i*(i+vk))
                bk = bk + r
-               if ( abs(r)<abs(bk)*1.0d-15 ) exit
+               if ( abs(r)<abs(bk)*1.0e-15_wp ) exit
             enddo
             Vl(k) = bk
             uk = 1.0_wp
@@ -2774,7 +2797,7 @@
             do i = 1 , 50
                r = -0.25_wp*r*x2/(i*(i+vk+1.0_wp))
                uk = uk + r
-               if ( abs(r)<abs(uk)*1.0d-15 ) exit
+               if ( abs(r)<abs(uk)*1.0e-15_wp ) exit
             enddo
             Dl(k) = -0.5_wp*x/(vk+1.0_wp)*uk
          enddo
@@ -2790,15 +2813,15 @@
          px = 1.0_wp
          rp = 1.0_wp
          do k = 1 , k0
-            rp = -0.78125d-2*rp*(vv-(4.0*k-3.0_wp)**2.0_wp)                   &
-               & *(vv-(4.0*k-1.0_wp)**2.0_wp)/(k*(2.0*k-1.0_wp)*x2)
+            rp = -0.78125d-2*rp*(vv-(4.0_wp*k-3.0_wp)**2.0_wp)                   &
+               & *(vv-(4.0_wp*k-1.0_wp)**2.0_wp)/(k*(2.0_wp*k-1.0_wp)*x2)
             px = px + rp
          enddo
          qx = 1.0_wp
          rq = 1.0_wp
          do k = 1 , k0
-            rq = -0.78125d-2*rq*(vv-(4.0*k-1.0_wp)**2.0_wp)                   &
-               & *(vv-(4.0*k+1.0_wp)**2.0_wp)/(k*(2.0*k+1.0_wp)*x2)
+            rq = -0.78125d-2*rq*(vv-(4.0_wp*k-1.0_wp)**2.0_wp)                   &
+               & *(vv-(4.0_wp*k+1.0_wp)**2.0_wp)/(k*(2.0_wp*k+1.0_wp)*x2)
             qx = qx + rq
          enddo
          qx = 0.125_wp*(vv-1.0_wp)*qx/x
@@ -3030,7 +3053,7 @@
       enddo
       if ( m==0 ) dnp = Df(1)
       if ( m/=0 ) dnp = Dn(m)
-      Dn(m+1) = (-1)**ip*dnp*cs/((2.0*m-1.0_wp)*(2.0*m+1.0-4.0*ip)*tp(m+1))
+      Dn(m+1) = (-1)**ip*dnp*cs/((2.0_wp*m-1.0_wp)*(2.0_wp*m+1.0-4.0_wp*ip)*tp(m+1))
       do k = m + 2 , nn
          Dn(k) = rk(k)*Dn(k-1)
       enddo
@@ -3060,7 +3083,7 @@
          do j = 1 , (n-m-ip)/2
             r3 = r3*j
          enddo
-         sa0 = (2.0*(m+ip)+1.0_wp)*r1/(2.0**n*c**ip*r2*r3*Df(1))
+         sa0 = (2.0_wp*(m+ip)+1.0_wp)*r1/(2.0_wp**n*c**ip*r2*r3*Df(1))
          Ck1 = sa0*su0
          if ( Kd==-1 ) return
       endif
@@ -3074,7 +3097,7 @@
       enddo
       g0 = Dn(m)
       if ( m==0 ) g0 = Df(1)
-      sb0 = (ip+1.0_wp)*c**(ip+1)/(2.0*ip*(m-2.0_wp)+1.0_wp)/(2.0*m-1.0_wp)
+      sb0 = (ip+1.0_wp)*c**(ip+1)/(2.0_wp*ip*(m-2.0_wp)+1.0_wp)/(2.0_wp*m-1.0_wp)
       Ck2 = (-1)**ip*sb0*r4*r5*g0/r1*su0
       end
 
@@ -3128,7 +3151,7 @@
          enddo
          gd = (pd-q*fd)/p
          z = z - fd/gd
-         if ( it<=40 .and. abs((z-z0)/z)>1.0d-15 ) goto 50
+         if ( it<=40 .and. abs((z-z0)/z)>1.0e-15_wp ) goto 50
          x(nr) = z
          w(nr) = 1.0_wp/(z*pd*pd)
       enddo
@@ -3155,7 +3178,7 @@
       r = 1.0_wp
       Pv = 1.0_wp
       do k = 1 , 18
-         r = 0.5_wp*r*(2.0*k+Va-1.0_wp)*(2.0*k+Va)/(k*x*x)
+         r = 0.5_wp*r*(2.0_wp*k+Va-1.0_wp)*(2.0_wp*k+Va)/(k*x*x)
          Pv = Pv + r
          if ( abs(r/Pv)<eps ) exit
       enddo
@@ -3235,7 +3258,7 @@
             do k = 1 , 40
                cr = -0.25_wp*cr*z2/(k*(k+vl))
                cjvl = cjvl + cr
-               if ( abs(cr)<abs(cjvl)*1.0d-15 ) exit
+               if ( abs(cr)<abs(cjvl)*1.0e-15_wp ) exit
             enddo
             vg = 1.0_wp + vl
             call gamma2(vg,ga)
@@ -3252,15 +3275,15 @@
             cpz = (1.0_wp,0.0_wp)
             crp = (1.0_wp,0.0_wp)
             do k = 1 , k0
-               crp = -0.78125d-2*crp*(vv-(4.0*k-3.0_wp)**2.0_wp)              &
-                   & *(vv-(4.0*k-1.0_wp)**2.0_wp)/(k*(2.0*k-1.0_wp)*z2)
+               crp = -0.78125d-2*crp*(vv-(4.0_wp*k-3.0_wp)**2.0_wp)              &
+                   & *(vv-(4.0_wp*k-1.0_wp)**2.0_wp)/(k*(2.0_wp*k-1.0_wp)*z2)
                cpz = cpz + crp
             enddo
             cqz = (1.0_wp,0.0_wp)
             crq = (1.0_wp,0.0_wp)
             do k = 1 , k0
-               crq = -0.78125d-2*crq*(vv-(4.0*k-1.0_wp)**2.0_wp)              &
-                   & *(vv-(4.0*k+1.0_wp)**2.0_wp)/(k*(2.0*k+1.0_wp)*z2)
+               crq = -0.78125d-2*crq*(vv-(4.0_wp*k-1.0_wp)**2.0_wp)              &
+                   & *(vv-(4.0_wp*k+1.0_wp)**2.0_wp)/(k*(2.0_wp*k+1.0_wp)*z2)
                cqz = cqz + crq
             enddo
             cqz = 0.125_wp*(vv-1.0_wp)*cqz/z1
@@ -3286,7 +3309,7 @@
                do k = 1 , 40
                   cr = -0.25_wp*cr*z2/(k*(k-vl))
                   cjvl = cjvl + cr
-                  if ( abs(cr)<abs(cjvl)*1.0d-15 ) exit
+                  if ( abs(cr)<abs(cjvl)*1.0e-15_wp ) exit
                enddo
                vg = 1.0_wp - vl
                call gamma2(vg,gb)
@@ -3502,7 +3525,7 @@
          do k = 1 , 40
             cr = -0.25_wp*cr*z2/(k*(k+v0))
             cjv0 = cjv0 + cr
-            if ( abs(cr)<abs(cjv0)*1.0d-15 ) exit
+            if ( abs(cr)<abs(cjv0)*1.0e-15_wp ) exit
          enddo
          vg = 1.0_wp + v0
          call gamma2(vg,ga)
@@ -3516,15 +3539,15 @@
          cpz = (1.0_wp,0.0_wp)
          crp = (1.0_wp,0.0_wp)
          do k = 1 , k0
-            crp = -0.78125d-2*crp*(vv-(4.0*k-3.0_wp)**2.0_wp)                 &
-                & *(vv-(4.0*k-1.0_wp)**2.0_wp)/(k*(2.0*k-1.0_wp)*z2)
+            crp = -0.78125d-2*crp*(vv-(4.0_wp*k-3.0_wp)**2.0_wp)                 &
+                & *(vv-(4.0_wp*k-1.0_wp)**2.0_wp)/(k*(2.0_wp*k-1.0_wp)*z2)
             cpz = cpz + crp
          enddo
          cqz = (1.0_wp,0.0_wp)
          crq = (1.0_wp,0.0_wp)
          do k = 1 , k0
-            crq = -0.78125d-2*crq*(vv-(4.0*k-1.0_wp)**2.0_wp)                 &
-                & *(vv-(4.0*k+1.0_wp)**2.0_wp)/(k*(2.0*k+1.0_wp)*z2)
+            crq = -0.78125d-2*crq*(vv-(4.0_wp*k-1.0_wp)**2.0_wp)                 &
+                & *(vv-(4.0_wp*k+1.0_wp)**2.0_wp)/(k*(2.0_wp*k+1.0_wp)*z2)
             cqz = cqz + crq
          enddo
          cqz = 0.125_wp*(vv-1.0_wp)*cqz/z1
@@ -3542,7 +3565,7 @@
             do k = 1 , 40
                cr = -0.25_wp*cr*z2/(k*(k-v0))
                cjvn = cjvn + cr
-               if ( abs(cr)<abs(cjvn)*1.0d-15 ) exit
+               if ( abs(cr)<abs(cjvn)*1.0e-15_wp ) exit
             enddo
             vg = 1.0_wp - v0
             call gamma2(vg,gb)
@@ -3657,14 +3680,14 @@
          do k = 1 , 30
             r = -0.25_wp*r*x2/(k*k)
             Bj0 = Bj0 + r
-            if ( abs(r)<abs(Bj0)*1.0d-15 ) exit
+            if ( abs(r)<abs(Bj0)*1.0e-15_wp ) exit
          enddo
          Bj1 = 1.0_wp
          r = 1.0_wp
          do k = 1 , 30
             r = -0.25_wp*r*x2/(k*(k+1.0_wp))
             Bj1 = Bj1 + r
-            if ( abs(r)<abs(Bj1)*1.0d-15 ) exit
+            if ( abs(r)<abs(Bj1)*1.0e-15_wp ) exit
          enddo
          Bj1 = 0.5_wp*x*Bj1
          ec = log(x/2.0_wp) + 0.5772156649015329d0
@@ -3676,7 +3699,7 @@
             r0 = -0.25_wp*r0/(k*k)*x2
             r = r0*w0
             cs0 = cs0 + r
-            if ( abs(r)<abs(cs0)*1.0d-15 ) exit
+            if ( abs(r)<abs(cs0)*1.0e-15_wp ) exit
          enddo
          By0 = rp2*(ec*Bj0-cs0)
          cs1 = 1.0_wp
@@ -3687,7 +3710,7 @@
             r1 = -0.25_wp*r1/(k*(k+1))*x2
             r = r1*(2.0_wp*w1+1.0_wp/(k+1.0_wp))
             cs1 = cs1 + r
-            if ( abs(r)<abs(cs1)*1.0d-15 ) exit
+            if ( abs(r)<abs(cs1)*1.0e-15_wp ) exit
          enddo
          By1 = rp2*(ec*Bj1-1.0_wp/x-0.25_wp*x*cs1)
       else
@@ -3779,7 +3802,7 @@
          do k = 1 , 60
             r = r*x/(a+k)
             s = s + r
-            if ( abs(r/s)<1.0d-15 ) exit
+            if ( abs(r/s)<1.0e-15_wp ) exit
          enddo
          Gin = exp(xam)*s
          call gamma2(a,ga)
@@ -3885,7 +3908,7 @@
          do k = 1 , 50
             r = .25_wp*r*(2*k-1.0_wp)/(2*k+1.0_wp)/(k*k)*x2
             Ti = Ti + r
-            if ( abs(r/Ti)<1.0d-12 ) exit
+            if ( abs(r/Ti)<1.0e-12_wp ) exit
          enddo
          Ti = Ti*x
       else
@@ -3912,7 +3935,7 @@
             rs = rs + 1.0_wp/k
             b2 = b2 + r*rs
             Tk = b1 + b2
-            if ( abs((Tk-tw)/Tk)<1.0d-12 ) exit
+            if ( abs((Tk-tw)/Tk)<1.0e-12_wp ) exit
             tw = Tk
          enddo
          Tk = Tk*x
@@ -3986,7 +4009,7 @@
             do k = 1 , 40
                r = -0.25_wp*r*x2/(k*(k+vl))
                bjvl = bjvl + r
-               if ( abs(r)<abs(bjvl)*1.0d-15 ) exit
+               if ( abs(r)<abs(bjvl)*1.0e-15_wp ) exit
             enddo
             vg = 1.0_wp + vl
             call gamma2(vg,ga)
@@ -4003,15 +4026,15 @@
             px = 1.0_wp
             rp = 1.0_wp
             do k = 1 , k0
-               rp = -0.78125d-2*rp*(vv-(4.0*k-3.0_wp)**2.0_wp)                &
-                  & *(vv-(4.0*k-1.0_wp)**2.0_wp)/(k*(2.0*k-1.0_wp)*x2)
+               rp = -0.78125d-2*rp*(vv-(4.0_wp*k-3.0_wp)**2.0_wp)                &
+                  & *(vv-(4.0_wp*k-1.0_wp)**2.0_wp)/(k*(2.0_wp*k-1.0_wp)*x2)
                px = px + rp
             enddo
             qx = 1.0_wp
             rq = 1.0_wp
             do k = 1 , k0
-               rq = -0.78125d-2*rq*(vv-(4.0*k-1.0_wp)**2.0_wp)                &
-                  & *(vv-(4.0*k+1.0_wp)**2.0_wp)/(k*(2.0*k+1.0_wp)*x2)
+               rq = -0.78125d-2*rq*(vv-(4.0_wp*k-1.0_wp)**2.0_wp)                &
+                  & *(vv-(4.0_wp*k+1.0_wp)**2.0_wp)/(k*(2.0_wp*k+1.0_wp)*x2)
                qx = qx + rq
             enddo
             qx = 0.125_wp*(vv-1.0_wp)*qx/x
@@ -4080,7 +4103,7 @@
                do k = 1 , 40
                   r = -0.25_wp*r*x2/(k*(k-vl))
                   bjvl = bjvl + r
-                  if ( abs(r)<abs(bjvl)*1.0d-15 ) exit
+                  if ( abs(r)<abs(bjvl)*1.0e-15_wp ) exit
                enddo
                vg = 1.0_wp - vl
                call gamma2(vg,gb)
@@ -4340,7 +4363,7 @@
             enddo
             gd = (pd-q*fd)/p
             z = z - fd/gd
-            if ( abs(z-z0)>abs(z)*1.0d-15 ) goto 50
+            if ( abs(z-z0)>abs(z)*1.0e-15_wp ) goto 50
          endif
          x(nr) = z
          x(n+1-nr) = -z
@@ -4703,7 +4726,7 @@
          pv = pi*sqrt(2.0_wp*nr-0.25_wp)
          px = 0.5*pu - 0.5*log(pv)/pu
          py = 0.5*pu + 0.5*log(pv)/pu
-         z = dcmplx(px,py)
+         z = cmplx(px,py,kind=wp)
          it = 0
  50      it = it + 1
          call cerf(z,zf,zd)
@@ -4888,7 +4911,7 @@
             do i = 1 , 50
                r = -0.25_wp*r*x2/(i*(i+k))
                bk = bk + r
-               if ( abs(r)<abs(bk)*1.0d-15 ) exit
+               if ( abs(r)<abs(bk)*1.0e-15_wp ) exit
             enddo
             Bl(k) = bk
             if ( k>=1 ) Dl(k-1) = -0.5_wp*x/k*bk
@@ -4898,7 +4921,7 @@
          do i = 1 , 50
             r = -0.25_wp*r*x2/(i*(i+n+1.0_wp))
             uk = uk + r
-            if ( abs(r)<abs(uk)*1.0d-15 ) exit
+            if ( abs(r)<abs(uk)*1.0e-15_wp ) exit
          enddo
          Dl(n) = -0.5_wp*x/(n+1.0_wp)*uk
          return
@@ -4989,7 +5012,7 @@
             dk(2*k) = k*(b-k)*x/(a+2.0_wp*k-1.0_wp)/(a+2.0_wp*k)
          enddo
          do k = 0 , 20
-            dk(2*k+1) = -(a+k)*(a+b+k)*x/(a+2.d0*k)/(a+2.0*k+1.0_wp)
+            dk(2*k+1) = -(a+k)*(a+b+k)*x/(a+2.d0*k)/(a+2.0_wp*k+1.0_wp)
          enddo
          t1 = 0.0_wp
          do k = 20 , 1 , -1
@@ -4999,7 +5022,7 @@
          Bix = x**a*(1.0_wp-x)**b/(a*bt)*ta
       else
          do k = 1 , 20
-            fk(2*k) = k*(a-k)*(1.0_wp-x)/(b+2.*k-1.0_wp)/(b+2.0*k)
+            fk(2*k) = k*(a-k)*(1.0_wp-x)/(b+2.*k-1.0_wp)/(b+2.0_wp*k)
          enddo
          do k = 0 , 20
             fk(2*k+1) = -(b+k)*(a+b+k)*(1.d0-x)/(b+2.d0*k)              &
@@ -5082,7 +5105,7 @@
       real(wp) x , y
       dimension Cpn(0:n) , Cpd(0:n)
 
-      z = dcmplx(x,y)
+      z = cmplx(x,y,kind=wp)
       Cpn(0) = (1.0_wp,0.0_wp)
       Cpn(1) = z
       Cpd(0) = (0.0_wp,0.0_wp)
@@ -5158,7 +5181,7 @@
             qf0 = q00
             qf1 = q01
             do k = 2 , n
-               qf2 = ((2.0*k-1.0_wp)*x*qf1-(k-1.0_wp)*qf0)/k
+               qf2 = ((2.0_wp*k-1.0_wp)*x*qf1-(k-1.0_wp)*qf0)/k
                Qm(k) = qf2
                qf0 = qf1
                qf1 = qf2
@@ -5178,7 +5201,7 @@
             qh0 = q10
             qh1 = q11
             do k = 2 , n
-               qh2 = ((2.0*k-1.0_wp)*x*qh1-k*qh0)/(k-1.0_wp)
+               qh2 = ((2.0_wp*k-1.0_wp)*x*qh1-k*qh0)/(k-1.0_wp)
                Qm(k) = qh2
                qh0 = qh1
                qh1 = qh2
@@ -5191,7 +5214,7 @@
             qmk = 0.0_wp
             do l = 2 , n
                q0l = ((2.0_wp*l-1.0_wp)*x*qg1-(l-1.0_wp)*qg0)/l
-               q1l = ((2.0*l-1.0_wp)*x*qh1-l*qh0)/(l-1.0_wp)
+               q1l = ((2.0_wp*l-1.0_wp)*x*qh1-l*qh0)/(l-1.0_wp)
                qf0 = q0l
                qf1 = q1l
                do k = 2 , m
@@ -5216,7 +5239,7 @@
          qf2 = 0.0_wp
          qf1 = 1.0_wp
          do k = km , 0 , -1
-            qf0 = ((2.0*k+3.0_wp)*x*qf1-(k+2.0-m)*qf2)/(k+m+1.0_wp)
+            qf0 = ((2.0_wp*k+3.0_wp)*x*qf1-(k+2.0-m)*qf2)/(k+m+1.0_wp)
             if ( k<=n ) Qm(k) = qf0
             qf2 = qf1
             qf1 = qf0
@@ -5424,7 +5447,7 @@
          do k = 1 , 100
             r = r*k*x/(k+1.0_wp)**2
             Ei = Ei + r
-            if ( abs(r/Ei)<=1.0d-15 ) exit
+            if ( abs(r/Ei)<=1.0e-15_wp ) exit
          enddo
          ga = 0.5772156649015328d0
          Ei = ga + log(x) + x*Ei
@@ -5482,7 +5505,7 @@
          do k = 1 , 25
             r = -r*k*x/(k+1.0_wp)**2
             e1 = e1 + r
-            if ( abs(r)<=abs(e1)*1.0d-15 ) exit
+            if ( abs(r)<=abs(e1)*1.0e-15_wp ) exit
          enddo
          ga = 0.5772156649015328d0
          e1 = -ga - log(x) + x*e1
@@ -5544,7 +5567,7 @@
             do j = 1 , 500
                rg = rg*(a+j-1.0_wp)/(j*(b+j-1.0_wp))*x
                Hg = Hg + rg
-               if ( Hg/=0d0 .and. abs(rg/Hg)<1.0d-15 ) then
+               if ( Hg/=0d0 .and. abs(rg/Hg)<1.0e-15_wp ) then
 !       DLMF 13.2.39 (cf. above)
                   if ( x0<0.0_wp ) Hg = Hg*exp(x0)
                   goto 50
@@ -5554,14 +5577,14 @@
 !       DLMF 13.7.2 & 13.2.4, SUM2 corresponds to first sum
             y = 0.0_wp
             call cgama(a,y,0,tar,tai)
-            cta = dcmplx(tar,tai)
+            cta = cmplx(tar,tai,kind=wp)
             y = 0.0_wp
             call cgama(b,y,0,tbr,tbi)
-            ctb = dcmplx(tbr,tbi)
+            ctb = cmplx(tbr,tbi,kind=wp)
             xg = b - a
             y = 0.0_wp
             call cgama(xg,y,0,tbar,tbai)
-            ctba = dcmplx(tbar,tbai)
+            ctba = cmplx(tbar,tbai,kind=wp)
             sum1 = 1.0_wp
             sum2 = 1.0_wp
             r1 = 1.0_wp
@@ -5623,7 +5646,7 @@
 
       Isfer = 0
       l0 = c==int(c) .and. c<0.0
-      l1 = 1.0_wp - x<1.0d-15 .and. c - a - b<=0.0
+      l1 = 1.0_wp - x<1.0e-15_wp .and. c - a - b<=0.0
       l2 = a==int(a) .and. a<0.0
       l3 = b==int(b) .and. b<0.0
       l4 = c - a==int(c-a) .and. c - a<=0.0
@@ -5632,7 +5655,7 @@
          Isfer = 3
          return
       endif
-      eps = 1.0d-15
+      eps = 1.0e-15_wp
       if ( x>0.95 ) eps = 1.0d-8
       if ( x==0.0 .or. a==0.0 .or. b==0.0_wp ) then
          Hf = 1.0_wp
@@ -5687,7 +5710,7 @@
       hw = 0.0_wp
       if ( x>=0.75d0 ) then
          gm = 0.0_wp
-         if ( abs(c-a-b-int(c-a-b))<1.0d-15 ) then
+         if ( abs(c-a-b-int(c-a-b))<1.0e-15_wp ) then
             m = int(c-a-b)
             call gamma2(a,ga)
             call gamma2(b,gb)
@@ -5883,14 +5906,14 @@
             else
                y = 0.0_wp
                call cgama(a,y,0,g1r,g1i)
-               cg1 = dcmplx(g1r,g1i)
+               cg1 = cmplx(g1r,g1i,kind=wp)
                y = 0.0_wp
                call cgama(b,y,0,g2r,g2i)
-               cg2 = dcmplx(g2r,g2i)
+               cg2 = cmplx(g2r,g2i,kind=wp)
                ba = b - a
                y = 0.0_wp
                call cgama(ba,y,0,g3r,g3i)
-               cg3 = dcmplx(g3r,g3i)
+               cg3 = cmplx(g3r,g3i,kind=wp)
                cs1 = (1.0_wp,0.0_wp)
                cs2 = (1.0_wp,0.0_wp)
                cr1 = (1.0_wp,0.0_wp)
@@ -5963,7 +5986,7 @@
 
       x = real(z,wp)
       y = aimag(z)
-      eps = 1.0d-15
+      eps = 1.0e-15_wp
       Isfer = 0
       l0 = c==int(c) .and. c<0.0_wp
       l1 = abs(1.0_wp-x)<eps .and. y==0.0_wp .and. c - a - b<=0.0_wp
@@ -6268,7 +6291,7 @@
       integer k , l
       dimension a(16)
 
-      eps = 1.0d-15
+      eps = 1.0e-15_wp
       c1 = .355028053887817d0
       c2 = .258819403792807d0
       sr3 = 1.732050807568877d0
@@ -6656,7 +6679,7 @@
             vt = 4.0_wp*l
             r = 1.0_wp
             do k = 1 , k0
-               r = 0.125_wp*r*(vt-(2.0*k-1.0_wp)**2)/(k*x)
+               r = 0.125_wp*r*(vt-(2.0_wp*k-1.0_wp)**2)/(k*x)
                bkl = bkl + r
             enddo
             Bk(l) = a0*bkl
@@ -6867,14 +6890,14 @@
          do k = 1 , 40
             cr = -0.25_wp*cr*z2/(k*k)
             cbj0 = cbj0 + cr
-            if ( abs(cr)<abs(cbj0)*1.0d-15 ) exit
+            if ( abs(cr)<abs(cbj0)*1.0e-15_wp ) exit
          enddo
          cbj1 = (1.0_wp,0.0_wp)
          cr = (1.0_wp,0.0_wp)
          do k = 1 , 40
             cr = -0.25_wp*cr*z2/(k*(k+1.0_wp))
             cbj1 = cbj1 + cr
-            if ( abs(cr)<abs(cbj1)*1.0d-15 ) exit
+            if ( abs(cr)<abs(cbj1)*1.0e-15_wp ) exit
          enddo
          cbj1 = 0.5_wp*z1*cbj1
          w0 = 0.0_wp
@@ -6885,7 +6908,7 @@
             cr = -0.25_wp*cr/(k*k)*z2
             cp = cr*w0
             cs = cs + cp
-            if ( abs(cp)<abs(cs)*1.0d-15 ) exit
+            if ( abs(cp)<abs(cs)*1.0e-15_wp ) exit
          enddo
          cby0 = rp2*(log(z1/2.0_wp)+gamma)*cbj0 - rp2*cs
          w1 = 0.0_wp
@@ -6896,7 +6919,7 @@
             cr = -0.25_wp*cr/(k*(k+1))*z2
             cp = cr*(2.0_wp*w1+1.0_wp/(k+1.0_wp))
             cs = cs + cp
-            if ( abs(cp)<abs(cs)*1.0d-15 ) exit
+            if ( abs(cp)<abs(cs)*1.0e-15_wp ) exit
          enddo
          cby1 = rp2*((log(z1/2.0_wp)+gamma)*cbj1-1.0_wp/z1-0.25_wp*z1*cs)
       else
@@ -7000,7 +7023,7 @@
       integer k , Ks , m
 
       srd = 57.29577951308233d0
-      eps = 1.0d-15
+      eps = 1.0e-15_wp
       pp2 = 1.2533141373155d0
       p2p = .7978845608028654d0
       xa = abs(x)
@@ -7171,7 +7194,7 @@
       integer k , km , km2 , kmax
       dimension ck(51) , dk(51)
 
-      eps = 1.0d-15
+      eps = 1.0e-15_wp
       c1 = 0.355028053887817d0
       c2 = 0.258819403792807d0
       sr3 = 1.732050807568877d0
@@ -7360,7 +7383,7 @@
             else
                Ck(2) = f2
                do j = 3 , kb + 1
-                  f = 0.25_wp*(((2.0*j+m+ip-4.0_wp)*(2.0*j+m+ip-3.0_wp)-Cv+cs) &
+                  f = 0.25_wp*(((2.0_wp*j+m+ip-4.0_wp)*(2.0_wp*j+m+ip-3.0_wp)-Cv+cs) &
                     & *f2-cs*f1)/((j-1.0_wp)*(j+m-1.0_wp))
                   if ( j<=kb ) Ck(j) = f
                   f1 = f2
@@ -7475,7 +7498,7 @@
       cr = (1.0_wp,0.0_wp)
       Cdn = (1.0_wp,0.0_wp)
       do k = 1 , 16
-         cr = -0.5_wp*cr*(2.0*k-n-1.0_wp)*(2.0*k-n-2.0_wp)/(k*z*z)
+         cr = -0.5_wp*cr*(2.0_wp*k-n-1.0_wp)*(2.0_wp*k-n-2.0_wp)/(k*z*z)
          Cdn = Cdn + cr
          if ( abs(cr)<abs(Cdn)*1.0e-12_wp ) exit
       enddo
@@ -7506,7 +7529,7 @@
          if ( Kf==2 ) psq = 2.0_wp*nr**(0.5)
          px = psq - log(pi*psq)/(pi*pi*psq**3.0_wp)
          py = log(pi*psq)/(pi*psq)
-         z = dcmplx(px,py)
+         z = cmplx(px,py,kind=wp)
          if ( Kf==2 ) then
             if ( nr==2 ) z = (2.8334,0.2443)
             if ( nr==3 ) z = (3.4674,0.2185)
@@ -7533,7 +7556,7 @@
          z = z - zfd/zgd
          w0 = w
          w = abs(z)
-         if ( it<=50 .and. abs((w-w0)/w)>1.0d-12 ) goto 50
+         if ( it<=50 .and. abs((w-w0)/w)>1.0e-12_wp ) goto 50
          Zo(nr) = z
       enddo
       end
@@ -7899,7 +7922,7 @@
          hua = abs(Hu)
          if ( hua>hmax ) hmax = hua
          if ( hua<hmin ) hmin = hua
-         if ( abs(Hu-h0)<abs(Hu)*1.0d-15 ) exit
+         if ( abs(Hu-h0)<abs(Hu)*1.0e-15_wp ) exit
          h0 = Hu
       enddo
       d1 = log10(hmax)
@@ -7925,14 +7948,14 @@
       r = 1.0_wp
       if ( x<24.5_wp ) then
          do k = 1 , 60
-            r = -r*x*x*(2.0*k-1.0_wp)/(2.0*k+1.0_wp)**3
+            r = -r*x*x*(2.0_wp*k-1.0_wp)/(2.0_wp*k+1.0_wp)**3
             s = s + r
             if ( abs(r)<abs(s)*1.0e-12_wp ) exit
          enddo
          Tth = pi/2.0_wp - 2.0_wp/pi*x*s
       else
          do k = 1 , 10
-            r = -r*(2.0*k-1.0_wp)**3/((2.0*k+1.0_wp)*x*x)
+            r = -r*(2.0_wp*k-1.0_wp)**3/((2.0_wp*k+1.0_wp)*x*x)
             s = s + r
             if ( abs(r)<abs(s)*1.0e-12_wp ) exit
          enddo
@@ -8046,13 +8069,13 @@
                      & x1
       integer k
 
-      eps = 1.0d-12
+      eps = 1.0e-12_wp
       ep = exp(-.25*x*x)
       a0 = abs(x)**Va*ep
       r = 1.0_wp
       Pd = 1.0_wp
       do k = 1 , 16
-         r = -0.5_wp*r*(2.0*k-Va-1.0_wp)*(2.0*k-Va-2.0_wp)/(k*x*x)
+         r = -0.5_wp*r*(2.0_wp*k-Va-1.0_wp)*(2.0_wp*k-Va-2.0_wp)/(k*x*x)
          Pd = Pd + r
          if ( abs(r/Pd)<eps ) exit
       enddo
@@ -8106,14 +8129,14 @@
          do k = 1 , 50
             r = 0.25_wp*r*x2/(k*k)
             Bi0 = Bi0 + r
-            if ( abs(r/Bi0)<1.0d-15 ) exit
+            if ( abs(r/Bi0)<1.0e-15_wp ) exit
          enddo
          Bi1 = 1.0_wp
          r = 1.0_wp
          do k = 1 , 50
             r = 0.25_wp*r*x2/(k*(k+1))
             Bi1 = Bi1 + r
-            if ( abs(r/Bi1)<1.0d-15 ) exit
+            if ( abs(r/Bi1)<1.0e-15_wp ) exit
          enddo
          Bi1 = 0.5_wp*x*Bi1
       else
@@ -8155,7 +8178,7 @@
             w0 = w0 + 1.0_wp/k
             r = 0.25_wp*r/(k*k)*x2
             Bk0 = Bk0 + r*(w0+ct)
-            if ( abs((Bk0-ww)/Bk0)<1.0d-15 ) exit
+            if ( abs((Bk0-ww)/Bk0)<1.0e-15_wp ) exit
             ww = Bk0
          enddo
          Bk0 = Bk0 + ct
@@ -8717,7 +8740,7 @@
       integer k , l1 , l2 , m
       dimension h(100) , d(80)
 
-      eps = 1.0d-15
+      eps = 1.0e-15_wp
       p0 = 0.59460355750136d0
       if ( a==0.0_wp ) then
          g1 = 3.625609908222d0
@@ -8850,7 +8873,7 @@
          do j = 1 , (n-m-ip)/2
             r3 = r3*j
          enddo
-         sa0 = (2.0*(m+ip)+1.0_wp)*r1/(2.0**n*c**ip*r2*r3)
+         sa0 = (2.0_wp*(m+ip)+1.0_wp)*r1/(2.0_wp**n*c**ip*r2*r3)
          if ( ip==0 ) then
             R1f = sum/(sa0*suc)*Df(1)*reg
             R1d = 0.0_wp
@@ -8917,7 +8940,7 @@
                      & r , r1 , Va , va0 , vm , vt , x
       integer m
 
-      eps = 1.0d-15
+      eps = 1.0e-15_wp
       ep = exp(-0.25_wp*x*x)
       va0 = 0.5_wp*(1.0_wp-Va)
       if ( Va==0.0_wp ) then
@@ -8975,7 +8998,7 @@
          do k = 1 , 500
             cr = -cr*k*z/(k+1.0_wp)**2
             Ce1 = Ce1 + cr
-            if ( abs(cr)<=abs(Ce1)*1.0d-15 ) exit
+            if ( abs(cr)<=abs(Ce1)*1.0e-15_wp ) exit
          enddo
          if ( x<=0.0 .and. aimag(z)==0.0_wp ) then
 !     Careful on the branch cut -- use the sign of the imaginary part
@@ -9004,7 +9027,7 @@
             zdc = (z*zd-1)*zdc
             zc = zc + zdc
 
-            if ( abs(zdc)<=abs(zc)*1.0d-15 .and. k>20 ) exit
+            if ( abs(zdc)<=abs(zc)*1.0e-15_wp .and. k>20 ) exit
          enddo
          Ce1 = exp(-z)*zc
          if ( x<=0.0 .and. aimag(z)==0.0_wp ) Ce1 = Ce1 - pi*(0.0_wp,1.0_wp)
@@ -9104,7 +9127,7 @@
          do k = 1 , 25
             r = -r*(a+k-1.0_wp)*(a-b+k)/(k*x)
             ra = abs(r)
-            if ( k>5 .and. ra>=r0 .or. ra<1.0d-15 ) exit
+            if ( k>5 .and. ra>=r0 .or. ra<1.0e-15_wp ) exit
             r0 = ra
             Hu = Hu + r
          enddo
@@ -9133,7 +9156,7 @@
       gf0 = 0.0_wp
       gw = 0.0_wp
       do k = 1 , nm
-         gf0 = gf0 + Bk(k)*x**(2.0*k-2.0_wp)
+         gf0 = gf0 + Bk(k)*x**(2.0_wp*k-2.0_wp)
          if ( abs((gf0-gw)/gf0)<eps .and. k>=10 ) exit
          gw = gf0
       enddo
@@ -9142,9 +9165,9 @@
       gd0 = 0.0_wp
       do k = 1 , nm
          if ( ip==0 ) then
-            gd0 = gd0 + (2.0_wp*k-1.0_wp)*Bk(k)*x**(2.0*k-2.0_wp)
+            gd0 = gd0 + (2.0_wp*k-1.0_wp)*Bk(k)*x**(2.0_wp*k-2.0_wp)
          else
-            gd0 = gd0 + 2.0_wp*k*Bk(k+1)*x**(2.0*k-1.0_wp)
+            gd0 = gd0 + 2.0_wp*k*Bk(k+1)*x**(2.0_wp*k-1.0_wp)
          endif
          if ( abs((gd0-gw)/gd0)<eps .and. k>=10 ) exit
          gw = gd0
@@ -9163,12 +9186,13 @@
 !       Output:  TJ --- Integration of J0(t) from 0 to x
 !                TY --- Integration of Y0(t) from 0 to x
 
-      real(wp) a , a0 , a1 , af , bf , bg , eps , r , &
+      real(wp) a , a0 , a1 , af , bf , bg , r , &
                      & r2 , rc , rs , Tj , Ty , ty1 , ty2 , x , x2 , xp
       integer k
       dimension a(18)
 
-      eps = 1.0d-12
+      real(wp),parameter :: eps = 1.0e-12_wp
+
       if ( x==0.0_wp ) then
          Tj = 0.0_wp
          Ty = 0.0_wp
@@ -9333,15 +9357,16 @@
 !                HEI --- kei'x
 
       real(wp) Bei , Ber , cn0 , cp0 , cs , Dei , Der ,    &
-                     & eps , fac , Gei , Ger , gs , Hei , Her ,    &
-                     & pn0 , pn1 , pp0 , pp1
+               fac , Gei , Ger , gs , Hei , Her ,    &
+               pn0 , pn1 , pp0 , pp1
       real(wp) qn0 , qn1 , qp0 , qp1 , r , r0 , r1 , rc , rs ,  &
-                     & sn0 , sp0 , ss , x , x2 , x4 , xc1 , xc2 , xd ,  &
-                     & xe1 , xe2
+               sn0 , sp0 , ss , x , x2 , x4 , xc1 , xc2 , xd ,  &
+               xe1 , xe2
       real(wp) xt
       integer k , km , m
 
-      eps = 1.0d-15
+      real(wp),parameter :: eps = 1.0e-15_wp
+
       if ( x==0.0_wp ) then
          Ber = 1.0_wp
          Bei = 0.0_wp
@@ -9537,7 +9562,7 @@
          hu1 = abs(hm1)
          if ( hu1>hmax ) hmax = hu1
          if ( hu1<hmin ) hmin = hu1
-         if ( abs(hm1-h0)<abs(hm1)*1.0d-15 ) exit
+         if ( abs(hm1-h0)<abs(hm1)*1.0e-15_wp ) exit
          h0 = hm1
       enddo
       da1 = log10(hmax)
@@ -9578,7 +9603,7 @@
          hu2 = abs(hm2)
          if ( hu2>hmax ) hmax = hu2
          if ( hu2<hmin ) hmin = hu2
-         if ( abs((hm2-h0)/hm2)<1.0d-15 ) exit
+         if ( abs((hm2-h0)/hm2)<1.0e-15_wp ) exit
          h0 = hm2
       enddo
       db1 = log10(hmax)
@@ -9641,7 +9666,7 @@
       endif
       if ( Kf==1 ) x = -0.503
       if ( Kf==2 ) x = 0.577
-      z = dcmplx(x,y)
+      z = cmplx(x,y,kind=wp)
       w = 0.0_wp
       do nr = 1 , Nt
          if ( nr/=1 ) z = Zo(nr-1) - h
@@ -9665,7 +9690,7 @@
          z = z - zfd/zgd
          w0 = w
          w = abs(z)
-         if ( it<=50 .and. abs((w-w0)/w)>1.0d-12 ) goto 50
+         if ( it<=50 .and. abs((w-w0)/w)>1.0e-12_wp ) goto 50
          Zo(nr) = z
       enddo
       do i = 1 , Nt
@@ -10371,7 +10396,7 @@
          do k = 1 , 30
             r = 0.25_wp*r*x2/(k*(k+v0))
             bi0 = bi0 + r
-            if ( abs(r/bi0)<1.0d-15 ) exit
+            if ( abs(r/bi0)<1.0e-15_wp ) exit
          enddo
          bi0 = bi0*a1
       else
@@ -10413,7 +10438,7 @@
          sum = 1.0_wp
          r = 1.0_wp
          do k = 1 , k0
-            r = 0.125_wp*r*(vt-(2.0*k-1.0_wp)**2.0_wp)/(k*x)
+            r = 0.125_wp*r*(vt-(2.0_wp*k-1.0_wp)**2.0_wp)/(k*x)
             sum = sum + r
          enddo
          bk0 = cb*sum
@@ -10427,7 +10452,7 @@
             r = 0.25_wp*r/(k*k)*x2
             cs = cs + r*(w0+ct)
             wa = abs(cs)
-            if ( abs((wa-ww)/wa)<1.0d-15 ) exit
+            if ( abs((wa-ww)/wa)<1.0e-15_wp ) exit
             ww = wa
          enddo
          bk0 = ct + cs
@@ -10444,7 +10469,7 @@
             r2 = 0.25_wp*r2*x2/(k*(k+v0))
             sum = sum + a2*r1 - a1*r2
             wa = abs(sum)
-            if ( abs((wa-ww)/wa)<1.0d-15 ) exit
+            if ( abs((wa-ww)/wa)<1.0e-15_wp ) exit
             ww = wa
          enddo
          bk0 = halfpi*sum/sin(piv)
@@ -10510,7 +10535,7 @@
          dk2 = 2*(m+k)
          d2k = 2*m + k
          a(i) = (d2k+2.0_wp)*(d2k+1.0_wp)/((dk2+3.0_wp)*(dk2+5.0_wp))*cs
-         d(i) = dk0*dk1 + (2.0*dk0*dk1-2.0*m*m-1.0_wp) &
+         d(i) = dk0*dk1 + (2.0_wp*dk0*dk1-2.0_wp*m*m-1.0_wp) &
               & /((dk2-1.0_wp)*(dk2+3.0_wp))*cs
          g(i) = k*(k-1.0_wp)/((dk2-3.0_wp)*(dk2-1.0_wp))*cs
       enddo
@@ -10656,7 +10681,7 @@
             do k = 1 , 40
                r = -0.25_wp*r*x2/(k*(k+vl))
                vjl = vjl + r
-               if ( abs(r)<1.0d-15 ) exit
+               if ( abs(r)<1.0e-15_wp ) exit
             enddo
             a0 = (0.5_wp*x)**vl
             if ( l==1 ) Vj1 = a0/gp1*vjl
@@ -10668,15 +10693,15 @@
             px = 1.0_wp
             rp = 1.0_wp
             do k = 1 , k0
-               rp = -0.78125d-2*rp*(vv-(4.0*k-3.0_wp)**2.0_wp)                &
-                  & *(vv-(4.0*k-1.0_wp)**2.0_wp)/(k*(2.0*k-1.0_wp)*x2)
+               rp = -0.78125d-2*rp*(vv-(4.0_wp*k-3.0_wp)**2.0_wp)                &
+                  & *(vv-(4.0_wp*k-1.0_wp)**2.0_wp)/(k*(2.0_wp*k-1.0_wp)*x2)
                px = px + rp
             enddo
             qx = 1.0_wp
             rq = 1.0_wp
             do k = 1 , k0
-               rq = -0.78125d-2*rq*(vv-(4.0*k-1.0_wp)**2.0_wp)                &
-                  & *(vv-(4.0*k+1.0_wp)**2.0_wp)/(k*(2.0*k+1.0_wp)*x2)
+               rq = -0.78125d-2*rq*(vv-(4.0_wp*k-1.0_wp)**2.0_wp)                &
+                  & *(vv-(4.0_wp*k+1.0_wp)**2.0_wp)/(k*(2.0_wp*k+1.0_wp)*x2)
                qx = qx + rq
             enddo
             qx = 0.125_wp*(vv-1.0_wp)*qx/x
@@ -10703,7 +10728,7 @@
             do k = 1 , 40
                r = -0.25_wp*r*x2/(k*(k-vl))
                vjl = vjl + r
-               if ( abs(r)<1.0d-15 ) exit
+               if ( abs(r)<1.0e-15_wp ) exit
             enddo
             b0 = (2.0_wp/x)**vl
             if ( l==1 ) uj1 = b0*vjl/gn1
@@ -10722,7 +10747,7 @@
             do k = 1 , 40
                r = 0.25_wp*r*x2/(k*(k+vl))
                vil = vil + r
-               if ( abs(r)<1.0d-15 ) exit
+               if ( abs(r)<1.0e-15_wp ) exit
             enddo
             a0 = (0.5_wp*x)**vl
             if ( l==1 ) Vi1 = a0/gp1*vil
@@ -10754,7 +10779,7 @@
             do k = 1 , 60
                r = 0.25_wp*r*x2/(k*(k-vl))
                sum = sum + r
-               if ( abs(r)<1.0d-15 ) exit
+               if ( abs(r)<1.0e-15_wp ) exit
             enddo
             if ( l==1 ) Vk1 = 0.5_wp*uu0*pi*(sum*a0-Vi1)
             if ( l==2 ) Vk2 = 0.5_wp*uu0*pi*(sum*a0-Vi2)
@@ -10766,7 +10791,7 @@
             sum = 1.0_wp
             r = 1.0_wp
             do k = 1 , k0
-               r = 0.125_wp*r*(vv-(2.0*k-1.0_wp)**2.0_wp)/(k*x)
+               r = 0.125_wp*r*(vv-(2.0_wp*k-1.0_wp)**2.0_wp)/(k*x)
                sum = sum + r
             enddo
             if ( l==1 ) Vk1 = c0*sum
@@ -10841,7 +10866,7 @@
          do k = 1 , 50
             cr = 0.25_wp*cr*z2/(k*(k+v0))
             ci0 = ci0 + cr
-            if ( abs(cr/ci0)<1.0d-15 ) exit
+            if ( abs(cr/ci0)<1.0e-15_wp ) exit
          enddo
          cbi0 = ci0*ca1
       else
@@ -10891,7 +10916,7 @@
             cr = 0.25_wp*cr/(k*k)*z2
             cp = cr*(w0+ct)
             cs = cs + cp
-            if ( k>=10 .and. abs(cp/cs)<1.0d-15 ) exit
+            if ( k>=10 .and. abs(cp/cs)<1.0e-15_wp ) exit
          enddo
          cbk0 = ct + cs
       else
@@ -10907,7 +10932,7 @@
             cr2 = 0.25_wp*cr2*z2/(k*(k+v0))
             cp = ca2*cr1 - ca1*cr2
             csu = csu + cp
-            if ( k>=10 .and. abs(cp/csu)<1.0d-15 ) exit
+            if ( k>=10 .and. abs(cp/csu)<1.0e-15_wp ) exit
          enddo
          cbk0 = halfpi*csu/sin(piv)
       endif
@@ -11003,7 +11028,7 @@
          do k = 1 , 50
             cr = 0.25_wp*cr*z2/(k*(k+v0))
             ci0 = ci0 + cr
-            if ( abs(cr)<abs(ci0)*1.0d-15 ) exit
+            if ( abs(cr)<abs(ci0)*1.0e-15_wp ) exit
          enddo
          cbi0 = ci0*ca1
       else
@@ -11053,7 +11078,7 @@
             cr = 0.25_wp*cr/(k*k)*z2
             cp = cr*(w0+ct)
             cs = cs + cp
-            if ( k>=10 .and. abs(cp/cs)<1.0d-15 ) exit
+            if ( k>=10 .and. abs(cp/cs)<1.0e-15_wp ) exit
          enddo
          cbk0 = ct + cs
       else
@@ -11070,7 +11095,7 @@
             cr2 = 0.25_wp*cr2*z2/(k*(k+v0))
             csu = csu + ca2*cr1 - ca1*cr2
             ws = abs(csu)
-            if ( k>=10 .and. abs(ws-ws0)/ws<1.0d-15 ) exit
+            if ( k>=10 .and. abs(ws-ws0)/ws<1.0e-15_wp ) exit
             ws0 = ws
          enddo
          cbk0 = halfpi*csu/sin(piv)
@@ -11157,16 +11182,16 @@
 !          See comment at CFS(), use C(z) = iC(-iz)
          if ( aimag(z)>-real(z,wp) .and. aimag(z)<=real(z,wp) ) then
 !            right quadrant
-            d = dcmplx(0.5_wp,0.0_wp)
+            d = cmplx(0.5_wp,0.0_wp,kind=wp)
          elseif ( aimag(z)>real(z,wp) .and. aimag(z)>=-real(z,wp) ) then
 !            upper quadrant
-            d = dcmplx(0.0_wp,0.5_wp)
+            d = cmplx(0.0_wp,0.5_wp,kind=wp)
          elseif ( aimag(z)<-real(z,wp) .and. aimag(z)>=real(z,wp) ) then
 !            left quadrant
-            d = dcmplx(-0.5_wp,0.0_wp)
+            d = cmplx(-0.5_wp,0.0_wp,kind=wp)
          else
 !            lower quadrant
-            d = dcmplx(0.0_wp,-0.5_wp)
+            d = cmplx(0.0_wp,-0.5_wp,kind=wp)
          endif
          cr = (1.0_wp,0.0_wp)
          cf = (1.0_wp,0.0_wp)
@@ -11196,11 +11221,12 @@
 !       Output:  C --- C(x)
 !                S --- S(x)
 
-      real(wp) c , eps , f , f0 , f1 , g , px , q , r , s ,&
+      real(wp) c , f , f0 , f1 , g , px , q , r , s ,&
                      & su , t , t0 , t2 , x , xa
       integer k , m
 
-      eps = 1.0d-15
+      real(wp),parameter :: eps = 1.0e-15_wp
+
       xa = abs(x)
       px = pi*xa
       t = 0.5_wp*px*xa
@@ -11380,7 +11406,7 @@
          enddo
          gd = (hd-q*fd)/p
          z = z - fd/gd
-         if ( it<=40 .and. abs((z-z0)/z)>1.0d-15 ) goto 50
+         if ( it<=40 .and. abs((z-z0)/z)>1.0e-15_wp ) goto 50
          x(nr) = z
          x(n+1-nr) = -z
          r = 1.0_wp
@@ -11519,7 +11545,7 @@
                      r = -r*x/j
                   enddo
                   s = s + r/(m-l+1.0_wp)
-                  if ( abs(s-s0)<abs(s)*1.0d-15 ) exit
+                  if ( abs(s-s0)<abs(s)*1.0e-15_wp ) exit
                   s0 = s
                endif
             enddo
@@ -11777,7 +11803,7 @@
       real(wp) x , xc , y
       dimension Cqm(0:Mm,0:n) , Cqd(0:Mm,0:n)
 
-      z = dcmplx(x,y)
+      z = cmplx(x,y,kind=wp)
       if ( abs(x)==1.0_wp .and. y==0.0_wp ) then
          do i = 0 , m
             do j = 0 , n
@@ -11905,7 +11931,7 @@
             dk2 = 2*(m+k)
             d2k = 2*m + k
             a(i) = (d2k+2.0_wp)*(d2k+1.0_wp)/((dk2+3.0_wp)*(dk2+5.0_wp))*cs
-            d(i) = dk0*dk1 + (2.0*dk0*dk1-2.0*m*m-1.0_wp)                  &
+            d(i) = dk0*dk1 + (2.0_wp*dk0*dk1-2.0_wp*m*m-1.0_wp)                  &
                  & /((dk2-1.0_wp)*(dk2+3.0_wp))*cs
             g(i) = k*(k-1.0_wp)/((dk2-3.0_wp)*(dk2-1.0_wp))*cs
          enddo
@@ -12046,7 +12072,7 @@
             vt = 4.0_wp*l
             cr = (1.0_wp,0.0_wp)
             do k = 1 , k0
-               cr = 0.125_wp*cr*(vt-(2.0*k-1.0_wp)**2)/(k*z1)
+               cr = 0.125_wp*cr*(vt-(2.0_wp*k-1.0_wp)**2)/(k*z1)
                cbkl = cbkl + cr
             enddo
             Cbk(l) = ca0*cbkl
@@ -12192,6 +12218,7 @@
               & dy2(0:251)
 
       real(wp),parameter :: eps = 1.0e-14_wp
+
       if ( Kf==1 .and. m==2*int(m/2) ) kd = 1
       if ( Kf==1 .and. m/=2*int(m/2) ) kd = 2
       if ( Kf==2 .and. m/=2*int(m/2) ) kd = 3
@@ -12339,14 +12366,14 @@
          do k = 1 , 50
             cr = 0.25_wp*cr*z2/(k*k)
             Cbi0 = Cbi0 + cr
-            if ( abs(cr/Cbi0)<1.0d-15 ) exit
+            if ( abs(cr/Cbi0)<1.0e-15_wp ) exit
          enddo
          Cbi1 = (1.0_wp,0.0_wp)
          cr = (1.0_wp,0.0_wp)
          do k = 1 , 50
             cr = 0.25_wp*cr*z2/(k*(k+1))
             Cbi1 = Cbi1 + cr
-            if ( abs(cr/Cbi1)<1.0d-15 ) exit
+            if ( abs(cr/Cbi1)<1.0e-15_wp ) exit
          enddo
          Cbi1 = 0.5_wp*z1*Cbi1
       else
@@ -12387,7 +12414,7 @@
             w0 = w0 + 1.0_wp/k
             cr = 0.25_wp*cr/(k*k)*z2
             cs = cs + cr*(w0+ct)
-            if ( abs((cs-cw)/cs)<1.0d-15 ) exit
+            if ( abs((cs-cw)/cs)<1.0e-15_wp ) exit
             cw = cs
          enddo
          Cbk0 = ct + cs

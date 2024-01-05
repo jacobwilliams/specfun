@@ -71,7 +71,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 0.6% of total for procedures.">59 statements</a>
+                 title=" 0.6% of total for procedures.">61 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -123,6 +123,12 @@
   
   
   
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/cerf.html#src">cerf</a>
+      </div>
+    </div>
 
 
   </div>
@@ -134,7 +140,7 @@
 </h2>
     
 
-    <p>Compute complex Error function erf(z) &amp; erf'(z)</p>
+    <p>Compute complex Error function <code>erf(z)</code> &amp; <code>erf'(z)</code></p>
 
 
     <h3>Arguments</h3>
@@ -151,46 +157,46 @@
         <tr>
             <td>
               <span class="anchor" id="variable-z~5"></span>
-              complex(kind=wp)
+              complex(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>z</strong></td>
             <td>
-                
+                <p>Complex argument of erf(z)</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-cer"></span>
-              complex(kind=wp)
+              complex(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Cer</strong></td>
             <td>
-                
+                <p><code>erf(z)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-cder"></span>
-              complex(kind=wp)
+              complex(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Cder</strong></td>
             <td>
-                
+                <p><code>erf'(z)</code></p>
             </td>
         </tr>
     </tbody>
@@ -327,6 +333,82 @@ implementation in a submodule of an interface in a parent module.
 
 
     
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="w">   </span><span class="k">subroutine </span><span class="n">cerf</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">Cer</span><span class="p">,</span><span class="n">Cder</span><span class="p">)</span>
+
+<span class="w">      </span><span class="kt">complex</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="c">!! Complex argument of erf(z)</span>
+<span class="w">      </span><span class="kt">complex</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Cer</span><span class="w"> </span><span class="c">!! `erf(z)`</span>
+<span class="w">      </span><span class="kt">complex</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Cder</span><span class="w"> </span><span class="c">!! `erf&#39;(z)`</span>
+
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">c0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">cs</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">ei1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">ei2</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">er</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">er0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">er1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                  </span><span class="n">er2</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">eri</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">err</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">ss</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">w1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">w2</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="p">,&amp;</span>
+<span class="w">                  </span><span class="n">x2</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">y</span>
+<span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">eps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0e-12_wp</span>
+
+<span class="w">      </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">real</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">wp</span><span class="p">)</span>
+<span class="w">      </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">aimag</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="w">      </span><span class="n">x2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">*</span><span class="n">x</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="o">&lt;=</span><span class="mf">3.5_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         </span><span class="n">er</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">         </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">         </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0_wp</span>
+<span class="w">         </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">100</span>
+<span class="w">            </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="o">*</span><span class="n">x2</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mf">0.5_wp</span><span class="p">)</span>
+<span class="w">            </span><span class="n">er</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">er</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">r</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">er</span><span class="o">-</span><span class="n">w</span><span class="p">)</span><span class="o">&lt;=</span><span class="n">eps</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">er</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">exit</span>
+<span class="k">            </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">er</span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">         </span><span class="n">c0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0_wp</span><span class="o">/</span><span class="n">sqrtpi</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x2</span><span class="p">)</span>
+<span class="w">         </span><span class="n">er0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c0</span><span class="o">*</span><span class="n">er</span>
+<span class="w">      </span><span class="k">else</span>
+<span class="k">         </span><span class="n">er</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">         </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">         </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">12</span>
+<span class="w">            </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mf">0.5_wp</span><span class="p">)</span><span class="o">/</span><span class="n">x2</span>
+<span class="w">            </span><span class="n">er</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">er</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">r</span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">         </span><span class="n">c0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">sqrtpi</span><span class="p">)</span>
+<span class="w">         </span><span class="n">er0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">c0</span><span class="o">*</span><span class="n">er</span>
+<span class="w">      </span><span class="k">endif</span>
+<span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">y</span><span class="o">==</span><span class="mf">0.0_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         </span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">er0</span>
+<span class="w">         </span><span class="n">eri</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0_wp</span>
+<span class="w">      </span><span class="k">else</span>
+<span class="k">         </span><span class="n">cs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">cos</span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+<span class="w">         </span><span class="n">ss</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">sin</span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+<span class="w">         </span><span class="n">er1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0_wp</span><span class="o">-</span><span class="n">cs</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">twopi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="w">         </span><span class="n">ei1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x2</span><span class="p">)</span><span class="o">*</span><span class="n">ss</span><span class="o">/</span><span class="p">(</span><span class="n">twopi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="w">         </span><span class="n">er2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0_wp</span>
+<span class="w">         </span><span class="n">w1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0_wp</span>
+<span class="w">         </span><span class="k">do </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">100</span>
+<span class="w">            </span><span class="n">er2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">er2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25_wp</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mf">4.0_wp</span><span class="o">*</span><span class="n">x2</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                  </span><span class="o">*</span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">x</span><span class="o">-</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="nb">cosh</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">cs</span><span class="o">+</span><span class="n">n</span><span class="o">*</span><span class="nb">sinh</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">ss</span><span class="p">)</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="nb">abs</span><span class="p">((</span><span class="n">er2</span><span class="o">-</span><span class="n">w1</span><span class="p">)</span><span class="o">/</span><span class="n">er2</span><span class="p">)</span><span class="o">&lt;</span><span class="n">eps</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">exit</span>
+<span class="k">            </span><span class="n">w1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">er2</span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">         </span><span class="n">c0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0_wp</span><span class="o">*</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x2</span><span class="p">)</span><span class="o">/</span><span class="n">pi</span>
+<span class="w">         </span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">er0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">er1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">c0</span><span class="o">*</span><span class="n">er2</span>
+<span class="w">         </span><span class="n">ei2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0_wp</span>
+<span class="w">         </span><span class="n">w2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0_wp</span>
+<span class="w">         </span><span class="k">do </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">100</span>
+<span class="w">            </span><span class="n">ei2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ei2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25_wp</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mf">4.0_wp</span><span class="o">*</span><span class="n">x2</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                  </span><span class="o">*</span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="nb">cosh</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">ss</span><span class="o">+</span><span class="n">n</span><span class="o">*</span><span class="nb">sinh</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">cs</span><span class="p">)</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="nb">abs</span><span class="p">((</span><span class="n">ei2</span><span class="o">-</span><span class="n">w2</span><span class="p">)</span><span class="o">/</span><span class="n">ei2</span><span class="p">)</span><span class="o">&lt;</span><span class="n">eps</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">exit</span>
+<span class="k">            </span><span class="n">w2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ei2</span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">         </span><span class="n">eri</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ei1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">c0</span><span class="o">*</span><span class="n">ei2</span>
+<span class="w">      </span><span class="k">endif</span>
+<span class="k">      </span><span class="n">Cer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">cmplx</span><span class="p">(</span><span class="n">err</span><span class="p">,</span><span class="n">eri</span><span class="p">,</span><span class="nb">kind</span><span class="o">=</span><span class="n">wp</span><span class="p">)</span>
+<span class="w">      </span><span class="n">Cder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0_wp</span><span class="o">/</span><span class="n">sqrtpi</span><span class="o">*</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">z</span><span class="o">*</span><span class="n">z</span><span class="p">)</span>
+
+<span class="w">   </span><span class="k">end subroutine </span><span class="n">cerf</span>
+</pre></div>
+
+    </section>
+    <br>
     
     </div>
   </div>
