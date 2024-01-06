@@ -1812,7 +1812,7 @@
       integer :: k
 
       real(wp),dimension(25),parameter :: g = [ 1.0_wp , &
-                                                0.5772156649015329_wp , &
+                                                gamma , &
                                                -0.6558780715202538_wp , &
                                                -0.420026350340952e-1_wp , &
                                                 0.1665386113822915_wp , &
@@ -3021,15 +3021,21 @@
 
    subroutine kmn(m,n,c,Cv,Kd,Df,Dn,Ck1,Ck2)
 
-      real(wp) c , Ck1 , Ck2 , cs , Cv , Df , Dn , dnp , g0 ,   &
-                     & gk0 , gk1 , gk2 , gk3 , r , r1 , r2 , r3 , r4 ,  &
-                     & r5 , rk
-      real(wp) sa0 , sb0 , su0 , sw , t , tp , u , v , w
-      integer i , ip , j , k , Kd , l , m , n , nm , nm1 , nn
-      dimension u(200) , v(200) , w(200) , Df(200) , Dn(200) , tp(200) ,&
-              & rk(200)
+      integer :: m
+      integer :: n
+      real(wp) :: c
+      integer :: Kd
+      real(wp),dimension(200) :: Df
+      real(wp),dimension(200) :: Dn
+      real(wp) :: Ck1
+      real(wp) :: Ck2
 
-      nm = 25 + int(0.5*(n-m)+c)
+      real(wp) :: cs , Cv , dnp , g0 , gk0 , gk1 , gk2 , gk3 , &
+                  r , r1 , r2 , r3 , r4 , r5 , rk(200) , sa0 , sb0 , &
+                  su0 , sw , t , tp(200) , u(200) , v(200) , w(200)
+      integer :: i , ip , j , k , l , nm , nm1 , nn
+
+      nm = 25 + int(0.5_wp*(n-m)+c)
       nn = nm + m
       cs = c*c*Kd
       ip = 1
@@ -3083,7 +3089,7 @@
       do k = 2 , nm
          r = r*(m+k-1.0_wp)*(m+k+ip-1.5_wp)/(k-1.0_wp)/(k+ip-1.5_wp)
          su0 = su0 + r*Df(k)
-         if ( k>nm1 .and. abs((su0-sw)/su0)<1.0d-14 ) exit
+         if ( k>nm1 .and. abs((su0-sw)/su0)<1.0e-14_wp ) exit
          sw = su0
       enddo
       if ( Kd/=1 ) then
@@ -3121,61 +3127,66 @@
 !  weighting coefficients for Gauss-Laguerre
 !  integration
 
-      subroutine lagzo(n,x,w)
+   subroutine lagzo(n,x,w)
 
-!       Input :   n    --- Order of the Laguerre polynomial
-!                 X(n) --- Zeros of the Laguerre polynomial
-!                 W(n) --- Corresponding weighting coefficients
+      integer,intent(in) :: n !! Order of the Laguerre polynomial
+      real(wp),dimension(n),intent(out) :: x !! Zeros of the Laguerre polynomial
+      real(wp),dimension(n),intent(out) :: w !! Corresponding weighting coefficients
 
-      real(wp) f0 , f1 , fd , gd , hn , p , pd , pf , q , w ,   &
-                     & wp_ , x , z , z0
-      integer i , it , j , k , n , nr
-      dimension x(n) , w(n)
+      real(wp) :: f0 , f1 , fd , gd , hn , p , pd , pf , q , &
+                  wp_ , z , z0
+      integer :: i , it , j , k , nr
+
+      integer,parameter :: max_iter = 40
 
       hn = 1.0_wp/n
       pf = 0.0_wp
       pd = 0.0_wp
       do nr = 1 , n
          z = hn
-         if ( nr>1 ) z = x(nr-1) + hn*nr**1.27
+         if ( nr>1 ) z = x(nr-1) + hn*nr**1.27_wp
          it = 0
- 50      it = it + 1
-         z0 = z
-         p = 1.0_wp
-         do i = 1 , nr - 1
-            p = p*(z-x(i))
-         enddo
-         f0 = 1.0_wp
-         f1 = 1.0_wp - z
-         do k = 2 , n
-            pf = ((2.0_wp*k-1.0_wp-z)*f1-(k-1.0_wp)*f0)/k
-            pd = k/z*(pf-f1)
-            f0 = f1
-            f1 = pf
-         enddo
-         fd = pf/p
-         q = 0.0_wp
-         do i = 1 , nr - 1
-            wp_ = 1.0_wp
-            do j = 1 , nr - 1
-               if ( j/=i ) wp_ = wp_*(z-x(j))
+         do
+           it = it + 1
+            z0 = z
+            p = 1.0_wp
+            do i = 1 , nr - 1
+               p = p*(z-x(i))
             enddo
-            q = q + wp_
-         enddo
-         gd = (pd-q*fd)/p
-         z = z - fd/gd
-         if ( it<=40 .and. abs((z-z0)/z)>1.0e-15_wp ) goto 50
+            f0 = 1.0_wp
+            f1 = 1.0_wp - z
+            do k = 2 , n
+               pf = ((2.0_wp*k-1.0_wp-z)*f1-(k-1.0_wp)*f0)/k
+               pd = k/z*(pf-f1)
+               f0 = f1
+               f1 = pf
+            enddo
+            fd = pf/p
+            q = 0.0_wp
+            do i = 1 , nr - 1
+               wp_ = 1.0_wp
+               do j = 1 , nr - 1
+                  if ( j/=i ) wp_ = wp_*(z-x(j))
+               enddo
+               q = q + wp_
+            enddo
+            gd = (pd-q*fd)/p
+            z = z - fd/gd
+            if ( it<=max_iter .and. abs((z-z0)/z)>1.0e-15_wp ) cycle
+            exit
+         end do
          x(nr) = z
          w(nr) = 1.0_wp/(z*pd*pd)
       enddo
-      end
+
+   end subroutine lagzo
 
 !*****************************************************************************************
 !>
 !  Compute parabolic cylinder function `Vv(x)`
 !  for large argument
 
-      subroutine vvla(Va,x,Pv)
+   subroutine vvla(Va,x,Pv)
 
       real(wp),intent(in) :: x !! Argument
       real(wp),intent(in) :: Va !! Order
@@ -3204,39 +3215,36 @@
          Pv = dsl*gl/pi*pdl - cos(pi*Va)*Pv
       endif
 
-      end subroutine vvla
+   end subroutine vvla
 
 !*****************************************************************************************
 !>
 !  Compute Bessel functions `Jv(z)`, `Yv(z)` and their
 !  derivatives for a complex argument
 
-      subroutine cjyva(v,z,Vm,Cbj,Cdj,Cby,Cdy)
+   subroutine cjyva(v,z,Vm,Cbj,Cdj,Cby,Cdy)
 
-!       Input :  z --- Complex argument
-!                v --- Order of Jv(z) and Yv(z)
-!                      ( v = n+v0, n = 0,1,2,..., 0 ≤ v0 < 1 )
-!       Output:  CBJ(n) --- Jn+v0(z)
-!                CDJ(n) --- Jn+v0'(z)
-!                CBY(n) --- Yn+v0(z)
-!                CDY(n) --- Yn+v0'(z)
-!                VM --- Highest order computed
+      real(wp),intent(in) :: v !! Order of `Jv(z)` and `Yv(z)`
+                               !! ( `v = n+v0`, `n = 0,1,2,...`, `0 ≤ v0 < 1 `)
+      complex(wp),intent(in) :: z !! Complex argument
+      integer,intent(out) :: Vm !! Highest order computed
+      complex(wp),dimension(0:*),intent(out) :: Cbj !! `CBJ(n)` --- `Jn+v0(z)`
+      complex(wp),dimension(0:*),intent(out) :: Cdj !! `CDJ(n)` --- `Jn+v0'(z)`
+      complex(wp),dimension(0:*),intent(out) :: Cby !! `CBY(n)` --- `Yn+v0(z)`
+      complex(wp),dimension(0:*),intent(out) :: Cdy !! `CDY(n)` --- `Yn+v0'(z)`
 
-      real(wp) a0 , ga , gb , pv0 , pv1 , rp2 , v , v0 ,   &
-                     & vg , vl , Vm , vv , w0 , w1 , wa , ya0 , ya1 ,   &
-                     & yak
-      complex(wp) ca , ca0 , cb , Cbj , Cby , cck , Cdj , Cdy , cec ,    &
-               & cf , cf0 , cf1 , cf2 , cfac0 , cfac1 , cg0 , cg1 ,     &
-               & ch0 , ch1 , ch2
-      complex(wp) ci , cju0 , cju1 , cjv0 , cjv1 , cjvl , cp11 , cp12 ,  &
-               & cp21 , cp22 , cpz , cqz , cr , cr0 , cr1 , crp , crq , &
-               & cs , cs0 , cs1
-      complex(wp) csk , cyk , cyl1 , cyl2 , cylk , cyv0 , cyv1 , z , z1 ,&
-               & z2 , zk
-      integer j , k , k0 , l , lb , lb0 , m , n
-      dimension Cbj(0:*) , Cdj(0:*) , Cby(0:*) , Cdy(0:*)
+      real(wp) :: a0 , ga , gb , pv0 , pv1 , v0 , vg , vl , &
+                  vv , w0 , w1 , wa , ya0 , ya1 , yak
+      complex(wp) :: ca , ca0 , cb , cck , cec , &
+                     cf , cf0 , cf1 , cf2 , cfac0 , cfac1 , cg0 , cg1 , &
+                     ch0 , ch1 , ch2 , ci , cju0 , cju1 , cjv0 , cjv1 , &
+                     cjvl , cp11 , cp12 , cp21 , cp22 , cpz , cqz , cr , &
+                     cr0 , cr1 , crp , crq , cs , cs0 , cs1 , csk , cyk , &
+                     cyl1 , cyl2 , cylk , cyv0 , cyv1 , z1 , z2 , zk
+      integer :: j , k , k0 , l , lb , lb0 , m , n
 
-      rp2 = .63661977236758e0_wp
+      real(wp),parameter :: rp2 = 2.0_wp / pi ! 0.63661977236758d0
+
       ci = (0.0_wp,1.0_wp)
       a0 = abs(z)
       z1 = z
@@ -3288,14 +3296,14 @@
             cpz = (1.0_wp,0.0_wp)
             crp = (1.0_wp,0.0_wp)
             do k = 1 , k0
-               crp = -0.78125d-2*crp*(vv-(4.0_wp*k-3.0_wp)**2.0_wp)              &
-                   & *(vv-(4.0_wp*k-1.0_wp)**2.0_wp)/(k*(2.0_wp*k-1.0_wp)*z2)
+               crp = -0.78125e-2_wp*crp*(vv-(4.0_wp*k-3.0_wp)**2.0_wp) &
+                     *(vv-(4.0_wp*k-1.0_wp)**2.0_wp)/(k*(2.0_wp*k-1.0_wp)*z2)
                cpz = cpz + crp
             enddo
             cqz = (1.0_wp,0.0_wp)
             crq = (1.0_wp,0.0_wp)
             do k = 1 , k0
-               crq = -0.78125d-2*crq*(vv-(4.0_wp*k-1.0_wp)**2.0_wp)              &
+               crq = -0.78125e-2_wp*crq*(vv-(4.0_wp*k-1.0_wp)**2.0_wp) &
                    & *(vv-(4.0_wp*k+1.0_wp)**2.0_wp)/(k*(2.0_wp*k+1.0_wp)*z2)
                cqz = cqz + crq
             enddo
@@ -3333,7 +3341,7 @@
             cyv0 = (cjv0*cos(pv0)-cju0)/sin(pv0)
             cyv1 = (cjv1*cos(pv1)-cju1)/sin(pv1)
          else
-            cec = log(z1/2.0_wp) + .5772156649015329d0
+            cec = log(z1/2.0_wp) + gamma ! 0.5772156649015329
             cs0 = (0.0_wp,0.0_wp)
             w0 = 0.0_wp
             cr0 = (1.0_wp,0.0_wp)
@@ -3413,7 +3421,7 @@
       cg1 = cyv1
       do k = 2 , n
          cyk = 2.0_wp*(v0+k-1.0_wp)/z*cg1 - cg0
-         if ( abs(cyk)<=1.0d+290 ) then
+         if ( abs(cyk)<=1.0e+290_wp ) then
             yak = abs(cyk)
             ya1 = abs(cg0)
             if ( yak<ya0 .and. yak<ya1 ) lb = k
@@ -3423,70 +3431,74 @@
          endif
       enddo
       if ( lb>4 .and. aimag(z)/=0.0_wp ) then
- 50      if ( lb/=lb0 ) then
-            ch2 = (1.0_wp,0.0_wp)
-            ch1 = (0.0_wp,0.0_wp)
-            lb0 = lb
-            do k = lb , 1 , -1
-               ch0 = 2.0_wp*(k+v0)/z*ch1 - ch2
-               ch2 = ch1
-               ch1 = ch0
-            enddo
-            cp12 = ch0
-            cp22 = ch2
-            ch2 = (0.0_wp,0.0_wp)
-            ch1 = (1.0_wp,0.0_wp)
-            do k = lb , 1 , -1
-               ch0 = 2.0_wp*(k+v0)/z*ch1 - ch2
-               ch2 = ch1
-               ch1 = ch0
-            enddo
-            cp11 = ch0
-            cp21 = ch2
-            if ( lb==n ) Cbj(lb+1) = 2.0_wp*(lb+v0)/z*Cbj(lb) - Cbj(lb-1)
-            if ( abs(Cbj(0))>abs(Cbj(1)) ) then
-               Cby(lb+1) = (Cbj(lb+1)*cyv0-2.0_wp*cp11/(pi*z))/Cbj(0)
-               Cby(lb) = (Cbj(lb)*cyv0+2.0_wp*cp12/(pi*z))/Cbj(0)
+         do
+           if ( lb/=lb0 ) then
+               ch2 = (1.0_wp,0.0_wp)
+               ch1 = (0.0_wp,0.0_wp)
+               lb0 = lb
+               do k = lb , 1 , -1
+                  ch0 = 2.0_wp*(k+v0)/z*ch1 - ch2
+                  ch2 = ch1
+                  ch1 = ch0
+               enddo
+               cp12 = ch0
+               cp22 = ch2
+               ch2 = (0.0_wp,0.0_wp)
+               ch1 = (1.0_wp,0.0_wp)
+               do k = lb , 1 , -1
+                  ch0 = 2.0_wp*(k+v0)/z*ch1 - ch2
+                  ch2 = ch1
+                  ch1 = ch0
+               enddo
+               cp11 = ch0
+               cp21 = ch2
+               if ( lb==n ) Cbj(lb+1) = 2.0_wp*(lb+v0)/z*Cbj(lb) - Cbj(lb-1)
+               if ( abs(Cbj(0))>abs(Cbj(1)) ) then
+                  Cby(lb+1) = (Cbj(lb+1)*cyv0-2.0_wp*cp11/(pi*z))/Cbj(0)
+                  Cby(lb) = (Cbj(lb)*cyv0+2.0_wp*cp12/(pi*z))/Cbj(0)
+               else
+                  Cby(lb+1) = (Cbj(lb+1)*cyv1-2.0_wp*cp21/(pi*z))/Cbj(1)
+                  Cby(lb) = (Cbj(lb)*cyv1+2.0_wp*cp22/(pi*z))/Cbj(1)
+               endif
+               cyl2 = Cby(lb+1)
+               cyl1 = Cby(lb)
+               do k = lb - 1 , 0 , -1
+                  cylk = 2.0_wp*(k+v0+1.0_wp)/z*cyl1 - cyl2
+                  Cby(k) = cylk
+                  cyl2 = cyl1
+                  cyl1 = cylk
+               enddo
+               cyl1 = Cby(lb)
+               cyl2 = Cby(lb+1)
+               do k = lb + 1 , n - 1
+                  cylk = 2.0_wp*(k+v0)/z*cyl2 - cyl1
+                  Cby(k+1) = cylk
+                  cyl1 = cyl2
+                  cyl2 = cylk
+               enddo
+               do k = 2 , n
+                  wa = abs(Cby(k))
+                  if ( wa<abs(Cby(k-1)) ) lb = k
+               enddo
             else
-               Cby(lb+1) = (Cbj(lb+1)*cyv1-2.0_wp*cp21/(pi*z))/Cbj(1)
-               Cby(lb) = (Cbj(lb)*cyv1+2.0_wp*cp22/(pi*z))/Cbj(1)
+               exit
             endif
-            cyl2 = Cby(lb+1)
-            cyl1 = Cby(lb)
-            do k = lb - 1 , 0 , -1
-               cylk = 2.0_wp*(k+v0+1.0_wp)/z*cyl1 - cyl2
-               Cby(k) = cylk
-               cyl2 = cyl1
-               cyl1 = cylk
-            enddo
-            cyl1 = Cby(lb)
-            cyl2 = Cby(lb+1)
-            do k = lb + 1 , n - 1
-               cylk = 2.0_wp*(k+v0)/z*cyl2 - cyl1
-               Cby(k+1) = cylk
-               cyl1 = cyl2
-               cyl2 = cylk
-            enddo
-            do k = 2 , n
-               wa = abs(Cby(k))
-               if ( wa<abs(Cby(k-1)) ) lb = k
-            enddo
-            goto 50
-         endif
+         end do
       endif
       Cdy(0) = v0/z*Cby(0) - Cby(1)
       do k = 1 , n
          Cdy(k) = Cby(k-1) - (k+v0)/z*Cby(k)
       enddo
       Vm = n + v0
-      end
+
+   end subroutine cjyva
 
 !*****************************************************************************************
 !>
 !  Compute Bessel functions Jv(z), Yv(z) and their
 !  derivatives for a complex argument
 
-      subroutine cjyvb(v,z,Vm,Cbj,Cdj,Cby,Cdy)
+   subroutine cjyvb(v,z,Vm,Cbj,Cdj,Cby,Cdy)
 
 !       Input :  z --- Complex argument
 !                v --- Order of Jv(z) and Yv(z)
@@ -3586,7 +3598,7 @@
             cju0 = cjvn*cb
             cyv0 = (cjv0*cos(pv0)-cju0)/sin(pv0)
          else
-            cec = log(z1/2.0_wp) + .5772156649015329d0
+            cec = log(z1/2.0_wp) + gamma
             cs0 = (0.0_wp,0.0_wp)
             w0 = 0.0_wp
             cr0 = (1.0_wp,0.0_wp)
@@ -3647,7 +3659,8 @@
          Cdy(k) = Cby(k-1) - (k+v0)/z*Cby(k)
       enddo
       Vm = n + v0
-      end
+
+   end subroutine cjyvb
 
 !*****************************************************************************************
 !>
@@ -3703,7 +3716,7 @@
             if ( abs(r)<abs(Bj1)*1.0e-15_wp ) exit
          enddo
          Bj1 = 0.5_wp*x*Bj1
-         ec = log(x/2.0_wp) + 0.5772156649015329d0
+         ec = log(x/2.0_wp) + gamma
          cs0 = 0.0_wp
          w0 = 0.0_wp
          r0 = 1.0_wp
@@ -4271,7 +4284,7 @@
 !          Estimates for Yn at start of recurrence
          bj0 = f1/s0
          bj1 = f2/s0
-         ec = log(x/2.0_wp) + 0.5772156649015329d0
+         ec = log(x/2.0_wp) + gamma
          by0 = r2p*(ec*bj0-4.0_wp*su/s0)
          by1 = r2p*((ec-1.0_wp)*bj1-bj0/x-4.0_wp*sv/s0)
          if ( 0>=Nmin ) By(0-Nmin) = by0
@@ -4791,7 +4804,7 @@
          else
             z = x
          endif
-         data g/1.0_wp , 0.5772156649015329d0 , -0.6558780715202538d0 ,  &
+         data g/1.0_wp , gamma , -0.6558780715202538d0 ,  &
             & -0.420026350340952d-1 , 0.1665386113822915d0 ,            &
             & -.421977345555443d-1 , -.96219715278770d-2 ,              &
             & .72189432466630d-2 , -.11651675918591d-2 ,                &
@@ -10456,7 +10469,7 @@
          enddo
          bk0 = cb*sum
       elseif ( v0==0.0_wp ) then
-         ct = -log(0.5_wp*x) - 0.5772156649015329d0
+         ct = -log(0.5_wp*x) - gamma
          cs = 0.0_wp
          w0 = 0.0_wp
          r = 1.0_wp
@@ -10920,7 +10933,7 @@
          enddo
          cbk0 = cb*cs
       elseif ( v0==0.0_wp ) then
-         ct = -log(0.5_wp*z1) - 0.5772156649015329d0
+         ct = -log(0.5_wp*z1) - gamma
          cs = (0.0_wp,0.0_wp)
          w0 = 0.0_wp
          cr = (1.0_wp,0.0_wp)
@@ -11082,7 +11095,7 @@
          enddo
          cbk0 = cb*cs
       elseif ( v0==0.0_wp ) then
-         ct = -log(0.5_wp*z1) - 0.5772156649015329d0
+         ct = -log(0.5_wp*z1) - gamma
          cs = (0.0_wp,0.0_wp)
          w0 = 0.0_wp
          cr = (1.0_wp,0.0_wp)
@@ -12420,7 +12433,7 @@
       endif
       if ( a0<=9.0_wp ) then
          cs = (0.0_wp,0.0_wp)
-         ct = -log(0.5_wp*z1) - 0.5772156649015329d0
+         ct = -log(0.5_wp*z1) - gamma
          w0 = 0.0_wp
          cr = (1.0_wp,0.0_wp)
          do k = 1 , 50
