@@ -71,7 +71,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="100.0% of total for modules and submodules.">9749 statements</a>
+                 title="100.0% of total for modules and submodules.">9770 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -4099,46 +4099,46 @@ Mathieu functions</p>
         <tr>
             <td>
               <span class="anchor" id="variable-kd~7"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Kd</strong></td>
             <td>
-
+<p>Case code:</p><a href="../proc/cva1.html#variable-kd~7" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-m~23"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>m</strong></td>
             <td>
-
+<p>Maximum order of Mathieu functions</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-q~6"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>q</strong></td>
             <td>
-
+<p>Parameter of Mathieu functions</p>
             </td>
         </tr>
         <tr>
@@ -4146,14 +4146,14 @@ Mathieu functions</p>
               <span class="anchor" id="variable-cv~3"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
-              dimension(200)
+              
             </td>
             <td>::</td>
-            <td><strong>Cv</strong></td>
+            <td><strong>Cv</strong>(200)</td>
             <td>
-
+<p>CV(I) --- Characteristic values; I = 1,2,3,...</p><a href="../proc/cva1.html#variable-cv~3" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
     </tbody>
@@ -4185,46 +4185,46 @@ to x, and K0(t)/t with respect to t from x to ∞</p>
         <tr>
             <td>
               <span class="anchor" id="variable-x~25"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-
+<p>Variable in the limits  ( x ≥ 0 )</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-tti"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Tti</strong></td>
             <td>
-
+<p>Integration of [I0(t)-1]/t from 0 to x</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-ttk"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Ttk</strong></td>
             <td>
-
+<p>Integration of K0(t)/t from x to ∞</p>
             </td>
         </tr>
     </tbody>
@@ -4239,7 +4239,7 @@ to x, and K0(t)/t with respect to t from x to ∞</p>
 </h3></div>
     <div class="card-body">
           
-  <p>Compute Legendre functions Qn(x) &amp; Qn'(x)</p>
+  <p>Compute Legendre functions <code>Qn(x)</code> &amp; <code>Qn'(x)</code></p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -4255,31 +4255,31 @@ to x, and K0(t)/t with respect to t from x to ∞</p>
         <tr>
             <td>
               <span class="anchor" id="variable-n~21"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>n</strong></td>
             <td>
-
+<p>Degree of Qn(x)  ( n = 0,1,2,…)</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-x~26"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-
+<p>Argument of Qn(x)</p>
             </td>
         </tr>
         <tr>
@@ -4287,14 +4287,14 @@ to x, and K0(t)/t with respect to t from x to ∞</p>
               <span class="anchor" id="variable-qn"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
-              dimension(0:n)
+              
             </td>
             <td>::</td>
-            <td><strong>Qn</strong></td>
+            <td><strong>Qn</strong>(0:n)</td>
             <td>
-
+<p>Qn(x)</p>
             </td>
         </tr>
         <tr>
@@ -4302,14 +4302,14 @@ to x, and K0(t)/t with respect to t from x to ∞</p>
               <span class="anchor" id="variable-qd~2"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
-              dimension(0:n)
+              
             </td>
             <td>::</td>
-            <td><strong>Qd</strong></td>
+            <td><strong>Qd</strong>(0:n)</td>
             <td>
-
+<p>Qn'(x)</p>
             </td>
         </tr>
     </tbody>
@@ -4342,16 +4342,16 @@ with large orders</p>
         <tr>
             <td>
               <span class="anchor" id="variable-km"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Km</strong></td>
             <td>
-
+<p>Maximum k</p>
             </td>
         </tr>
         <tr>
@@ -4359,14 +4359,15 @@ with large orders</p>
               <span class="anchor" id="variable-a~5"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out),</td>
               <td></td>            <td>
               dimension(*)
             </td>
             <td>::</td>
             <td><strong>a</strong></td>
             <td>
-
+<p>A(L) --- Cj(k) where j and k are related to L
+by L=j+1+[k*(k+1)]/2; j,k=0,1,...,Km</p>
             </td>
         </tr>
     </tbody>
@@ -4398,46 +4399,46 @@ to x, and K0(t)/t with respect to t from x to ∞</p>
         <tr>
             <td>
               <span class="anchor" id="variable-x~27"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-
+<p>Variable in the limits  ( x ≥ 0 )</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-tti~2"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Tti</strong></td>
             <td>
-
+<p>Integration of [I0(t)-1]/t from 0 to x</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-ttk~2"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Ttk</strong></td>
             <td>
-
+<p>Integration of K0(t)/t from x to ∞</p>
             </td>
         </tr>
     </tbody>
@@ -4448,12 +4449,12 @@ to x, and K0(t)/t with respect to t from x to ∞</p>
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-lamv"></span> <h3>public  subroutine <a href='../proc/lamv.html'>lamv</a>(v, x, Vm, Vl, Dl)  
+    <div class="card-header codesum"><span class="anchor" id="proc-lamv"></span> <h3>public  subroutine <a href='../proc/lamv.html'>lamv</a>(v, xi, Vm, Vl, Dl)  
 </h3></div>
     <div class="card-body">
           
-  <p>Compute lambda function with arbitrary order v,
-and their derivative</p>
+  <p>Compute lambda function with arbitrary order <code>v</code>,
+  and their derivative</p><a href="../proc/lamv.html" class="pull-right"><emph>Read more&hellip;</emph></a>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -4469,46 +4470,46 @@ and their derivative</p>
         <tr>
             <td>
               <span class="anchor" id="variable-v~3"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>v</strong></td>
             <td>
-
+<p>Order of lambda function</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~28"></span>
-              real(kind=wp)
+              <span class="anchor" id="variable-xi"></span>
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
-            <td><strong>x</strong></td>
+            <td><strong>xi</strong></td>
             <td>
-
+<p>Argument of lambda function</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-vm"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Vm</strong></td>
             <td>
-
+<p>Highest order computed</p>
             </td>
         </tr>
         <tr>
@@ -4516,14 +4517,14 @@ and their derivative</p>
               <span class="anchor" id="variable-vl"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out),</td>
               <td></td>            <td>
               dimension(0:*)
             </td>
             <td>::</td>
             <td><strong>Vl</strong></td>
             <td>
-
+<p>Lambda function of order <code>n+v0</code></p>
             </td>
         </tr>
         <tr>
@@ -4531,14 +4532,14 @@ and their derivative</p>
               <span class="anchor" id="variable-dl"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out),</td>
               <td></td>            <td>
               dimension(0:*)
             </td>
             <td>::</td>
             <td><strong>Dl</strong></td>
             <td>
-
+<p>Derivative of lambda function</p>
             </td>
         </tr>
     </tbody>
@@ -4570,76 +4571,76 @@ using Gaussian-Legendre integration (n=60)</p>
         <tr>
             <td>
               <span class="anchor" id="variable-a~6"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>a</strong></td>
             <td>
-
+<p>Parameter ( <code>a &gt; 0</code> )</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-b"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>b</strong></td>
             <td>
-
+<p>Parameter</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-x~29"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-
+<p>Argument ( <code>x &gt; 0</code> )</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-hu"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Hu</strong></td>
             <td>
-
+<p><code>U(a,b,z)</code></p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-id~2"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Id</strong></td>
             <td>
-
+<p>Estimated number of significant digits</p>
             </td>
         </tr>
     </tbody>

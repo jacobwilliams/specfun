@@ -71,7 +71,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title=" 1.3% of total for procedures.">124 statements</a>
+                 title=" 1.3% of total for procedures.">127 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -123,6 +123,12 @@
   
   
   
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/lamv.html#src">lamv</a>
+      </div>
+    </div>
 
 
   </div>
@@ -130,12 +136,16 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>public  subroutine lamv(v, x, Vm, Vl, Dl)  
+    <h2>public  subroutine lamv(v, xi, Vm, Vl, Dl)  
 </h2>
     
 
-    <p>Compute lambda function with arbitrary order v,
-and their derivative</p>
+    <p>Compute lambda function with arbitrary order <code>v</code>,
+  and their derivative</p>
+<div class="alert alert-info">
+<p class="alert-title h4">Note</p>
+<p>In the original version of this routine, <code>x</code> was returned modified as <code>x = abs(x)</code>.</p>
+</div>
 
 
     <h3>Arguments</h3>
@@ -152,46 +162,46 @@ and their derivative</p>
         <tr>
             <td>
               <span class="anchor" id="variable-v~3"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>v</strong></td>
             <td>
-                
+                <p>Order of lambda function</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~28"></span>
-              real(kind=wp)
+              <span class="anchor" id="variable-xi"></span>
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
-            <td><strong>x</strong></td>
+            <td><strong>xi</strong></td>
             <td>
-                
+                <p>Argument of lambda function</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-vm"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Vm</strong></td>
             <td>
-                
+                <p>Highest order computed</p>
             </td>
         </tr>
         <tr>
@@ -199,14 +209,14 @@ and their derivative</p>
               <span class="anchor" id="variable-vl"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out),</td>
               <td></td>            <td>
               dimension(0:*)
             </td>
             <td>::</td>
             <td><strong>Vl</strong></td>
             <td>
-                
+                <p>Lambda function of order <code>n+v0</code></p>
             </td>
         </tr>
         <tr>
@@ -214,14 +224,14 @@ and their derivative</p>
               <span class="anchor" id="variable-dl"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out),</td>
               <td></td>            <td>
               dimension(0:*)
             </td>
             <td>::</td>
             <td><strong>Dl</strong></td>
             <td>
-                
+                <p>Derivative of lambda function</p>
             </td>
         </tr>
     </tbody>
@@ -409,6 +419,148 @@ implementation in a submodule of an interface in a parent module.
 
 
     
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="w">   </span><span class="k">subroutine </span><span class="n">lamv</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">Vm</span><span class="p">,</span><span class="n">Vl</span><span class="p">,</span><span class="n">Dl</span><span class="p">)</span>
+
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="c">!! Order of lambda function</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xi</span><span class="w"> </span><span class="c">!! Argument of lambda function</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Vm</span><span class="w"> </span><span class="c">!! Highest order computed</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="o">*</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Vl</span><span class="w"> </span><span class="c">!! Lambda function of order `n+v0`</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="o">*</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Dl</span><span class="w"> </span><span class="c">!! Derivative of lambda function</span>
+
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">bjv0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">bjv1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">bk</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">ck</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">cs</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">f0</span><span class="w"> </span><span class="p">,</span><span class="w">  </span><span class="p">&amp;</span>
+<span class="w">                  </span><span class="n">f1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">f2</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">fac</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">ga</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">px</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">qx</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">r0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">rc</span><span class="w"> </span><span class="p">,&amp;</span>
+<span class="w">                  </span><span class="n">rp</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">rq</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">sk</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">uk</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">v0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">vk</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">vv</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">x2</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">xk</span>
+<span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">k0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rp2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0_wp</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">pi</span><span class="w"> </span><span class="c">! 0.63661977236758d0</span>
+
+<span class="w">      </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
+<span class="w">      </span><span class="n">x2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">*</span><span class="n">x</span>
+<span class="w">      </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<span class="w">      </span><span class="n">v0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">n</span>
+<span class="w">      </span><span class="n">Vm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="o">&lt;=</span><span class="mi">1</span><span class="mf">2.0_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<span class="w">            </span><span class="n">vk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">k</span>
+<span class="w">            </span><span class="n">bk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">            </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">            </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">50</span>
+<span class="w">               </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">0.25_wp</span><span class="o">*</span><span class="n">r</span><span class="o">*</span><span class="n">x2</span><span class="o">/</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">vk</span><span class="p">))</span>
+<span class="w">               </span><span class="n">bk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bk</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">r</span>
+<span class="w">               </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">&lt;</span><span class="nb">abs</span><span class="p">(</span><span class="n">bk</span><span class="p">)</span><span class="o">*</span><span class="mf">1.0e-15_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">exit</span>
+<span class="k">            enddo</span>
+<span class="k">            </span><span class="n">Vl</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bk</span>
+<span class="w">            </span><span class="n">uk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">            </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">            </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">50</span>
+<span class="w">               </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">0.25_wp</span><span class="o">*</span><span class="n">r</span><span class="o">*</span><span class="n">x2</span><span class="o">/</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">vk</span><span class="o">+</span><span class="mf">1.0_wp</span><span class="p">))</span>
+<span class="w">               </span><span class="n">uk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uk</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">r</span>
+<span class="w">               </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">&lt;</span><span class="nb">abs</span><span class="p">(</span><span class="n">uk</span><span class="p">)</span><span class="o">*</span><span class="mf">1.0e-15_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">exit</span>
+<span class="k">            enddo</span>
+<span class="k">            </span><span class="n">Dl</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">0.5_wp</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="p">(</span><span class="n">vk</span><span class="o">+</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">*</span><span class="n">uk</span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">         return</span>
+<span class="k">      endif</span>
+<span class="k">      </span><span class="n">k0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="o">&gt;=</span><span class="mi">3</span><span class="mf">5.0_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="n">k0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="o">&gt;=</span><span class="mi">5</span><span class="mf">0.0_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="n">k0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span>
+<span class="w">      </span><span class="n">bjv0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0_wp</span>
+<span class="w">      </span><span class="n">bjv1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0_wp</span>
+<span class="w">      </span><span class="k">do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">         </span><span class="n">vv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">4.0_wp</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="n">v0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="n">v0</span><span class="p">)</span>
+<span class="w">         </span><span class="n">px</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">         </span><span class="n">rp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">         </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">k0</span>
+<span class="w">            </span><span class="n">rp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">0.78125e-2_wp</span><span class="o">*</span><span class="n">rp</span><span class="o">*</span><span class="p">(</span><span class="n">vv</span><span class="o">-</span><span class="p">(</span><span class="mf">4.0_wp</span><span class="o">*</span><span class="n">k</span><span class="o">-</span><span class="mf">3.0_wp</span><span class="p">)</span><span class="o">**</span><span class="mf">2.0_wp</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                 </span><span class="o">*</span><span class="p">(</span><span class="n">vv</span><span class="o">-</span><span class="p">(</span><span class="mf">4.0_wp</span><span class="o">*</span><span class="n">k</span><span class="o">-</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">**</span><span class="mf">2.0_wp</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">k</span><span class="o">-</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="p">)</span>
+<span class="w">            </span><span class="n">px</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">px</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">rp</span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">         </span><span class="n">qx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">         </span><span class="n">rq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">         </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">k0</span>
+<span class="w">            </span><span class="n">rq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">0.78125e-2_wp</span><span class="o">*</span><span class="n">rq</span><span class="o">*</span><span class="p">(</span><span class="n">vv</span><span class="o">-</span><span class="p">(</span><span class="mf">4.0_wp</span><span class="o">*</span><span class="n">k</span><span class="o">-</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">**</span><span class="mf">2.0_wp</span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                 </span><span class="o">*</span><span class="p">(</span><span class="n">vv</span><span class="o">-</span><span class="p">(</span><span class="mf">4.0_wp</span><span class="o">*</span><span class="n">k</span><span class="o">+</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">**</span><span class="mf">2.0_wp</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">*</span><span class="n">k</span><span class="o">+</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="p">)</span>
+<span class="w">            </span><span class="n">qx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">rq</span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">         </span><span class="n">qx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.125_wp</span><span class="o">*</span><span class="p">(</span><span class="n">vv</span><span class="o">-</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">*</span><span class="n">qx</span><span class="o">/</span><span class="n">x</span>
+<span class="w">         </span><span class="n">xk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="mf">0.5_wp</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="n">v0</span><span class="p">)</span><span class="o">+</span><span class="mf">0.25_wp</span><span class="p">)</span><span class="o">*</span><span class="n">pi</span>
+<span class="w">         </span><span class="n">a0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">sqrt</span><span class="p">(</span><span class="n">rp2</span><span class="o">/</span><span class="n">x</span><span class="p">)</span>
+<span class="w">         </span><span class="n">ck</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">cos</span><span class="p">(</span><span class="n">xk</span><span class="p">)</span>
+<span class="w">         </span><span class="n">sk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">sin</span><span class="p">(</span><span class="n">xk</span><span class="p">)</span>
+<span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">j</span><span class="o">==</span><span class="mi">0</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="n">bjv0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a0</span><span class="o">*</span><span class="p">(</span><span class="n">px</span><span class="o">*</span><span class="n">ck</span><span class="o">-</span><span class="n">qx</span><span class="o">*</span><span class="n">sk</span><span class="p">)</span>
+<span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">j</span><span class="o">==</span><span class="mi">1</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="n">bjv1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a0</span><span class="o">*</span><span class="p">(</span><span class="n">px</span><span class="o">*</span><span class="n">ck</span><span class="o">-</span><span class="n">qx</span><span class="o">*</span><span class="n">sk</span><span class="p">)</span>
+<span class="w">      </span><span class="k">enddo</span>
+<span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">v0</span><span class="o">==</span><span class="mf">0.0_wp</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         </span><span class="n">ga</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span>
+<span class="w">      </span><span class="k">else</span>
+<span class="k">         call </span><span class="n">gam0</span><span class="p">(</span><span class="n">v0</span><span class="p">,</span><span class="n">ga</span><span class="p">)</span>
+<span class="w">         </span><span class="n">ga</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v0</span><span class="o">*</span><span class="n">ga</span>
+<span class="w">      </span><span class="k">endif</span>
+<span class="k">      </span><span class="n">fac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">2.0_wp</span><span class="o">/</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="n">v0</span><span class="o">*</span><span class="n">ga</span>
+<span class="w">      </span><span class="n">Vl</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bjv0</span>
+<span class="w">      </span><span class="n">Dl</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">bjv1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">v0</span><span class="o">/</span><span class="n">x</span><span class="o">*</span><span class="n">bjv0</span>
+<span class="w">      </span><span class="n">Vl</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bjv1</span>
+<span class="w">      </span><span class="n">Dl</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bjv0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0_wp</span><span class="o">+</span><span class="n">v0</span><span class="p">)</span><span class="o">/</span><span class="n">x</span><span class="o">*</span><span class="n">bjv1</span>
+<span class="w">      </span><span class="n">r0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0_wp</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0_wp</span><span class="o">+</span><span class="n">v0</span><span class="p">)</span><span class="o">/</span><span class="n">x</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">n</span><span class="o">&lt;=</span><span class="mi">1</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         </span><span class="n">Vl</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fac</span><span class="o">*</span><span class="n">Vl</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="w">         </span><span class="n">Dl</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fac</span><span class="o">*</span><span class="n">Dl</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">v0</span><span class="o">/</span><span class="n">x</span><span class="o">*</span><span class="n">Vl</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="w">         </span><span class="n">Vl</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fac</span><span class="o">*</span><span class="n">r0</span><span class="o">*</span><span class="n">Vl</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">         </span><span class="n">Dl</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fac</span><span class="o">*</span><span class="n">r0</span><span class="o">*</span><span class="n">Dl</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0_wp</span><span class="o">+</span><span class="n">v0</span><span class="p">)</span><span class="o">/</span><span class="n">x</span><span class="o">*</span><span class="n">Vl</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">         </span><span class="k">return</span>
+<span class="k">      endif</span>
+<span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">n</span><span class="o">&gt;=</span><span class="mi">2</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="n">n</span><span class="o">&lt;=</span><span class="nb">int</span><span class="p">(</span><span class="mf">0.9_wp</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         </span><span class="n">f0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bjv0</span>
+<span class="w">         </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bjv1</span>
+<span class="w">         </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<span class="w">            </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0_wp</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="n">v0</span><span class="o">-</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">/</span><span class="n">x</span><span class="o">*</span><span class="n">f1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">f0</span>
+<span class="w">            </span><span class="n">f0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1</span>
+<span class="w">            </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span>
+<span class="w">            </span><span class="n">Vl</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">      elseif</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">n</span><span class="o">&gt;=</span><span class="mi">2</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">msta1</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span>
+<span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">m</span><span class="o">&lt;</span><span class="n">n</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span>
+<span class="w">         </span><span class="k">else</span>
+<span class="k">            </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">msta2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
+<span class="w">         </span><span class="k">endif</span>
+<span class="k">         </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0_wp</span>
+<span class="w">         </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0_wp</span>
+<span class="w">         </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0e-100_wp</span>
+<span class="w">         </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">            </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0_wp</span><span class="o">*</span><span class="p">(</span><span class="n">v0</span><span class="o">+</span><span class="n">k</span><span class="o">+</span><span class="mf">1.0_wp</span><span class="p">)</span><span class="o">/</span><span class="n">x</span><span class="o">*</span><span class="n">f1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">f2</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">k</span><span class="o">&lt;=</span><span class="n">n</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="n">Vl</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span>
+<span class="w">            </span><span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1</span>
+<span class="w">            </span><span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">         </span><span class="n">cs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0_wp</span>
+<span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">bjv0</span><span class="p">)</span><span class="o">&gt;</span><span class="nb">abs</span><span class="p">(</span><span class="n">bjv1</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            </span><span class="n">cs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bjv0</span><span class="o">/</span><span class="n">f</span>
+<span class="w">         </span><span class="k">else</span>
+<span class="k">            </span><span class="n">cs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bjv1</span><span class="o">/</span><span class="n">f2</span>
+<span class="w">         </span><span class="k">endif</span>
+<span class="k">         do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<span class="w">            </span><span class="n">Vl</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cs</span><span class="o">*</span><span class="n">Vl</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<span class="w">         </span><span class="k">enddo</span>
+<span class="k">      endif</span>
+<span class="k">      </span><span class="n">Vl</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fac</span><span class="o">*</span><span class="n">Vl</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="w">      </span><span class="k">do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<span class="w">         </span><span class="n">rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fac</span><span class="o">*</span><span class="n">r0</span>
+<span class="w">         </span><span class="n">Vl</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rc</span><span class="o">*</span><span class="n">Vl</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+<span class="w">         </span><span class="n">Dl</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">0.5_wp</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="n">v0</span><span class="p">)</span><span class="o">*</span><span class="n">Vl</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+<span class="w">         </span><span class="n">r0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0_wp</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="n">v0</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">x</span><span class="o">*</span><span class="n">r0</span>
+<span class="w">      </span><span class="k">enddo</span>
+<span class="k">      </span><span class="n">Dl</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0_wp</span><span class="o">*</span><span class="p">(</span><span class="n">v0</span><span class="o">+</span><span class="n">n</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">Vl</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="n">Vl</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="o">/</span><span class="n">x</span>
+<span class="w">      </span><span class="n">Vm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">v0</span>
+
+<span class="w">   </span><span class="k">end subroutine </span><span class="n">lamv</span>
+</pre></div>
+
+    </section>
+    <br>
     
     </div>
   </div>
