@@ -71,7 +71,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="100.0% of total for modules and submodules.">9770 statements</a>
+                 title="100.0% of total for modules and submodules.">9789 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -4836,16 +4836,16 @@ integration</p>
         <tr>
             <td>
               <span class="anchor" id="variable-n~24"></span>
-              integer
+              integer,
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>n</strong></td>
             <td>
-
+<p>Order of the Laguerre polynomial</p>
             </td>
         </tr>
         <tr>
@@ -4853,14 +4853,14 @@ integration</p>
               <span class="anchor" id="variable-x~30"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out),</td>
               <td></td>            <td>
               dimension(n)
             </td>
             <td>::</td>
             <td><strong>x</strong></td>
             <td>
-
+<p>Zeros of the Laguerre polynomial</p>
             </td>
         </tr>
         <tr>
@@ -4868,14 +4868,14 @@ integration</p>
               <span class="anchor" id="variable-w~6"></span>
               real(kind=wp),
             </td>
-<td></td>
+<td>intent(out),</td>
               <td></td>            <td>
               dimension(n)
             </td>
             <td>::</td>
             <td><strong>w</strong></td>
             <td>
-
+<p>Corresponding weighting coefficients</p>
             </td>
         </tr>
     </tbody>
@@ -4978,46 +4978,47 @@ derivatives for a complex argument</p>
         <tr>
             <td>
               <span class="anchor" id="variable-v~5"></span>
-              real(kind=wp)
+              real(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>v</strong></td>
             <td>
-
+<p>Order of <code>Jv(z)</code> and <code>Yv(z)</code>
+( <code>v = n+v0</code>, <code>n = 0,1,2,...</code>, <code>0 ≤ v0 &lt; 1</code>)</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-z~9"></span>
-              complex(kind=wp)
+              complex(kind=wp),
             </td>
-<td></td>
+<td>intent(in)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>z</strong></td>
             <td>
-
+<p>Complex argument</p>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-vm~2"></span>
-              real(kind=wp)
+              integer,
             </td>
-<td></td>
+<td>intent(out)</td>
               <td></td>            <td>
               
             </td>
             <td>::</td>
             <td><strong>Vm</strong></td>
             <td>
-
+<p>Highest order computed</p>
             </td>
         </tr>
         <tr>
@@ -5025,14 +5026,14 @@ derivatives for a complex argument</p>
               <span class="anchor" id="variable-cbj"></span>
               complex(kind=wp),
             </td>
-<td></td>
+<td>intent(out),</td>
               <td></td>            <td>
               dimension(0:*)
             </td>
             <td>::</td>
             <td><strong>Cbj</strong></td>
             <td>
-
+<p><code>CBJ(n)</code> --- <code>Jn+v0(z)</code></p>
             </td>
         </tr>
         <tr>
@@ -5040,14 +5041,14 @@ derivatives for a complex argument</p>
               <span class="anchor" id="variable-cdj"></span>
               complex(kind=wp),
             </td>
-<td></td>
+<td>intent(out),</td>
               <td></td>            <td>
               dimension(0:*)
             </td>
             <td>::</td>
             <td><strong>Cdj</strong></td>
             <td>
-
+<p><code>CDJ(n)</code> --- <code>Jn+v0'(z)</code></p>
             </td>
         </tr>
         <tr>
@@ -5055,14 +5056,14 @@ derivatives for a complex argument</p>
               <span class="anchor" id="variable-cby"></span>
               complex(kind=wp),
             </td>
-<td></td>
+<td>intent(out),</td>
               <td></td>            <td>
               dimension(0:*)
             </td>
             <td>::</td>
             <td><strong>Cby</strong></td>
             <td>
-
+<p><code>CBY(n)</code> --- <code>Yn+v0(z)</code></p>
             </td>
         </tr>
         <tr>
@@ -5070,14 +5071,14 @@ derivatives for a complex argument</p>
               <span class="anchor" id="variable-cdy"></span>
               complex(kind=wp),
             </td>
-<td></td>
+<td>intent(out),</td>
               <td></td>            <td>
               dimension(0:*)
             </td>
             <td>::</td>
             <td><strong>Cdy</strong></td>
             <td>
-
+<p><code>CDY(n)</code> --- <code>Yn+v0'(z)</code></p>
             </td>
         </tr>
     </tbody>
