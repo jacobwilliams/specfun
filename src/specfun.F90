@@ -2395,35 +2395,38 @@
 !  Compute a sequence of characteristic values of
 !  Mathieu functions
 
-      subroutine cva1(Kd,m,q,Cv)
+   subroutine cva1(Kd,m,q,Cv)
 
-!       Input :  M  --- Maximum order of Mathieu functions
-!                q  --- Parameter of Mathieu functions
-!                KD --- Case code
-!                       KD=1 for cem(x,q)  ( m = 0,2,4,… )
-!                       KD=2 for cem(x,q)  ( m = 1,3,5,… )
-!                       KD=3 for sem(x,q)  ( m = 1,3,5,… )
-!                       KD=4 for sem(x,q)  ( m = 2,4,6,… )
-!       Output:  CV(I) --- Characteristic values; I = 1,2,3,...
-!                For KD=1, CV(1), CV(2), CV(3),..., correspond to
-!                the characteristic values of cem for m = 0,2,4,...
-!                For KD=2, CV(1), CV(2), CV(3),..., correspond to
-!                the characteristic values of cem for m = 1,3,5,...
-!                For KD=3, CV(1), CV(2), CV(3),..., correspond to
-!                the characteristic values of sem for m = 1,3,5,...
-!                For KD=4, CV(1), CV(2), CV(3),..., correspond to
-!                the characteristic values of sem for m = 0,2,4,...
+      integer,intent(in) :: Kd !! Case code:
+                               !!
+                               !!  * `KD=1` for `cem(x,q)`  ( `m = 0,2,4,…` )
+                               !!  * `KD=2` for `cem(x,q)`  ( `m = 1,3,5,…` )
+                               !!  * `KD=3` for `sem(x,q)`  ( `m = 1,3,5,…` )
+                               !!  * `KD=4` for `sem(x,q)`  ( `m = 2,4,6,…` )
+      integer,intent(in) :: m !! Maximum order of Mathieu functions
+      real(wp),intent(in) :: q !! Parameter of Mathieu functions
+      real(wp),intent(out) :: Cv(200) !! CV(I) --- Characteristic values; I = 1,2,3,...
+                                      !!
+                                      !! * For `KD=1, CV(1), CV(2), CV(3),...`, correspond to
+                                      !!   the characteristic values of `cem` for `m = 0,2,4,...`
+                                      !! * For `KD=2, CV(1), CV(2), CV(3),...`, correspond to
+                                      !!   the characteristic values of `cem` for `m = 1,3,5,...`
+                                      !! * For `KD=3, CV(1), CV(2), CV(3),...`, correspond to
+                                      !!   the characteristic values of `sem` for `m = 1,3,5,...`
+                                      !! * For `KD=4, CV(1), CV(2), CV(3),...`, correspond to
+                                      !!   the characteristic values of `sem` for `m = 0,2,4,...`
 
-      implicit none
-      real(wp) Cv , d , e , f , g , h , q , s , t , t1 ,  &
-                     & x1 , xa , xb
-      integer i , ic , icm , j , k , k1 , Kd , m , nm , nm1
-      dimension g(200) , h(200) , d(500) , e(500) , f(500) , Cv(200)
+      real(wp),dimension(500) :: d , e , f
+      real(wp),dimension(200) :: g , h
+      real(wp) :: s , t , t1 , x1 , xa , xb
+      integer :: i , ic , icm , j , k , k1 , nm , nm1
+
       real(wp),parameter :: eps = 1.0e-14_wp
+
       icm = int(m/2) + 1
       if ( Kd==4 ) icm = m/2
       if ( q/=0.0_wp ) then
-         nm = int(10+1.5*m+0.5*q)
+         nm = int(10.0_wp+1.5_wp*m+0.5_wp*q)
          e(1) = 0.0_wp
          f(1) = 0.0_wp
          if ( Kd==1 ) then
@@ -2472,32 +2475,34 @@
                endif
             enddo
             if ( k/=1 .and. h(k)<h(k-1) ) h(k) = h(k-1)
- 40         x1 = (g(k)+h(k))/2.0_wp
-            Cv(k) = x1
-            if ( abs((g(k)-h(k))/x1)<eps ) then
+            do
+               x1 = (g(k)+h(k))/2.0_wp
                Cv(k) = x1
-            else
-               j = 0
-               s = 1.0_wp
-               do i = 1 , nm
-                  if ( s==0.0_wp ) s = s + 1.0d-30
-                  t = f(i)/s
-                  s = d(i) - t - x1
-                  if ( s<0.0_wp ) j = j + 1
-               enddo
-               if ( j<k ) then
-                  h(k) = x1
+               if ( abs((g(k)-h(k))/x1)<eps ) then
+                  Cv(k) = x1
+                  exit
                else
-                  g(k) = x1
-                  if ( j>=icm ) then
-                     g(icm) = x1
+                  j = 0
+                  s = 1.0_wp
+                  do i = 1 , nm
+                     if ( s==0.0_wp ) s = s + 1.0e-30_wp
+                     t = f(i)/s
+                     s = d(i) - t - x1
+                     if ( s<0.0_wp ) j = j + 1
+                  enddo
+                  if ( j<k ) then
+                     h(k) = x1
                   else
-                     if ( h(j+1)<x1 ) h(j+1) = x1
-                     if ( x1<g(j) ) g(j) = x1
+                     g(k) = x1
+                     if ( j>=icm ) then
+                        g(icm) = x1
+                     else
+                        if ( h(j+1)<x1 ) h(j+1) = x1
+                        if ( x1<g(j) ) g(j) = x1
+                     endif
                   endif
                endif
-               goto 40
-            endif
+            end do
          enddo
       elseif ( Kd==1 ) then
          do ic = 1 , icm
@@ -2512,35 +2517,36 @@
             Cv(ic) = 4.0_wp*ic*ic
          enddo
       endif
-      end
+
+   end subroutine cva1
 
 !*****************************************************************************************
 !>
 !  Integrate [I0(t)-1]/t with respect to t from 0
 !  to x, and K0(t)/t with respect to t from x to ∞
 
-      subroutine ittikb(x,Tti,Ttk)
+   subroutine ittikb(x,Tti,Ttk)
 
-!       Input :  x   --- Variable in the limits  ( x ≥ 0 )
-!       Output:  TTI --- Integration of [I0(t)-1]/t from 0 to x
-!                TTK --- Integration of K0(t)/t from x to ∞
+      real(wp),intent(in) :: x !! Variable in the limits  ( x ≥ 0 )
+      real(wp),intent(out) :: Tti !! Integration of [I0(t)-1]/t from 0 to x
+      real(wp),intent(out) :: Ttk !! Integration of K0(t)/t from x to ∞
 
-      real(wp) e0 , t , t1 , Tti , Ttk , x , x1
+      real(wp) :: e0 , t , t1 , x1
 
       if ( x==0.0_wp ) then
          Tti = 0.0_wp
       elseif ( x<=5.0_wp ) then
          x1 = x/5.0_wp
          t = x1*x1
-         Tti = (((((((.1263d-3*t+.96442d-3)*t+.968217d-2)*t+.06615507d0)&
-             & *t+.33116853d0)*t+1.13027241d0)*t+2.44140746d0)          &
-             & *t+3.12499991d0)*t
+         Tti = (((((((.1263e-3_wp*t+.96442e-3_wp)*t+.968217e-2_wp)*t+.06615507_wp)&
+               *t+.33116853_wp)*t+1.13027241_wp)*t+2.44140746_wp) &
+               *t+3.12499991_wp)*t
       else
          t = 5.0_wp/x
-         Tti = (((((((((2.1945464d0*t-3.5195009d0)*t-11.9094395d0)*t+   &
-             & 40.394734d0)*t-48.0524115d0)*t+28.1221478d0)             &
-             & *t-8.6556013d0)*t+1.4780044d0)*t-.0493843d0)             &
-             & *t+.1332055d0)*t + .3989314d0
+         Tti = (((((((((2.1945464_wp*t-3.5195009_wp)*t-11.9094395_wp)*t+   &
+               40.394734_wp)*t-48.0524115_wp)*t+28.1221478_wp)             &
+               *t-8.6556013_wp)*t+1.4780044_wp)*t-.0493843_wp)             &
+               *t+.1332055_wp)*t + .3989314_wp
          Tti = Tti*exp(x)/(sqrt(x)*x)
       endif
       if ( x==0.0_wp ) then
@@ -2548,40 +2554,40 @@
       elseif ( x<=2.0_wp ) then
          t1 = x/2.0_wp
          t = t1*t1
-         Ttk = (((((.77d-6*t+.1544d-4)*t+.48077d-3)*t+.925821d-2)       &
-             & *t+.10937537d0)*t+.74999993d0)*t
+         Ttk = (((((.77e-6_wp*t+.1544e-4_wp)*t+.48077e-3_wp)*t+.925821e-2_wp) &
+             & *t+.10937537_wp)*t+.74999993_wp)*t
          e0 = gamma + log(x/2.0_wp)
-         Ttk = pi*pi/24.0d0 + e0*(0.5_wp*e0+Tti) - Ttk
+         Ttk = pi*pi/24.0_wp + e0*(0.5_wp*e0+Tti) - Ttk
       elseif ( x<=4.0_wp ) then
          t = 2.0_wp/x
-         Ttk = (((.06084d0*t-.280367d0)*t+.590944d0)*t-.850013d0)       &
-             & *t + 1.234684d0
+         Ttk = (((.06084_wp*t-.280367_wp)*t+.590944_wp)*t-.850013_wp) &
+             & *t + 1.234684_wp
          Ttk = Ttk*exp(-x)/(sqrt(x)*x)
       else
          t = 4.0_wp/x
-         Ttk = (((((.02724d0*t-.1110396d0)*t+.2060126d0)*t-.2621446d0)  &
-             & *t+.3219184d0)*t-.5091339d0)*t + 1.2533141d0
+         Ttk = (((((.02724_wp*t-.1110396_wp)*t+.2060126_wp)*t-.2621446_wp)  &
+             & *t+.3219184_wp)*t-.5091339_wp)*t + 1.2533141_wp
          Ttk = Ttk*exp(-x)/(sqrt(x)*x)
       endif
-      end
+
+   end subroutine ittikb
 
 !*****************************************************************************************
 !>
-!  Compute Legendre functions Qn(x) & Qn'(x)
+!  Compute Legendre functions `Qn(x)` & `Qn'(x)`
 
-      subroutine lqnb(n,x,Qn,Qd)
+   subroutine lqnb(n,x,Qn,Qd)
 
-!       Input :  x  --- Argument of Qn(x)
-!                n  --- Degree of Qn(x)  ( n = 0,1,2,…)
-!       Output:  QN(n) --- Qn(x)
-!                QD(n) --- Qn'(x)
+      real(wp),intent(in) :: x !! Argument of Qn(x)
+      integer,intent(in) :: n !! Degree of Qn(x)  ( n = 0,1,2,…)
+      real(wp),intent(out) :: Qn(0:n) !! Qn(x)
+      real(wp),intent(out) :: Qd(0:n) !! Qn'(x)
 
-      real(wp) q0 , q1 , qc1 , qc2 , Qd , qf , qf0 , qf1 ,&
-                     & qf2 , Qn , qr , x , x2
-      integer j , k , l , n , nl
-      dimension Qn(0:n) , Qd(0:n)
+      real(wp) :: q0 , q1 , qc1 , qc2 , qf , qf0 , qf1 , qf2 , qr , x2
+      integer :: j , k , l , nl
 
       real(wp),parameter :: eps = 1.0e-14_wp
+
       if ( abs(x)==1.0_wp ) then
          do k = 0 , n
             Qn(k) = 1.0e+300_wp
@@ -2589,7 +2595,7 @@
          enddo
          return
       endif
-      if ( x<=1.021d0 ) then
+      if ( x<=1.021_wp ) then
          x2 = abs((1.0_wp+x)/(1.0_wp-x))
          q0 = 0.5_wp*log(x2)
          q1 = x*q0 - 1.0_wp
@@ -2616,8 +2622,8 @@
             qf = 1.0_wp
             qr = 1.0_wp
             do k = 1 , 500
-               qr = qr*(0.5_wp*nl+k-1.0_wp)*(0.5_wp*(nl-1)+k)              &
-                  & /((nl+k-0.5_wp)*k*x*x)
+               qr = qr*(0.5_wp*nl+k-1.0_wp)*(0.5_wp*(nl-1)+k) &
+                    /((nl+k-0.5_wp)*k*x*x)
                qf = qf + qr
                if ( abs(qr/qf)<eps ) exit
             enddo
@@ -2640,7 +2646,8 @@
             Qd(k) = k*(Qn(k-1)-x*Qn(k))/(1.0_wp-x*x)
          enddo
       endif
-      end
+
+   end subroutine lqnb
 
 !*****************************************************************************************
 !>
@@ -2648,15 +2655,14 @@
 !  asymptotic expansion of Bessel functions
 !  with large orders
 
-      subroutine cjk(Km,a)
+   subroutine cjk(Km,a)
 
-!       Input :  Km   --- Maximum k
-!       Output:  A(L) --- Cj(k) where j and k are related to L
-!                         by L=j+1+[k*(k+1)]/2; j,k=0,1,...,Km
+      integer,intent(in) :: Km !! Maximum k
+      real(wp),dimension(*),intent(out) :: a !! A(L) --- Cj(k) where j and k are related to L
+                                             !! by L=j+1+[k*(k+1)]/2; j,k=0,1,...,Km
 
-      real(wp) a , f , f0 , g , g0
-      integer j , k , Km , l1 , l2 , l3 , l4
-      dimension a(*)
+      real(wp) :: f , f0 , g , g0
+      integer :: j , k , l1 , l2 , l3 , l4
 
       a(1) = 1.0_wp
       f0 = 1.0_wp
@@ -2665,7 +2671,7 @@
          l1 = (k+1)*(k+2)/2 + 1
          l2 = (k+1)*(k+2)/2 + k + 2
          f = (0.5_wp*k+0.125_wp/(k+1))*f0
-         g = -(1.5_wp*k+0.625d0/(3.0_wp*(k+1.0_wp)))*g0
+         g = -(1.5_wp*k+0.625_wp/(3.0_wp*(k+1.0_wp)))*g0
          a(l1) = f
          a(l2) = g
          f0 = f
@@ -2675,37 +2681,42 @@
          do j = 1 , k
             l3 = k*(k+1)/2 + j + 1
             l4 = (k+1)*(k+2)/2 + j + 1
-            a(l4) = (j+0.5_wp*k+0.125_wp/(2.0_wp*j+k+1.0_wp))*a(l3)             &
-                  & - (j+0.5_wp*k-1.0+0.625d0/(2.0_wp*j+k+1.0_wp))*a(l3-1)
+            a(l4) = (j+0.5_wp*k+0.125_wp/(2.0_wp*j+k+1.0_wp))*a(l3) &
+                  & - (j+0.5_wp*k-1.0_wp+0.625_wp/(2.0_wp*j+k+1.0_wp))*a(l3-1)
          enddo
       enddo
-      end
+
+   end subroutine cjk
 
 !*****************************************************************************************
 !>
 !  Integrate [I0(t)-1]/t with respect to t from 0
 !  to x, and K0(t)/t with respect to t from x to ∞
 
-      subroutine ittika(x,Tti,Ttk)
+   subroutine ittika(x,Tti,Ttk)
 
-!       Input :  x   --- Variable in the limits  ( x ≥ 0 )
-!       Output:  TTI --- Integration of [I0(t)-1]/t from 0 to x
-!                TTK --- Integration of K0(t)/t from x to ∞
+      real(wp),intent(in) :: x !! Variable in the limits  ( x ≥ 0 )
+      real(wp),intent(out) :: Tti !! Integration of [I0(t)-1]/t from 0 to x
+      real(wp),intent(out) :: Ttk !! Integration of K0(t)/t from x to ∞
 
-      real(wp) b1 , c , e0 , r , r2 , rc , rs , Tti , &
-                     & Ttk , x
-      integer k
-      dimension c(8)
+      real(wp) :: b1 , e0 , r , r2 , rc , rs
+      integer :: k
 
-      data c/1.625d0 , 4.1328125d0 , 1.45380859375d+1 ,                 &
-         & 6.553353881835d+1 , 3.6066157150269d+2 , 2.3448727161884d+3 ,&
-         & 1.7588273098916d+4 , 1.4950639538279d+5/
+      real(wp),dimension(8),parameter :: c = [1.625_wp , &
+                                              4.1328125_wp , &
+                                              1.45380859375e+1_wp , &
+                                              6.553353881835e+1_wp , &
+                                              3.6066157150269e+2_wp , &
+                                              2.3448727161884e+3_wp , &
+                                              1.7588273098916e+4_wp , &
+                                              1.4950639538279e+5_wp]
+
       if ( x==0.0_wp ) then
          Tti = 0.0_wp
          Ttk = 1.0e+300_wp
          return
       endif
-      if ( x<40.0d0 ) then
+      if ( x<40.0_wp ) then
          Tti = 1.0_wp
          r = 1.0_wp
          do k = 2 , 50
@@ -2724,9 +2735,9 @@
          rc = x*sqrt(twopi*x)
          Tti = Tti*exp(x)/rc
       endif
-      if ( x<=12.0d0 ) then
-         e0 = (0.5_wp*log(x/2.0_wp)+gamma)*log(x/2.0_wp) + pi*pi/24.0d0 +    &
-            & 0.5_wp*gamma*gamma
+      if ( x<=12.0_wp ) then
+         e0 = (0.5_wp*log(x/2.0_wp)+gamma)*log(x/2.0_wp) + pi*pi/24.0_wp + &
+              0.5_wp*gamma*gamma
          b1 = 1.5_wp - (gamma+log(x/2.0_wp))
          rs = 1.0_wp
          r = 1.0_wp
@@ -2748,40 +2759,37 @@
          rc = x*sqrt(2.0_wp/pi*x)
          Ttk = Ttk*exp(-x)/rc
       endif
-      end
+
+   end subroutine ittika
 
 !*****************************************************************************************
 !>
-!  Compute lambda function with arbitrary order v,
+!  Compute lambda function with arbitrary order `v`,
 !  and their derivative
+!
+!@note In the original version of this routine, `x` was returned modified as `x = abs(x)`.
 
-      subroutine lamv(v,x,Vm,Vl,Dl)
+   subroutine lamv(v,xi,Vm,Vl,Dl)
 
-!       Input :  x --- Argument of lambda function
-!                v --- Order of lambda function
-!       Output:  VL(n) --- Lambda function of order n+v0
-!                DL(n) --- Derivative of lambda function
-!                VM --- Highest order computed
-!       Routines called:
-!            (1) MSTA1 and MSTA2 for computing the starting
-!                point for backward recurrence
-!            (2) GAM0 for computing gamma function (|x| ≤ 1)
+      real(wp),intent(in) :: v !! Order of lambda function
+      real(wp),intent(in) :: xi !! Argument of lambda function
+      real(wp),intent(out) :: Vm !! Highest order computed
+      real(wp),dimension(0:*),intent(out) :: Vl !! Lambda function of order `n+v0`
+      real(wp),dimension(0:*),intent(out) :: Dl !! Derivative of lambda function
 
-      real(wp) a0 , bjv0 , bjv1 , bk , ck , cs , Dl , f , f0 ,  &
-                     & f1 , f2 , fac , ga , px , qx , r , r0 , rc ,&
-                     & rp
-      real(wp) rp2 , rq , sk , uk , v , v0 , vk , Vl , Vm , vv ,&
-                     & x , x2 , xk
-      integer i , j , k , k0 , m , n
-      dimension Vl(0:*) , Dl(0:*)
+      real(wp) :: a0 , bjv0 , bjv1 , bk , ck , cs , f , f0 ,  &
+                  f1 , f2 , fac , ga , px , qx , r , r0 , rc ,&
+                  rp, x, rq , sk , uk , v0 , vk , vv , x2 , xk
+      integer :: i , j , k , k0 , m , n
 
-      rp2 = 0.63661977236758d0
-      x = abs(x)
+      real(wp),parameter :: rp2 = 2.0_wp / pi ! 0.63661977236758d0
+
+      x = abs(xi)
       x2 = x*x
       n = int(v)
       v0 = v - n
       Vm = v
-      if ( x<=12.0d0 ) then
+      if ( x<=12.0_wp ) then
          do k = 0 , n
             vk = v0 + k
             bk = 1.0_wp
@@ -2804,8 +2812,8 @@
          return
       endif
       k0 = 11
-      if ( x>=35.0d0 ) k0 = 10
-      if ( x>=50.0d0 ) k0 = 8
+      if ( x>=35.0_wp ) k0 = 10
+      if ( x>=50.0_wp ) k0 = 8
       bjv0 = 0.0_wp
       bjv1 = 0.0_wp
       do j = 0 , 1
@@ -2813,15 +2821,15 @@
          px = 1.0_wp
          rp = 1.0_wp
          do k = 1 , k0
-            rp = -0.78125d-2*rp*(vv-(4.0_wp*k-3.0_wp)**2.0_wp)                   &
-               & *(vv-(4.0_wp*k-1.0_wp)**2.0_wp)/(k*(2.0_wp*k-1.0_wp)*x2)
+            rp = -0.78125e-2_wp*rp*(vv-(4.0_wp*k-3.0_wp)**2.0_wp) &
+                 *(vv-(4.0_wp*k-1.0_wp)**2.0_wp)/(k*(2.0_wp*k-1.0_wp)*x2)
             px = px + rp
          enddo
          qx = 1.0_wp
          rq = 1.0_wp
          do k = 1 , k0
-            rq = -0.78125d-2*rq*(vv-(4.0_wp*k-1.0_wp)**2.0_wp)                   &
-               & *(vv-(4.0_wp*k+1.0_wp)**2.0_wp)/(k*(2.0_wp*k+1.0_wp)*x2)
+            rq = -0.78125e-2_wp*rq*(vv-(4.0_wp*k-1.0_wp)**2.0_wp) &
+                 *(vv-(4.0_wp*k+1.0_wp)**2.0_wp)/(k*(2.0_wp*k+1.0_wp)*x2)
             qx = qx + rq
          enddo
          qx = 0.125_wp*(vv-1.0_wp)*qx/x
@@ -2851,7 +2859,7 @@
          Dl(1) = fac*r0*Dl(1) - (1.0_wp+v0)/x*Vl(1)
          return
       endif
-      if ( n>=2 .and. n<=int(0.9*x) ) then
+      if ( n>=2 .and. n<=int(0.9_wp*x) ) then
          f0 = bjv0
          f1 = bjv1
          do k = 2 , n
@@ -2895,62 +2903,65 @@
       enddo
       Dl(n) = 2.0_wp*(v0+n)*(Vl(n-1)-Vl(n))/x
       Vm = n + v0
-      end
+
+   end subroutine lamv
 
 !*****************************************************************************************
 !>
 !  Compute hypergeometric function U(a,b,x) by
 !  using Gaussian-Legendre integration (n=60)
 
-      subroutine chguit(a,b,x,Hu,Id)
+   subroutine chguit(a,b,x,Hu,Id)
 
-!       Input  : a  --- Parameter ( a > 0 )
-!                b  --- Parameter
-!                x  --- Argument ( x > 0 )
-!       Output:  HU --- U(a,b,z)
-!                ID --- Estimated number of significant digits
+      real(wp),intent(in) :: a !! Parameter ( `a > 0` )
+      real(wp),intent(in) :: b !! Parameter
+      real(wp),intent(in) :: x !! Argument ( `x > 0` )
+      real(wp),intent(out) :: Hu !! `U(a,b,z)`
+      integer,intent(out) :: Id !! Estimated number of significant digits
 
-      real(wp) a , a1 , b , b1 , c , d , f1 , f2 , g , ga , Hu ,&
-                     & hu0 , hu1 , hu2 , s , t , t1 , t2 , t3 , t4
-      real(wp) w , x
-      integer Id , j , k , m
-      dimension t(30) , w(30)
+      real(wp) :: a1 , b1 , c , d , f1 , f2 , g , ga ,&
+                  hu0 , hu1 , hu2 , s, t1 , t2 , t3 , t4
+      integer :: j , k , m
 
-      data t/.259597723012478d-01 , .778093339495366d-01 ,              &
-         & .129449135396945d+00 , .180739964873425d+00 ,                &
-         & .231543551376029d+00 , .281722937423262d+00 ,                &
-         & .331142848268448d+00 , .379670056576798d+00 ,                &
-         & .427173741583078d+00 , .473525841761707d+00 ,                &
-         & .518601400058570d+00 , .562278900753945d+00 ,                &
-         & .604440597048510d+00 , .644972828489477d+00 ,                &
-         & .683766327381356d+00 , .720716513355730d+00 ,                &
-         & .755723775306586d+00 , .788693739932264d+00 ,                &
-         & .819537526162146d+00 , .848171984785930d+00 ,                &
-         & .874519922646898d+00 , .898510310810046d+00 ,                &
-         & .920078476177628d+00 , .939166276116423d+00 ,                &
-         & .955722255839996d+00 , .969701788765053d+00 ,                &
-         & .981067201752598d+00 , .989787895222222d+00 ,                &
-         & .995840525118838d+00 , .999210123227436d+00/
-      data w/.519078776312206d-01 , .517679431749102d-01 ,              &
-         & .514884515009810d-01 , .510701560698557d-01 ,                &
-         & .505141845325094d-01 , .498220356905502d-01 ,                &
-         & .489955754557568d-01 , .480370318199712d-01 ,                &
-         & .469489888489122d-01 , .457343797161145d-01 ,                &
-         & .443964787957872d-01 , .429388928359356d-01 ,                &
-         & .413655512355848d-01 , .396806954523808d-01 ,                &
-         & .378888675692434d-01 , .359948980510845d-01 ,                &
-         & .340038927249464d-01 , .319212190192963d-01 ,                &
-         & .297524915007890d-01 , .275035567499248d-01 ,                &
-         & .251804776215213d-01 , .227895169439978d-01 ,                &
-         & .203371207294572d-01 , .178299010142074d-01 ,                &
-         & .152746185967848d-01 , .126781664768159d-01 ,                &
-         & .100475571822880d-01 , .738993116334531d-02 ,                &
-         & .471272992695363d-02 , .202681196887362d-02/
+      real(wp),dimension(30),parameter :: t = &
+            [.259597723012478e-01_wp , .778093339495366e-01_wp , &
+             .129449135396945e+00_wp , .180739964873425e+00_wp , &
+             .231543551376029e+00_wp , .281722937423262e+00_wp , &
+             .331142848268448e+00_wp , .379670056576798e+00_wp , &
+             .427173741583078e+00_wp , .473525841761707e+00_wp , &
+             .518601400058570e+00_wp , .562278900753945e+00_wp , &
+             .604440597048510e+00_wp , .644972828489477e+00_wp , &
+             .683766327381356e+00_wp , .720716513355730e+00_wp , &
+             .755723775306586e+00_wp , .788693739932264e+00_wp , &
+             .819537526162146e+00_wp , .848171984785930e+00_wp , &
+             .874519922646898e+00_wp , .898510310810046e+00_wp , &
+             .920078476177628e+00_wp , .939166276116423e+00_wp , &
+             .955722255839996e+00_wp , .969701788765053e+00_wp , &
+             .981067201752598e+00_wp , .989787895222222e+00_wp , &
+             .995840525118838e+00_wp , .999210123227436e+00_wp ]
+
+      real(wp),dimension(30),parameter :: w = &
+         [ .519078776312206e-01_wp , .517679431749102e-01_wp , &
+           .514884515009810e-01_wp , .510701560698557e-01_wp , &
+           .505141845325094e-01_wp , .498220356905502e-01_wp , &
+           .489955754557568e-01_wp , .480370318199712e-01_wp , &
+           .469489888489122e-01_wp , .457343797161145e-01_wp , &
+           .443964787957872e-01_wp , .429388928359356e-01_wp , &
+           .413655512355848e-01_wp , .396806954523808e-01_wp , &
+           .378888675692434e-01_wp , .359948980510845e-01_wp , &
+           .340038927249464e-01_wp , .319212190192963e-01_wp , &
+           .297524915007890e-01_wp , .275035567499248e-01_wp , &
+           .251804776215213e-01_wp , .227895169439978e-01_wp , &
+           .203371207294572e-01_wp , .178299010142074e-01_wp , &
+           .152746185967848e-01_wp , .126781664768159e-01_wp , &
+           .100475571822880e-01_wp , .738993116334531e-02_wp , &
+           .471272992695363e-02_wp , .202681196887362e-02_wp ]
+
       Id = 9
-!       DLMF 13.4.4, integration up to C=12/X
+      ! DLMF 13.4.4, integration up to C=12/X
       a1 = a - 1.0_wp
       b1 = b - a - 1.0_wp
-      c = 12.0d0/x
+      c = 12.0_wp/x
       hu0 = 0.0_wp
       do m = 10 , 100 , 5
          hu1 = 0.0_wp
@@ -2968,13 +2979,13 @@
             hu1 = hu1 + s*g
             d = d + 2.0_wp*g
          enddo
-         if ( abs(1.0_wp-hu0/hu1)<1.0d-9 ) exit
+         if ( abs(1.0_wp-hu0/hu1)<1.0e-9_wp ) exit
          hu0 = hu1
       enddo
       call gamma2(a,ga)
       hu1 = hu1/ga
-!       DLMF 13.4.4 with substitution t=C/(1-u)
-!       integration u from 0 to 1, i.e. t from C=12/X to infinity
+      ! DLMF 13.4.4 with substitution t=C/(1-u)
+      ! integration u from 0 to 1, i.e. t from C=12/X to infinity
       do m = 2 , 10 , 2
          hu2 = 0.0_wp
          g = 0.5_wp/m
@@ -2993,13 +3004,14 @@
             hu2 = hu2 + s*g
             d = d + 2.0_wp*g
          enddo
-         if ( abs(1.0_wp-hu0/hu2)<1.0d-9 ) exit
+         if ( abs(1.0_wp-hu0/hu2)<1.0e-9_wp ) exit
          hu0 = hu2
       enddo
       call gamma2(a,ga)
       hu2 = hu2/ga
       Hu = hu1 + hu2
-      end
+
+   end subroutine chguit
 
 !*****************************************************************************************
 !>
@@ -3007,7 +3019,7 @@
 !  prolate and oblate spheroidal functions
 !  and joining factors
 
-      subroutine kmn(m,n,c,Cv,Kd,Df,Dn,Ck1,Ck2)
+   subroutine kmn(m,n,c,Cv,Kd,Df,Dn,Ck1,Ck2)
 
       real(wp) c , Ck1 , Ck2 , cs , Cv , Df , Dn , dnp , g0 ,   &
                      & gk0 , gk1 , gk2 , gk3 , r , r1 , r2 , r3 , r4 ,  &
@@ -3099,7 +3111,8 @@
       if ( m==0 ) g0 = Df(1)
       sb0 = (ip+1.0_wp)*c**(ip+1)/(2.0_wp*ip*(m-2.0_wp)+1.0_wp)/(2.0_wp*m-1.0_wp)
       Ck2 = (-1)**ip*sb0*r4*r5*g0/r1*su0
-      end
+
+   end subroutine kmn
 
 !*****************************************************************************************
 !>
