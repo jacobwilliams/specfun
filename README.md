@@ -1,7 +1,13 @@
 # specfun
 
-Work in progress to modernize [`specfun.f`](https://github.com/scipy/scipy/blob/main/scipy/special/specfun/specfun.f) from SciPy.
+Computation of Special functions with Modern Fortran.
 
+### Status
+
+[![Language](https://img.shields.io/badge/-Fortran-734f96?logo=fortran&logoColor=white)](https://github.com/topics/fortran)
+![Build Status](https://github.com/jacobwilliams/specfun/actions/workflows/CI.yml/badge.svg?branch=master)
+
+This is a work in progress to modernize [`specfun.f`](https://github.com/scipy/scipy/blob/main/scipy/special/specfun/specfun.f) from SciPy.
 
 ## Documentation
 
